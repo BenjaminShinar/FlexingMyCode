@@ -28,7 +28,7 @@ CPP_ANSI=-std=c++11
 #C_LINKER_FLAGS= 
 C_LINKER_FLAGS= -lm -pthread -lrt
 
-all: knights.out
+all: knights_tour.out
 
 
 ########################################################
@@ -67,10 +67,10 @@ output/%.out: examples/%.cpp
 ########################################################
 
 
-knights.out: obj/knights.o
+knights_tour.out: obj/knights_tour.o
 	$(CPP) $(C_ANSI) $(C_COMPILER_FLAGS) $(^) -o $(@) $(C_LINKER_FLAGS)
 
-obj/knights.o: knights_test.cpp
+obj/knights_tour.o: knights_tour.cpp
 	$(CPP) $(C_ANSI) $(C_COMPILER_FLAGS) $(^) -c -o $(@)
 
 ########################################################
