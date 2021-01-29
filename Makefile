@@ -28,7 +28,7 @@ CPP_ANSI=-std=c++11
 #C_LINKER_FLAGS= 
 C_LINKER_FLAGS= -lm -pthread -lrt
 
-all: runfiles/knights.out
+all: knights.out
 
 
 ########################################################
@@ -67,11 +67,11 @@ output/%.out: examples/%.cpp
 ########################################################
 
 
-runfiles/knights.out: obj/knights.o
-	$(CC) $(C_ANSI) $(C_COMPILER_FLAGS) $(^) $(DATA_STRUCTURES_LIBRARRY)/ds_lib.so -o $(@) $(C_LINKER_FLAGS)
+knights.out: obj/knights.o
+	$(CPP) $(C_ANSI) $(C_COMPILER_FLAGS) $(^) -o $(@) $(C_LINKER_FLAGS)
 
-obj/knights.o: test/knights_test.c
-	$(CC) $(C_ANSI) $(C_COMPILER_FLAGS) $(^) -c -o $(@)
+obj/knights.o: knights_test.cpp
+	$(CPP) $(C_ANSI) $(C_COMPILER_FLAGS) $(^) -c -o $(@)
 
 ########################################################
 

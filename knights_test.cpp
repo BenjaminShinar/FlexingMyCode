@@ -5,8 +5,27 @@
 #include <math.h>   /* clock */
 #include <assert.h> /* asserts */
 
-#include "bit_array.h"
+#include <bitset>
+typedef std::bitset<64> bit_arr_t;
 
+
+
+static bit_arr_t BitArraySetOn(bit_arr_t & someBitSet, int bitPosition)
+{
+    bit_arr_t copiedBitSet(someBitSet);
+    copiedBitSet.set(bitPosition);
+    return copiedBitSet;
+}
+
+static std::size_t BitArrayLutCountOn(bit_arr_t & someBitSet)
+{
+    return someBitSet.count();
+}
+
+static bool BitArrayIsBitOff(bit_arr_t & someBitSet, int bitPosition)
+{
+    return !someBitSet.test(bitPosition);
+}
 #define ROWS 8
 
 enum directions
@@ -110,15 +129,15 @@ int PlayTurn(bit_arr_t game_board, int next_position, size_t row_length, int *vi
 void InitOptions()
 {
     int idx = 0;
-    enum directions idx_b = 0;
+    int idx_b = 0;
     int next = 0;
     for (idx = 0; idx < ROWS * ROWS; ++idx)
     {
         for (idx_b = 0; idx_b < DIRECTIONS_COUNT; ++idx_b)
         {
             options[idx][idx_b] = -1;
-            next = MoveKnight(idx, idx_b, ROWS);
-            if (FirstCheckLegalMove(ROWS, idx, next))
+            next = MoveKnight(idx, (enum directions)idx_b, ROWS);
+            if (FirstCheckLegalMove(ROWS, (enum directions)idx, next))
             {
                 options[idx][idx_b] = next;
             }
@@ -206,16 +225,16 @@ void PrintBoard(int *visits, size_t row_length)
 
 void SortMoves(struct movement_count *moves, bit_arr_t bit_board, int current_position, size_t row_length)
 {
-    size_t idx = 0;
-    size_t idx_b = 0;
+    int idx = 0;
+    int idx_b = 0;
     for (idx = 0; idx < DIRECTIONS_COUNT; ++idx)
     {
-        if (CheckLegalMove(bit_board, current_position, idx))
+        if (CheckLegalMove(bit_board, current_position, (enum directions)idx))
         {
-            int next_position = MoveKnight(current_position, idx, row_length);
+            int next_position = MoveKnight(current_position, (enum directions)idx, row_length);
             for (idx_b = 0; idx_b < DIRECTIONS_COUNT; ++idx_b)
             {
-                moves[idx].posssible_moves += CheckLegalMove(bit_board, next_position, idx_b);
+                moves[idx].posssible_moves += CheckLegalMove(bit_board, next_position, (enum directions)idx_b);
             }
         }
     }
