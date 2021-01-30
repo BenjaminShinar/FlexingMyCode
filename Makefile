@@ -28,7 +28,7 @@ CPP_ANSI=-std=c++11
 #C_LINKER_FLAGS= 
 C_LINKER_FLAGS= -lm -pthread -lrt
 
-all: knights_tour.out
+all: knights_tour.out product_without.out reverse_sentence
 
 
 ########################################################
@@ -73,6 +73,14 @@ knights_tour.out: obj/knights_tour.o
 obj/knights_tour.o: knights_tour.cpp
 	$(CPP) $(C_ANSI) $(C_COMPILER_FLAGS) $(^) -c -o $(@)
 
+product_without.out: obj/product_without.o
+	$(CPP) $(C_ANSI) $(C_COMPILER_FLAGS) $(^) -o $(@) $(C_LINKER_FLAGS)
+
+reverse_sentence.out: obj/reverse_sentence.o
+	$(CPP) $(C_ANSI) $(C_COMPILER_FLAGS) $(^) -o $(@) $(C_LINKER_FLAGS)
+
+obj/product_without.o: product_without.c
+	$(CC) $(C_ANSI) $(C_COMPILER_FLAGS) $(^) -c -o $(@)
 ########################################################
 
 .PHONY: clean 
