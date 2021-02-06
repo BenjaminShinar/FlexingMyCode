@@ -28,7 +28,7 @@ CPP_ANSI=-std=c++11
 #C_LINKER_FLAGS= 
 C_LINKER_FLAGS= -lm -pthread -lrt
 
-all: knights_tour.out product_without.out reverse_sentence output/calculator.out
+all: knights_tour.out product_without.out reverse_sentence five_stars.out output/calculator.out
 
 ########################################################
 obj/%.o: lib/%.cpp include/%.h
@@ -75,12 +75,17 @@ obj/knights_tour.o: knights_tour.cpp
 product_without.out: obj/product_without.o
 	$(CPP) $(C_ANSI) $(C_COMPILER_FLAGS) $(^) -o $(@) $(C_LINKER_FLAGS)
 
-reverse_sentence.out: obj/reverse_sentence.o
-	$(CPP) $(C_ANSI) $(C_COMPILER_FLAGS) $(^) -o $(@) $(C_LINKER_FLAGS)
-
 obj/product_without.o: product_without.c
 	$(CC) $(C_ANSI) $(C_COMPILER_FLAGS) $(^) -c -o $(@)
 
+reverse_sentence.out: obj/reverse_sentence.o
+	$(CPP) $(C_ANSI) $(C_COMPILER_FLAGS) $(^) -o $(@) $(C_LINKER_FLAGS)
+
+five_stars.out: obj/five_stars.o
+	$(CPP) $(C_ANSI) $(C_COMPILER_FLAGS) $(^) -o $(@) $(C_LINKER_FLAGS)
+
+obj/five_stars.o: five_stars.cpp
+	$(CPP) $(C_ANSI) $(C_COMPILER_FLAGS) $(^) -c -o $(@)
 ########################################################
 
 .PHONY: clean 
