@@ -14,3 +14,6 @@ C solution to finding the product all element in an array except one, without us
 ## Calculator
 C style implemantion of a calculator. Takes a string with a math equation (supports addution, substraction, multiplication, division, power and brackets) and computes the result.
 originally used a self made stack, adapted to use std::stack<double> instead, also orignally complied with a very strict C standard. I decided to keep the code as it was to presere, including all the oddeties.
+
+## Five_Stars
+A program the prints 5 rows, the first row has one star, and the last has five stars. Inspired by a facebook meme. I decided to use the most complicated way to get the same output, so I went with templates. *obviously this is not a good idea*.
