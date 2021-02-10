@@ -24,11 +24,11 @@ C_COMPILER_FLAGS=$(WARNING_LEVEL) -fpic $(C_OPTIMIZING) -I./include/
 CPP_COMPILER_FLAGS=$(WARNING_LEVEL) -Weffc++ -fpic $(CPP_OPTIMIZING) -I./include/
 WARNING_LEVEL=-pedantic-errors -Wall -Wextra
 C_ANSI=-ansi
-CPP_ANSI=-std=c++11
+CPP_ANSI=-std=c++17
 #C_LINKER_FLAGS= 
 C_LINKER_FLAGS= -lm -pthread -lrt
 
-all: knights_tour.out product_without.out reverse_sentence.out five_stars.out output/calculator.out
+all: output/main.out
 
 ########################################################
 obj/%.o: lib/%.cpp include/%.h
@@ -48,8 +48,8 @@ obj/%_test.o: test/%_test.c include/%.h
 
 #################-EXAMPLES-####################
 
-#output/%.out: examples/%.cpp
-#	$(CPP) $(CPP_ANSI) $(CPP_COMPILER_FLAGS) $(<) -o $(@)
+output/main.out: main.o
+	$(CPP) $(CPP_ANSI) $(CPP_COMPILER_FLAGS) $(<) -o $(@)
 
 
 ########################################################
@@ -65,30 +65,6 @@ obj/%_test.o: test/%_test.c include/%.h
 
 ########################################################
 
-
-knights_tour.out: obj/knights_tour.o
-	$(CPP) $(C_ANSI) $(C_COMPILER_FLAGS) $(^) -o $(@) $(C_LINKER_FLAGS)
-		
-obj/knights_tour.o: knights_tour.cpp
-	$(CPP) $(C_ANSI) $(C_COMPILER_FLAGS) $(^) -c -o $(@)
-
-product_without.out: obj/product_without.o
-	$(CPP) $(C_ANSI) $(C_COMPILER_FLAGS) $(^) -o $(@) $(C_LINKER_FLAGS)
-
-obj/product_without.o: product_without.c
-	$(CC) $(C_ANSI) $(C_COMPILER_FLAGS) $(^) -c -o $(@)
-
-reverse_sentence.out: obj/reverse_sentence.o
-	$(CC) $(C_ANSI) $(C_COMPILER_FLAGS) $(^) -o $(@) $(C_LINKER_FLAGS)
-
-obj/reverse_sentence.o: reverse_sentence.c
-	$(CC) $(C_ANSI) $(C_COMPILER_FLAGS) $(^) -c -o $(@)
-
-five_stars.out: obj/five_stars.o
-	$(CPP) $(C_ANSI) $(C_COMPILER_FLAGS) $(^) -o $(@) $(C_LINKER_FLAGS)
-
-obj/five_stars.o: five_stars.cpp
-	$(CPP) $(C_ANSI) $(C_COMPILER_FLAGS) $(^) -c -o $(@)
 ########################################################
 
 .PHONY: clean 
