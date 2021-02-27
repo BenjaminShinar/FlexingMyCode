@@ -43,7 +43,7 @@ obj/%_test.o: test/%_test.c include/%.h
 
 #################-EXAMPLES-####################
 
-output/main.out: main.o obj/mockmon_data.o
+output/main.out: main.o obj/mockmon_data.o obj/battle_tower.o
 	$(CPP) $(CPP_ANSI) $(CPP_COMPILER_FLAGS) $(^) -o $(@)
 
 
@@ -76,3 +76,4 @@ clean:
 #will print out the command, so don't pipe this.
 #use ralative paths to c so it will work both regardless of computer (home or lab)
 #sometimes we need -lm to inlude the math library
+#h files arent always updated properly, depends on how many times they are included and which of the files is changed

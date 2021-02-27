@@ -35,10 +35,14 @@ namespace mockmon
         moves:
         */
         public:
-        explicit Mockmon():m_name("Nameless"){}
+        explicit Mockmon(bool silent = false):m_name("Nameless"),m_outputEvents(silent){}
         void ChangeName(const std::string & newName); //needs to be somewhere else.
         void GrantExperiencePoints(long points);
-        MockmonExp CheckExperiencePoints() const {return MockmonExp{level,experience_points};};
+        MockmonExp CheckExperiencePoints() const {return MockmonExp{level,experience_points};};\
+        long ExpFromDefeating()const;
+        void GainExperienceFromVictory(const Mockmon & defeatedMon);
+
+        bool IsWild() const {return false;}
         protected:
 
         private:
@@ -46,5 +50,7 @@ namespace mockmon
         long level =1;
         long experience_points = 0;
         void LevelUp();
+        bool m_outputEvents;
+        const long m_speciesExp = 35;
     };
 }

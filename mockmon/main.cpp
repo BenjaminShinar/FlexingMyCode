@@ -5,8 +5,11 @@
 
 #include "include/controller.h"
 #include "include/mockmon_data.h"
+#include "include/battle_tower.h"
+
 
 using namespace mockmon;
+
 
 
 
@@ -45,25 +48,13 @@ controller::controller GetInput(const std::string & prompt,std::pair<const std::
 int main()
 {
     //controller::TestControllerToString();
-    Mockmon m{};
-    m.GrantExperiencePoints(105);
-    m.GrantExperiencePoints(105);
-
-    std::cout << "mockmon is " << m.CheckExperiencePoints() << '\n';
+    Mockmon m(true);
+    //m.GrantExperiencePoints(105);
+    //std::cout << "mockmon is " << m.CheckExperiencePoints() << '\n';
     m.ChangeName("levelupper");
-    m.GrantExperiencePoints(305);
-
-    //m.GrantExperiencePoints(3005);
-    std::cout << "mockmon is " << m.CheckExperiencePoints() << '\n';
-    m.GrantExperiencePoints(384);
-    std::cout << "mockmon is " << m.CheckExperiencePoints() << '\n';
-    m.GrantExperiencePoints(2);
-    std::cout << "mockmon is " << m.CheckExperiencePoints() << '\n';
-
-    // std::cout << "enter value of x" <<'\n';
-    // std::cin >> x;
-    // std::cout << x <<'\n';
-
+    BattleTower::StartTower(m);
+    //std::cout << "mockmon is " << m.CheckExperiencePoints() << '\n';
+    
     //auto cmd =GetInput("test case user input",{"option A",controller::ACTION_A});
     //std::cout<<controller::controllerToStr(cmd)<<'\n';
 
