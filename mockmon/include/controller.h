@@ -47,4 +47,16 @@ namespace mockmon::controller
     //         default: return SELECT;
     //     }
     // }
+
+    void TestControllerToString()
+    {
+        std::cout<<controllerToStr(controller::DPAD_UP)<<'\n';
+        std::cout<<controllerToStr(controller::DPAD_LEFT)<<'\n';
+        std::cout<<controllerToStr(controller::DPAD_DOWN)<<'\n';
+        std::cout<<controllerToStr(controller::DPAD_RIGHT)<<'\n';
+        std::cout<<controllerToStr(controller::ACTION_A)<<'\n';
+        std::cout<<controllerToStr(controller::CANCEL_B)<<'\n';
+        std::cout<<controllerToStr(controller::START)<<'\n';
+        std::cout<<controllerToStr(controller::SELECT)<<'\n';
+    }
 }

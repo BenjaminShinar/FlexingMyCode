@@ -31,11 +31,6 @@ C_LINKER_FLAGS= -lm -pthread -lrt
 all: output/main.out
 
 ########################################################
-obj/%.o: lib/%.cpp include/%.h
-	$(CPP) $(CPP_ANSI) $(CPP_COMPILER_FLAGS) -c $(<) -o $(@)
-
-obj/%_test.o: test/%_test.cpp include/%.h
-	$(CPP) $(CPP_ANSI) $(CPP_COMPILER_FLAGS) -c $(<) -o $(@)
 
 output/%.out: obj/%.o obj/%_test.o
 	$(CPP) $(CPP_ANSI) $(CPP_COMPILER_FLAGS) $(^) -o $(@)
@@ -48,8 +43,8 @@ obj/%_test.o: test/%_test.c include/%.h
 
 #################-EXAMPLES-####################
 
-output/main.out: main.o
-	$(CPP) $(CPP_ANSI) $(CPP_COMPILER_FLAGS) $(<) -o $(@)
+output/main.out: main.o obj/mockmon_data.o
+	$(CPP) $(CPP_ANSI) $(CPP_COMPILER_FLAGS) $(^) -o $(@)
 
 
 ########################################################
