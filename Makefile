@@ -31,9 +31,6 @@ C_LINKER_FLAGS= -lm -pthread -lrt
 all: knights_tour.out product_without.out reverse_sentence.out five_stars.out output/calculator.out output/roman_numerals.out
 
 ########################################################
-obj/%.o: lib/%.cpp include/%.h
-	$(CPP) $(CPP_ANSI) $(CPP_COMPILER_FLAGS) -c $(<) -o $(@)
-
 obj/%_test.o: test/%_test.cpp include/%.h
 	$(CPP) $(CPP_ANSI) $(CPP_COMPILER_FLAGS) -c $(<) -o $(@)
 
@@ -64,7 +61,6 @@ obj/%_test.o: test/%_test.c include/%.h
 #	$(CC) $(C_ANSI) $(C_COMPILER_FLAGS) -c $(<) -o $(@)
 
 ########################################################
-
 
 knights_tour.out: obj/knights_tour.o
 	$(CPP) $(C_ANSI) $(C_COMPILER_FLAGS) $(^) -o $(@) $(C_LINKER_FLAGS)

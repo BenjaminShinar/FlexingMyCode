@@ -1,15 +1,30 @@
 #include "roman_numerals.h"
-
 #include <iostream>
+
+
+
+bool IsStringValid(const std::string & str)
+{
+    auto b = RomanNumeral::VerifyString(str);
+    std::cout <<std::boolalpha<< "string " << str << " is valid? " << b << '\n';
+    return b;
+}
+
+bool GetAmountsValueSimple(const RomanNumeral::Amounts & amounts, int expected)
+{
+    auto val = amounts.Calculate();
+    auto res{val == expected};
+    std::cout <<std::boolalpha<< "amount is " << val << ". as expected? " << res << '\n';
+    return res;
+}
 int main()
 {
 
-const auto s1{"XII"};
-std::cout << "string " << s1 << " is valid? " << RomanNumeral::VerifyString(s1) << '\n';
-const auto s2{"XE"};
-std::cout << "string " << s2 << " is valid? " << RomanNumeral::VerifyString(s2) << '\n';
-
-const auto s3{"XE"};
-std::cout << "string " << s3 << " is valid? " << RomanNumeral::VerifyString(s3) << '\n';
+IsStringValid("XII");
+IsStringValid("Xi");
+IsStringValid("Xe");
+GetAmountsValueSimple({.I_Count=5},5);
+GetAmountsValueSimple({.I_Count=3},5);
+GetAmountsValueSimple({.X_Count=1},10);
 return 0;
 }
