@@ -26,5 +26,6 @@ IsStringValid("Xe");
 GetAmountsValueSimple({.I_Count=5},5);
 GetAmountsValueSimple({.I_Count=3},5);
 GetAmountsValueSimple({.X_Count=1},10);
+GetAmountsValueSimple({.I_Count=1,.V_Count=1,.L_Count=1},56);
 return 0;
 }
