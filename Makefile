@@ -24,11 +24,11 @@ C_COMPILER_FLAGS=$(WARNING_LEVEL) -fpic $(C_OPTIMIZING) -I./include/
 CPP_COMPILER_FLAGS=$(WARNING_LEVEL) -Weffc++ -fpic $(CPP_OPTIMIZING) -I./include/
 WARNING_LEVEL=-pedantic-errors -Wall -Wextra
 C_ANSI=-ansi
-CPP_ANSI=-std=c++11
+CPP_ANSI=-std=c++2a
 #C_LINKER_FLAGS= 
 C_LINKER_FLAGS= -lm -pthread -lrt
 
-all: knights_tour.out product_without.out reverse_sentence.out five_stars.out output/calculator.out
+all: knights_tour.out product_without.out reverse_sentence.out five_stars.out output/calculator.out output/roman_numerals.out
 
 ########################################################
 obj/%.o: lib/%.cpp include/%.h
