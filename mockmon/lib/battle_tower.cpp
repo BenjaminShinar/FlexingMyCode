@@ -1,13 +1,15 @@
 #include "battle_tower.h"
-
+#include "battle.h"
 namespace mockmon
 {
         void BattleTower::StartTower (Mockmon & playerMonster)
         {
             auto enemy = BattleTower::GenerateEnemy(9,"garry");
-            playerMonster.GainExperienceFromVictory(enemy);
-        //generate oppnenets for the player to fight
+            Battle::DoBattle(playerMonster,enemy);
+            
+            //generate oppnenets for the player to fight
         }
+
         Mockmon BattleTower::GenerateEnemy(int requestLevel,std::string enemyName)
         {
             Mockmon enmey(false);

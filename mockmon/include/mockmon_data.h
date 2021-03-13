@@ -41,7 +41,9 @@ namespace mockmon
         MockmonExp CheckExperiencePoints() const {return MockmonExp{level,experience_points};};\
         long ExpFromDefeating()const;
         void GainExperienceFromVictory(const Mockmon & defeatedMon);
-
+        void LoseSomehow();
+        void FullRestore();
+        bool IsAbleToBattle() const;
         bool IsWild() const {return false;}
         protected:
 
@@ -51,6 +53,7 @@ namespace mockmon
         long experience_points = 0;
         void LevelUp();
         bool m_outputEvents;
+        bool m_ableToBattle;
         const long m_speciesExp = 35;
     };
 }

@@ -1,10 +1,12 @@
 #pragma once
-//#include <string_view>
 #include <string>
+#include <array>
+#include <utility>
+#include <iostream>
 namespace mockmon::controller
 {
-
-    enum controller
+    
+    enum class controllerEnum
     {
         DPAD_UP,
         DPAD_LEFT,
@@ -16,47 +18,19 @@ namespace mockmon::controller
         SELECT
     };
 
-    std::string controllerToStr(const controller ctrler)
-    {
-        switch (ctrler)
-        {
-            case DPAD_UP: return "UP";
-            case DPAD_LEFT: return "LEFT";
-            case DPAD_DOWN: return "DOWN";
-            case DPAD_RIGHT: return "RIGHT";
-            case ACTION_A: return "A";
-            case CANCEL_B: return "B";
-            case START: return "START";
-            case SELECT: return "SELECT";
-            default: return "nothing";
-        }
-    }
+    std::string controllerToStr(const controllerEnum ctrler);
+    void TestControllerToString();
+    unsigned int ReadInput(std::size_t max);
 
-    // controller strToController(std::string_view & str)
-    // {
-    //     switch (str)
-    //     {
-    //         case "UP": return DPAD_UP;
-    //         case "LEFT": return DPAD_LEFT;
-    //         case "DOWN": return DPAD_DOWN;
-    //         case "RIGHT": return DPAD_RIGHT;
-    //         case "A": return ACTION_A:
-    //         case "B": return CANCEL_B;
-    //         case "START": return START:
-    //         case "SELECT": return SELECT:;
-    //         default: return SELECT;
-    //     }
-    // }
 
-    void TestControllerToString()
+    /* has to be defined here because it uses a template argument*/
+    template <std::size_t N>
+    controllerEnum GetInput(const std::string &prompt, const std::array<std::pair<std::string, controller::controllerEnum>, N> & actions)
     {
-        std::cout<<controllerToStr(controller::DPAD_UP)<<'\n';
-        std::cout<<controllerToStr(controller::DPAD_LEFT)<<'\n';
-        std::cout<<controllerToStr(controller::DPAD_DOWN)<<'\n';
-        std::cout<<controllerToStr(controller::DPAD_RIGHT)<<'\n';
-        std::cout<<controllerToStr(controller::ACTION_A)<<'\n';
-        std::cout<<controllerToStr(controller::CANCEL_B)<<'\n';
-        std::cout<<controllerToStr(controller::START)<<'\n';
-        std::cout<<controllerToStr(controller::SELECT)<<'\n';
+        std::cout << prompt << '\n';
+        auto d = ReadInput(N);
+        const auto p = actions.at(d);
+        std::cout << p.first << " : " << controllerToStr(p.second) << '\n';
+        return p.second;
     }
 }

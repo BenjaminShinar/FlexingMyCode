@@ -1,7 +1,17 @@
 #include "mockmon_data.h"
 #include <cmath>
+
 namespace mockmon
 {
+    bool Mockmon::IsAbleToBattle() const {return m_ableToBattle;}
+    void Mockmon::LoseSomehow()
+    {
+        m_ableToBattle = false;
+    }
+    void Mockmon::FullRestore()
+    {
+        m_ableToBattle = true;
+    }
     void Mockmon::GrantExperiencePoints(long points)
     {
         if (points <= 0) return;
@@ -83,7 +93,6 @@ namespace mockmon
          
         auto xp = std::floor(level * m_speciesExp * (IsWild()? 1.0: 1.2));
         std::cout << m_name << " gives out " << xp << " xp points!" <<'\n';
-        std::cout << m_name << " species Exp  " << m_speciesExp<<'\n';
         return xp;
     }
     std::ostream& operator<<(std::ostream& os,const MockmonExp& mx)

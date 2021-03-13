@@ -28,12 +28,19 @@ CPP_ANSI=-std=c++17
 #C_LINKER_FLAGS= 
 C_LINKER_FLAGS= -lm -pthread -lrt
 
+
+LIBS_NAME = battle_tower battle controller mockmon_data
+MAIN_NAME = main
+LIBS = $(addprefix obj/,$(addsuffix .o,$(LIBS_NAME)))   
+MAIN = $(addprefix obj/,$(addsuffix .o,$(MAIN_NAME)))   
+
 all: output/main.out
+
 
 ########################################################
 
-output/%.out: obj/%.o obj/%_test.o
-	$(CPP) $(CPP_ANSI) $(CPP_COMPILER_FLAGS) $(^) -o $(@)
+obj/main.o: lib/main.cpp 
+	$(CPP) $(CPP_ANSI) $(CPP_COMPILER_FLAGS) -c $(<) -o $(@)
 
 obj/%.o: lib/%.cpp include/%.h
 	$(CPP) $(CPP_ANSI) $(CPP_COMPILER_FLAGS) -c $(<) -o $(@)
@@ -43,7 +50,7 @@ obj/%_test.o: test/%_test.c include/%.h
 
 #################-EXAMPLES-####################
 
-output/main.out: main.o obj/mockmon_data.o obj/battle_tower.o
+output/main.out: $(MAIN) $(LIBS)
 	$(CPP) $(CPP_ANSI) $(CPP_COMPILER_FLAGS) $(^) -o $(@)
 
 
