@@ -3,6 +3,7 @@
 #include <array>
 #include <utility>
 #include <iostream>
+#include <map>
 namespace mockmon::controller
 {
     
@@ -31,6 +32,16 @@ namespace mockmon::controller
         auto d = ReadInput(N);
         const auto p = actions.at(d);
         std::cout << p.first << " : " << controllerToStr(p.second) << '\n';
+        return p.second;
+    }
+
+    /* has to be defined here because it uses a template argument*/
+    template <typename T,std::size_t N>
+    T GetAnyInput(const std::string &prompt, const std::array<std::pair<std::string, T>, N> & options)
+    {
+        std::cout << prompt << '\n';
+        auto d = ReadInput(N);
+        const auto p = options.at(d);
         return p.second;
     }
 }

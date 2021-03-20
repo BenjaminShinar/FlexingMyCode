@@ -53,7 +53,7 @@ namespace mockmon
         long experience_points = 0;
         void LevelUp();
         bool m_outputEvents;
-        bool m_ableToBattle;
+        bool m_ableToBattle = true;
         const long m_speciesExp = 35;
     };
 }

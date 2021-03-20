@@ -1,12 +1,21 @@
 #include "battle_tower.h"
 #include "battle.h"
+#include "types.h"
+#include "controller.h"
+#include "types.h"
+#include <array>
+#include <utility>
+
 namespace mockmon
 {
         void BattleTower::StartTower (Mockmon & playerMonster)
         {
             auto enemy = BattleTower::GenerateEnemy(9,"garry");
             Battle::DoBattle(playerMonster,enemy);
-            
+            // std::array<std::pair<std::string, Types>, 2> typesMap = {std::make_pair("iswater", Types::Water), std::make_pair("isnoram", Types::Normal)};
+
+            // auto a =controller::GetAnyInput("test types",typesMap);
+            // std::cout<< "testting any input: " << a <<'\n';
             //generate oppnenets for the player to fight
         }
 

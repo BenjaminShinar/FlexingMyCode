@@ -29,12 +29,12 @@ CPP_ANSI=-std=c++17
 C_LINKER_FLAGS= -lm -pthread -lrt
 
 
-LIBS_NAME = battle_tower battle controller mockmon_data
+LIBS_NAME = battle_tower battle controller mockmon_data moves types
 MAIN_NAME = main
 LIBS = $(addprefix obj/,$(addsuffix .o,$(LIBS_NAME)))   
 MAIN = $(addprefix obj/,$(addsuffix .o,$(MAIN_NAME)))   
 
-all: output/main.out
+all: output/main.exe
 
 
 ########################################################
@@ -50,7 +50,7 @@ obj/%_test.o: test/%_test.c include/%.h
 
 #################-EXAMPLES-####################
 
-output/main.out: $(MAIN) $(LIBS)
+output/main.exe: $(MAIN) $(LIBS)
 	$(CPP) $(CPP_ANSI) $(CPP_COMPILER_FLAGS) $(^) -o $(@)
 
 
@@ -71,7 +71,8 @@ output/main.out: $(MAIN) $(LIBS)
 
 .PHONY: clean 
 clean:
-	rm -fv output/*.out obj/*.o obj/*core* ./*core* 
+	del /q /s output\*.out output\*.exe obj\*.o
+#rm -fv output/*.out obj/*.o obj/*core* ./*core* 
 
 
 
