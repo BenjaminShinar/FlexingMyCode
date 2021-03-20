@@ -1,16 +1,57 @@
 #include "mockmon_data.h"
 #include <cmath>
+#include <algorithm>
 
 namespace mockmon
 {
-    bool Mockmon::IsAbleToBattle() const {return m_ableToBattle;}
+    bool Mockmon::IsAbleToBattle() const 
+    {
+        return m_ableToBattle && m_currentCondtion.HP() >0;
+    }
+
+    void Mockmon::AttackWith(Mockmon & enemy, moves::MoveId mvid)
+    {
+        auto chosenMove = std::find_if(m_Moveset.begin(),m_Moveset.end(),[&](const moves::EquipedMove  & mv ){ return mv.Identifier() == mvid;});
+        auto power = 0;
+        if (chosenMove != m_Moveset.end())
+        {
+            auto usedPower = chosenMove->UseMove();
+            power = -1 *usedPower.value_or(0);
+                
+        }
+        enemy.m_currentCondtion.ChangeHealth(power);
+    }
+
     void Mockmon::LoseSomehow()
     {
         m_ableToBattle = false;
     }
     void Mockmon::FullRestore()
     {
+        auto amountToMax = 100 - m_currentCondtion.HP();
+        m_currentCondtion.ChangeHealth(amountToMax);
         m_ableToBattle = true;
+    }
+    bool Mockmon::TeachMove(moves::MoveId newMoveId)
+    {
+        if (m_Moveset.size() <=moves::EquipedMove::MaxMoves)
+        {
+            m_Moveset.push_back(moves::EquipedMove(moves::BaseMove::AllMoves.at(newMoveId)));
+            if (m_outputEvents)
+            {
+                std::cout << m_name << " learned [" << newMoveId << "]"<<'\n';
+            } 
+            return true;
+        }
+        if (m_outputEvents)
+        {
+            std::cout << m_name << " cant learn [" << newMoveId << "]"<<'\n';
+        } 
+        return false;
+    }
+    const std::vector<moves::EquipedMove> & Mockmon::GetMoveSet() const
+    {
+        return m_Moveset;
     }
     void Mockmon::GrantExperiencePoints(long points)
     {
@@ -34,7 +75,10 @@ namespace mockmon
             GrantExperiencePoints(reminder);
         }
     }
-
+    MockmonExp Mockmon::CheckExperiencePoints() const 
+    {
+        return MockmonExp{level,experience_points};
+    }
     //level 1: 0 -100
     //level 2: 100-300
     //level 3: 300 - 600
@@ -88,16 +132,9 @@ namespace mockmon
     }
 
     long Mockmon::ExpFromDefeating() const
-    {
-
-         
+    {  
         auto xp = std::floor(level * m_speciesExp * (IsWild()? 1.0: 1.2));
         std::cout << m_name << " gives out " << xp << " xp points!" <<'\n';
         return xp;
-    }
-    std::ostream& operator<<(std::ostream& os,const MockmonExp& mx)
-    {
-        os << "Level: " << mx.CurrentLevel << " Exp: " << mx.CurrentExperience;
-        return os;
     }
 }

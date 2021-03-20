@@ -29,7 +29,7 @@ CPP_ANSI=-std=c++17
 C_LINKER_FLAGS= -lm -pthread -lrt
 
 
-LIBS_NAME = battle_tower battle controller mockmon_data moves types
+LIBS_NAME = battle_tower battle controller mockmon_data moves types condition stats mockmon_exp
 MAIN_NAME = main
 LIBS = $(addprefix obj/,$(addsuffix .o,$(LIBS_NAME)))   
 MAIN = $(addprefix obj/,$(addsuffix .o,$(MAIN_NAME)))   

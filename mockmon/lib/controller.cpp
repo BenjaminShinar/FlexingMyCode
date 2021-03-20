@@ -32,16 +32,22 @@ namespace mockmon::controller
         }
     }
 
+   std::ostream& operator<<(std::ostream& os,const controllerEnum& ctrl)
+    {
+        os << controllerToStr(ctrl);
+        return os;
+    }
+    
     void TestControllerToString()
     {
-        std::cout << controllerToStr(controllerEnum::DPAD_UP) << '\n';
-        std::cout << controllerToStr(controllerEnum::DPAD_LEFT) << '\n';
-        std::cout << controllerToStr(controllerEnum::DPAD_DOWN) << '\n';
-        std::cout << controllerToStr(controllerEnum::DPAD_RIGHT) << '\n';
-        std::cout << controllerToStr(controllerEnum::ACTION_A) << '\n';
-        std::cout << controllerToStr(controllerEnum::CANCEL_B) << '\n';
-        std::cout << controllerToStr(controllerEnum::START) << '\n';
-        std::cout << controllerToStr(controllerEnum::SELECT) << '\n';
+        std::cout << controllerEnum::DPAD_UP << '\n';
+        std::cout << controllerEnum::DPAD_LEFT << '\n';
+        std::cout << controllerEnum::DPAD_DOWN << '\n';
+        std::cout << controllerEnum::DPAD_RIGHT << '\n';
+        std::cout << controllerEnum::ACTION_A << '\n';
+        std::cout << controllerEnum::CANCEL_B << '\n';
+        std::cout << controllerEnum::START << '\n';
+        std::cout << controllerEnum::SELECT << '\n';
     }
 
     unsigned int ReadInput(std::size_t Max)

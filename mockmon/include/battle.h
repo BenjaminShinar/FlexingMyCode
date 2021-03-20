@@ -20,6 +20,9 @@ namespace mockmon
         
         private:
         void DetermineBattle(controller::controllerEnum action);
+        void PlayerTurn();
+        void EnemyTurn();
+        void LoopBattle();
 
         Mockmon & r_playerMockmon;
         Mockmon & r_enemyMockmon;

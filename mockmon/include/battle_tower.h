@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include "mockmon_data.h"
 #include <string>
 #include <iostream>
