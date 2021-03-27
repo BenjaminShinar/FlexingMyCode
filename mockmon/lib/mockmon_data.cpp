@@ -101,6 +101,11 @@ namespace mockmon
     {
         m_name = newName;
     }
+    std::string_view Mockmon::GetName() const
+    {
+        return m_name;
+    }
+    
 
     void Mockmon::GainExperienceFromVictory(const Mockmon & defeatedMon)
     {

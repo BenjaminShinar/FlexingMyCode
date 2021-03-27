@@ -1,3 +1,15 @@
+#determine OS
+ifeq ($(OS), Windows_NT)
+	CURR_OS = WIN
+	OUTEXTEN=.exe
+	DELCMD = del /q /s o
+	
+else
+	CURR_OS = LIN
+	OUTEXTEN=.out
+	DELCMD = rm -fv
+endif
+
 #user flags:
 DFLAG=
 
@@ -25,16 +37,22 @@ CPP_COMPILER_FLAGS=$(WARNING_LEVEL) -Weffc++ -fpic $(CPP_OPTIMIZING) -I./include
 WARNING_LEVEL=-pedantic-errors -Wall -Wextra
 C_ANSI=-ansi
 CPP_ANSI=-std=c++2a
-#C_LINKER_FLAGS= 
-C_LINKER_FLAGS= -lm -pthread -lrt
 
-all: knights_tour.out product_without.out reverse_sentence.out five_stars.out output/calculator.out output/roman_numerals.out
+C_LINKER_FLAGS= -lm -pthread
+C_LINKER_LRT= -lrt
+
+LIBS_NAME = battle_tower battle controller mockmon_data moves types condition stats mockmon_exp
+MAIN_NAME = main
+
+PROJECTS = knights_tour product_without reverse_sentence  five_stars calculator roman_numerals
+TARGETS1 = $(addprefix output/,$(addsuffix $(OUTEXTEN),$(PROJECTS)))   
+all: $(TARGETS1)
 
 ########################################################
 obj/%_test.o: test/%_test.cpp include/%.h
 	$(CPP) $(CPP_ANSI) $(CPP_COMPILER_FLAGS) -c $(<) -o $(@)
 
-output/%.out: obj/%.o obj/%_test.o
+output/%$(OUTEXTEN): obj/%.o obj/%_test.o
 	$(CPP) $(CPP_ANSI) $(CPP_COMPILER_FLAGS) $(^) -o $(@)
 
 obj/%.o: lib/%.cpp include/%.h
@@ -62,25 +80,25 @@ obj/%_test.o: test/%_test.c include/%.h
 
 ########################################################
 
-knights_tour.out: obj/knights_tour.o
+output/knights_tour$(OUTEXTEN): obj/knights_tour.o
 	$(CPP) $(C_ANSI) $(C_COMPILER_FLAGS) $(^) -o $(@) $(C_LINKER_FLAGS)
 		
 obj/knights_tour.o: knights_tour.cpp
 	$(CPP) $(C_ANSI) $(C_COMPILER_FLAGS) $(^) -c -o $(@)
 
-product_without.out: obj/product_without.o
+output/product_without$(OUTEXTEN): obj/product_without.o
 	$(CPP) $(C_ANSI) $(C_COMPILER_FLAGS) $(^) -o $(@) $(C_LINKER_FLAGS)
 
 obj/product_without.o: product_without.c
 	$(CC) $(C_ANSI) $(C_COMPILER_FLAGS) $(^) -c -o $(@)
 
-reverse_sentence.out: obj/reverse_sentence.o
+output/reverse_sentence$(OUTEXTEN): obj/reverse_sentence.o
 	$(CC) $(C_ANSI) $(C_COMPILER_FLAGS) $(^) -o $(@) $(C_LINKER_FLAGS)
 
 obj/reverse_sentence.o: reverse_sentence.c
 	$(CC) $(C_ANSI) $(C_COMPILER_FLAGS) $(^) -c -o $(@)
 
-five_stars.out: obj/five_stars.o
+output/five_stars$(OUTEXTEN): obj/five_stars.o
 	$(CPP) $(C_ANSI) $(C_COMPILER_FLAGS) $(^) -o $(@) $(C_LINKER_FLAGS)
 
 obj/five_stars.o: five_stars.cpp
@@ -89,7 +107,7 @@ obj/five_stars.o: five_stars.cpp
 
 .PHONY: clean 
 clean:
-	rm -fv output/*.out obj/*.o obj/*core* ./*core* 
+	$(DELCMD) output\*.out output\*.exe obj\*.o
 
 
 
@@ -101,3 +119,6 @@ clean:
 #will print out the command, so don't pipe this.
 #use ralative paths to c so it will work both regardless of computer (home or lab)
 #sometimes we need -lm to inlude the math library
+
+#for windows:
+#mingw32-make.exe instead of make

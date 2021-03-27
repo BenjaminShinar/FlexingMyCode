@@ -34,6 +34,7 @@ namespace mockmon
         void AttackWith(Mockmon & enemy, moves::MoveId);
         const std::vector<moves::EquipedMove> & GetMoveSet() const;
         Condition m_currentCondtion;
+        std::string_view GetName() const;
         protected:
         
         private:
