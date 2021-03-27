@@ -1,4 +1,6 @@
 #determine OS
+#what extension the output gets
+#how does the delete command word
 ifeq ($(OS), Windows_NT)
 	CURR_OS = WIN
 	OUTEXTEN=.exe

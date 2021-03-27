@@ -5,6 +5,7 @@
 #include <string>
 #include <string_view>
 #include <map>
+#include <deque>
 class RomanNumeral
 {
     public:
@@ -14,7 +15,7 @@ class RomanNumeral
     static  unsigned int TransfromToNumber(const std::string_view & str) { return 5;}
     const std::string Roman;
     const unsigned int Number;
-
+    static std::string MakeText(const unsigned int number);
 
     struct Amounts
     {
@@ -41,7 +42,8 @@ class RomanNumeral
     };
 
     private:
-
+    static std::string DecomposeDeque(std::deque<int> & digits, char symbol);
+    static std::string MakeTextRec(int number, char Symbol);
     static constexpr auto AllowedCharacters ="IiVvXxLlCcDdMm";
     static std::map<char, int> CharactersWorth;
 }
