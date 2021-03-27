@@ -1,4 +1,5 @@
 #include "moves.h"
+#include "random_gen.h"
 
 #include <string>
 #include <iostream>
@@ -12,6 +13,7 @@ namespace mockmon::moves
         {
         case MoveId::Tackle : return "Tackle";break;
         case MoveId::WaterGun : return "WaterGun";break;
+        case MoveId::Guillotine: return "Guillotine";break;
         default: return "Unknown move!"; break;
         }
     }
@@ -26,7 +28,9 @@ namespace mockmon::moves
     {
         //id,{id,type,accuracy,power, base pp,max pp}
         {MoveId::Tackle, BaseMove(MoveId::Tackle,types::Types::Normal,95,35,35,46)},
-        {MoveId::WaterGun, BaseMove(MoveId::WaterGun,types::Types::Water,100,40,25,40)}
+        {MoveId::WaterGun, BaseMove(MoveId::WaterGun,types::Types::Water,100,40,25,40)},
+        {MoveId::Guillotine , BaseMove(MoveId::Guillotine ,types::Types::Normal,30,200,5,8)},
+        {MoveId::Struggle, BaseMove(MoveId::Struggle,types::Types::Typeless,50,30,500,1000)},
     };
 
     unsigned int EquipedMove::RemainningPowerPoints() const
@@ -38,7 +42,7 @@ namespace mockmon::moves
         if (0 < RemainningPowerPoints())
         {
             --m_currentPowerPoints;
-            if (BaseMoveStats.BaseAccuracy >90)
+            if (BaseMoveStats.BaseAccuracy > random::Randomer::GetRandom())
             {
                 return BaseMoveStats.BasePower;
             }
@@ -63,7 +67,7 @@ namespace mockmon::moves
     std::string EquipedMove::Describe() const
     {
       std::string description("move is ");
-        description.append( "some name ").append(" it has ").append(std::to_string(RemainningPowerPoints())).append(" power points left");
+        description.append(moveToStr(Identifier())).append(" it has ").append(std::to_string(RemainningPowerPoints())).append(" power points left");
       return description;
     }
 

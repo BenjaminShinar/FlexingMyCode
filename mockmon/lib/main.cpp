@@ -17,9 +17,21 @@
 
 using namespace mockmon;
 
-int main()
+int main(int argc, char *argv[],char ** env)
 {
     Mockmon m(true);
-    m.ChangeName("levelupper");
+    
+    if (argc <2)
+    {
+        std::string mockmonName;
+        std::cout<< "how will you call your mockmon?" << '\n';
+        std::cin >> mockmonName;
+        m.ChangeName(mockmonName);
+    }
+    else
+    {
+        m.ChangeName(argv[1]);
+    }
+
     BattleTower::StartTower(m);
 }

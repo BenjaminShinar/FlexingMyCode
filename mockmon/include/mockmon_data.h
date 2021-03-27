@@ -20,6 +20,7 @@ namespace mockmon
         {
 
         }
+        int ModifyAttack(const int baseDamage,const Mockmon & target) const;
 
         void ChangeName(const std::string & newName); //needs to be somewhere else.
         void GrantExperiencePoints(long points);
@@ -46,6 +47,10 @@ namespace mockmon
         bool m_ableToBattle = true;
         const long m_speciesExp = 35;
         std::vector<moves::EquipedMove> m_Moveset;
+        const Stats IVs; //this is calculated once when the pokemon is born;
+        const Stats BaseTypeStats; // this belongs to the pokemon base class, not the indvidual;
+        Stats CurrentStats; // this is calculated each level;
+        Stats EVs; // this is what we gain after each battle;
     };
 
            /*

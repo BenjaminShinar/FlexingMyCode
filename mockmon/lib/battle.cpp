@@ -22,22 +22,31 @@ namespace mockmon
         int round =0;
         while (r_playerMockmon.IsAbleToBattle() && r_enemyMockmon.IsAbleToBattle())
         {
-            std::cout << "" <<" is engaging in battle with " << ""<< " starting round " << ++round <<'\n';
+            std::cout << r_playerMockmon.GetName() <<" is engaging in battle with " << r_enemyMockmon.GetName()<< " starting round " << ++round <<'\n';
             PlayerTurn();
+            if (r_enemyMockmon.IsAbleToBattle())
+            {
+                EnemyTurn();
+            }
         }
-        auto endAction = r_enemyMockmon.IsAbleToBattle()? controller::controllerEnum::ACTION_A : controller::controllerEnum::CANCEL_B;
+        auto endAction = r_playerMockmon.IsAbleToBattle()? controller::controllerEnum::ACTION_A : controller::controllerEnum::CANCEL_B;
         DetermineBattle(endAction);
-        std::cout << "" <<" battke ended at round " <<  round <<'\n';
-
+        const auto winner = r_playerMockmon.IsAbleToBattle() ? r_playerMockmon.GetName() : r_enemyMockmon.GetName();
+        std::cout << "Battle ended at round " <<  round << " winner: "<< winner<<'\n';
     }
 
     void Battle::PlayerTurn()
     {
-        auto attck = controller::GetAnyInput("which move to use?",r_playerMockmon.GetMoveSet());
-        r_playerMockmon.AttackWith(r_enemyMockmon,attck);
-
+        auto attack = controller::GetAnyInput("which move to use?",r_playerMockmon.GetMoveSet());
+        r_playerMockmon.AttackWith(r_enemyMockmon,attack);
     }
 
+    void Battle::EnemyTurn()
+    {
+        auto attack = r_enemyMockmon.GetMoveSet().front().Identifier();
+        r_enemyMockmon.AttackWith(r_playerMockmon,attack);
+    }
+    
     void Battle::DetermineBattle(controller::controllerEnum action)
     {
 
@@ -51,6 +60,7 @@ namespace mockmon
         }
         case (controller::controllerEnum::CANCEL_B):
         {
+            r_enemyMockmon.GainExperienceFromVictory(r_playerMockmon);
             r_playerMockmon.LoseSomehow();
             break;
         }

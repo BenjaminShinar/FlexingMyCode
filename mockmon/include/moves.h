@@ -13,6 +13,8 @@ namespace mockmon::moves
     {      
         Tackle,
         WaterGun,
+        Guillotine,
+        Struggle,
     };
 
     std::ostream& operator<<(std::ostream& os,const MoveId& moveId);

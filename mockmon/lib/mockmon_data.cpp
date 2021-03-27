@@ -12,14 +12,30 @@ namespace mockmon
     void Mockmon::AttackWith(Mockmon & enemy, moves::MoveId mvid)
     {
         auto chosenMove = std::find_if(m_Moveset.begin(),m_Moveset.end(),[&](const moves::EquipedMove  & mv ){ return mv.Identifier() == mvid;});
-        auto power = 0;
         if (chosenMove != m_Moveset.end())
         {
             auto usedPower = chosenMove->UseMove();
-            power = -1 *usedPower.value_or(0);
+            if (usedPower.has_value())
+            {
+                auto damage = ModifyAttack(usedPower.value_or(0),enemy);          
+                std::cout<< GetName() << " hit " << enemy.GetName() <<" with " << (*chosenMove).Identifier() <<" for " << damage << " damage!" << '\n';
+                enemy.m_currentCondtion.ChangeHealth(-1* damage);
+            }
+            else
+            {
+                std::cout<< GetName() << " missed with " << (*chosenMove).Identifier() << '\n';
+            }
                 
         }
-        enemy.m_currentCondtion.ChangeHealth(power);
+        
+    }
+
+    int Mockmon::ModifyAttack(const int baseDamage,const Mockmon & target) const
+    {
+        auto levelModifier = 2+((2*level)/5);
+        auto extraModifier = 1; //attack / defence
+        auto statsModifier = 1; // stab? all others
+        return (extraModifier*(2+((levelModifier* baseDamage * statsModifier)/50)));
     }
 
     void Mockmon::LoseSomehow()
@@ -131,15 +147,16 @@ namespace mockmon
         long xp =static_cast<long>(std::floor((NominatorValue*NominatorModifiers)/Denominator));
         if (m_outputEvents)
         {
-            std::cout << m_name << " gain " << xp << " xp points!" <<'\n';
+            std::cout << GetName() << " gain " << xp << " xp points!" <<'\n';
         }
+        EVs+=defeatedMon.BaseTypeStats;
         GrantExperiencePoints(xp);
     }
 
     long Mockmon::ExpFromDefeating() const
     {  
         auto xp = std::floor(level * m_speciesExp * (IsWild()? 1.0: 1.2));
-        std::cout << m_name << " gives out " << xp << " xp points!" <<'\n';
+        std::cout << GetName() << " was defeted! gives out " << xp << " xp points!" <<'\n';
         return xp;
     }
 }

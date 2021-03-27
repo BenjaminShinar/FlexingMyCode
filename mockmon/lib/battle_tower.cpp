@@ -11,6 +11,7 @@ namespace mockmon
         void BattleTower::StartTower (Mockmon & playerMonster)
         {
             playerMonster.TeachMove(moves::MoveId::WaterGun);
+            playerMonster.TeachMove(moves::MoveId::Guillotine);
             auto enemy = BattleTower::GenerateEnemy(9,"garry");
             Battle::DoBattle(playerMonster,enemy);
             
@@ -22,16 +23,16 @@ namespace mockmon
 
         Mockmon BattleTower::GenerateEnemy(int requestLevel,std::string enemyName)
         {
-            Mockmon enmey(false);
+            Mockmon enemy(false);
 
-            enmey.ChangeName(enemyName);
+            enemy.ChangeName(enemyName);
             for (auto z =1; z<=requestLevel;++z)
             {
-                        enmey.GrantExperiencePoints(z* 100);
+                        enemy.GrantExperiencePoints(z* 100);
             }
-            std::cout << "enemy is " << enmey.CheckExperiencePoints() << '\n';
-
-            return enmey;
+            std::cout << "enemy mockmon " <<enemy.GetName() << " is " << enemy.CheckExperiencePoints() << '\n';
+            enemy.TeachMove(moves::MoveId::Struggle);
+            return enemy;
         }
 
 }
