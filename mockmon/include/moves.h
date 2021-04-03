@@ -27,6 +27,9 @@ namespace mockmon::moves
         const unsigned int BasePower;
         const unsigned int BaseStartingPowerPoints;
         const unsigned int BaseMaxPowerPoints;
+        moves::MoveId Identifier() const;
+        bool UseMove() const;
+
         static const std::map<moves::MoveId,BaseMove> AllMoves;
         
         private:
@@ -51,7 +54,7 @@ namespace mockmon::moves
         std::string Describe() const;
         moves::MoveId Identifier() const;
         unsigned int RemainningPowerPoints() const;
-        std::optional<int> UseMove();
+        bool UseMove();
         static constexpr std::size_t MaxMoves= 4;    
         private:
         unsigned int m_fullPowerPoints;

@@ -14,6 +14,7 @@ namespace mockmon::moves
         case MoveId::Tackle : return "Tackle";break;
         case MoveId::WaterGun : return "WaterGun";break;
         case MoveId::Guillotine: return "Guillotine";break;
+        case MoveId::Struggle: return "Struggle"; break;
         default: return "Unknown move!"; break;
         }
     }
@@ -29,25 +30,37 @@ namespace mockmon::moves
         //id,{id,type,accuracy,power, base pp,max pp}
         {MoveId::Tackle, BaseMove(MoveId::Tackle,types::Types::Normal,95,35,35,46)},
         {MoveId::WaterGun, BaseMove(MoveId::WaterGun,types::Types::Water,100,40,25,40)},
-        {MoveId::Guillotine , BaseMove(MoveId::Guillotine ,types::Types::Normal,30,200,5,8)},
+        {MoveId::Guillotine ,BaseMove(MoveId::Guillotine ,types::Types::Normal,30,200,5,8)},
         {MoveId::Struggle, BaseMove(MoveId::Struggle,types::Types::Typeless,50,30,500,1000)},
     };
+
+    moves::MoveId BaseMove::Identifier() const
+    {
+        return MoveId;
+    }
+
+    bool BaseMove::UseMove() const
+    {
+        return (BaseAccuracy > random::Randomer::GetRandom());
+    }
+
+
 
     unsigned int EquipedMove::RemainningPowerPoints() const
     {
         return m_currentPowerPoints;
     }
-    std::optional<int> EquipedMove::UseMove()
+    bool EquipedMove::UseMove()
     {
         if (0 < RemainningPowerPoints())
         {
             --m_currentPowerPoints;
             if (BaseMoveStats.BaseAccuracy > random::Randomer::GetRandom())
             {
-                return BaseMoveStats.BasePower;
+                return true;
             }
         }
-        return {};
+        return false;;
     }
 
     void EquipedMove::RefillPowerPoints()

@@ -8,30 +8,42 @@
 
 namespace mockmon
 {
-        void BattleTower::StartTower (Mockmon & playerMonster)
+        void BattleTower::StartTower (Mockmon & playerMonster,unsigned int maxFloor)
         {
-            playerMonster.TeachMove(moves::MoveId::WaterGun);
-            playerMonster.TeachMove(moves::MoveId::Guillotine);
-            auto enemy = BattleTower::GenerateEnemy(9,"garry");
+            int currentFloor{0};
+            while(currentFloor < maxFloor && playerMonster.IsAbleToBattle())
+            {
+                
+                if (!TowerFloor(playerMonster,++currentFloor))
+                    std::cout << "player mockmon " << playerMonster.GetName() << " has fallen in floor "  << currentFloor <<'\n';
+            }
+
+            if (playerMonster.IsAbleToBattle())
+            {
+                std::cout << "player mockmon " << playerMonster.GetName() << " has conquered all "  << maxFloor << " of the tower!" <<'\n';
+            }
+
+        }
+        bool BattleTower::TowerFloor (Mockmon & playerMonster,unsigned int floorLevel)
+        {
+            //playerMonster.TeachMove(moves::MoveId::WaterGun);
+            //playerMonster.TeachMove(moves::MoveId::Guillotine);
+            auto enemy = BattleTower::GenerateEnemy(floorLevel,MockmonSpeciesId::Ratata,"garry");
             Battle::DoBattle(playerMonster,enemy);
-            
+            return(playerMonster.IsAbleToBattle());
             // std::array<std::pair<std::string, types::Types>, 2> typesMap = {std::make_pair("iswater", types::Types::Water), std::make_pair("isnoram", types::Types::Normal)};
             // auto a =controller::GetAnyInput("test types",typesMap);
             // std::cout<< "testting any input: " << a <<'\n';
             // //generate oppnenets for the player to fight
         }
 
-        Mockmon BattleTower::GenerateEnemy(int requestLevel,std::string enemyName)
+        Mockmon BattleTower::GenerateEnemy(int requestLevel,MockmonSpeciesId enemySpecies, std::string enemyName)
         {
-            Mockmon enemy(false);
-
-            enemy.ChangeName(enemyName);
-            for (auto z =1; z<=requestLevel;++z)
-            {
-                        enemy.GrantExperiencePoints(z* 100);
-            }
+            Mockmon enemy(enemySpecies,enemyName,true);
+            auto needexp = MockmonExp::TotalExperinceForLevel(requestLevel,enemy.GetMockmonSpeciesData().SpeciesLevelUpGroup);
+            enemy.GrantExperiencePoints(needexp);
+            
             std::cout << "enemy mockmon " <<enemy.GetName() << " is " << enemy.CheckExperiencePoints() << '\n';
-            enemy.TeachMove(moves::MoveId::Struggle);
             return enemy;
         }
 

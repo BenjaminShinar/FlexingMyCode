@@ -4,6 +4,11 @@
 
 namespace mockmon
 {
+    const MockmonSpecies & Mockmon::GetMockmonSpeciesData() const
+    {
+        return MockmonSpecies::AllMockmons.at(m_currentSpeciesId);
+    }
+
     bool Mockmon::IsAbleToBattle() const 
     {
         return m_ableToBattle && m_currentCondtion.HP() >0;
@@ -12,32 +17,56 @@ namespace mockmon
     void Mockmon::AttackWith(Mockmon & enemy, moves::MoveId mvid)
     {
         auto chosenMove = std::find_if(m_Moveset.begin(),m_Moveset.end(),[&](const moves::EquipedMove  & mv ){ return mv.Identifier() == mvid;});
-        if (chosenMove != m_Moveset.end())
+        if (chosenMove != m_Moveset.end() && chosenMove->RemainningPowerPoints()>0)
         {
-            auto usedPower = chosenMove->UseMove();
-            if (usedPower.has_value())
+            if (chosenMove->UseMove())
             {
-                auto damage = ModifyAttack(usedPower.value_or(0),enemy);          
+                auto damage = ModifyAttack(*chosenMove,enemy);          
                 std::cout<< GetName() << " hit " << enemy.GetName() <<" with " << (*chosenMove).Identifier() <<" for " << damage << " damage!" << '\n';
                 enemy.m_currentCondtion.ChangeHealth(-1* damage);
             }
             else
             {
                 std::cout<< GetName() << " missed with " << (*chosenMove).Identifier() << '\n';
+            }  
+        }
+        else
+        {
+            const auto struggleMove = moves::BaseMove::AllMoves.at(moves::MoveId::Struggle);
+            if (struggleMove.UseMove())
+            {
+                auto damage = ModifyAttack(struggleMove,enemy);
+                auto recoilDamage = std::max(1,damage/2);
+                std::cout<< GetName() << " struggles with  " << enemy.GetName() <<" and managed to hit for " << damage << " damage!" << '\n';
+                std::cout<< GetName() << " takes " << recoilDamage << " recoile damage while struggling!" << '\n';
+                enemy.m_currentCondtion.ChangeHealth(-1* damage);
+                m_currentCondtion.ChangeHealth(-1* recoilDamage);
             }
-                
+            else
+            {
+                std::cout<< GetName() << " missed with " << struggleMove.Identifier() << '\n';
+            }
         }
         
     }
 
-    int Mockmon::ModifyAttack(const int baseDamage,const Mockmon & target) const
+    int Mockmon::ModifyAttack(const moves::EquipedMove & AttackingMove,const Mockmon & target) const
     {
-        auto levelModifier = 2+((2*level)/5);
-        auto extraModifier = 1; //attack / defence
-        auto statsModifier = 1; // stab? all others
+        auto baseDamage = AttackingMove.BaseMoveStats.BasePower;
+        auto levelModifier = 2+((2*CurrentLevel)/5);
+        auto  statsModifier = CurrentStats.Attack / target.CurrentStats.Defence; //attack / defence
+        auto  extraModifier = 1; // stab? all others
         return (extraModifier*(2+((levelModifier* baseDamage * statsModifier)/50)));
     }
 
+    int Mockmon::ModifyAttack(const moves::BaseMove & AttackingMove,const Mockmon & target) const
+    {
+        auto baseDamage = AttackingMove.BasePower;
+        auto levelModifier = 2+((2*CurrentLevel)/5);
+        auto  statsModifier = CurrentStats.Attack / target.CurrentStats.Defence; //attack / defence
+        auto  extraModifier = 1; // stab? all others
+        return (extraModifier*(2+((levelModifier* baseDamage * statsModifier)/50)));
+    }
     void Mockmon::LoseSomehow()
     {
         m_ableToBattle = false;
@@ -72,15 +101,15 @@ namespace mockmon
     void Mockmon::GrantExperiencePoints(long points)
     {
         if (points <= 0) return;
-        auto neededToNextLevelAbs =((level+1)*(level+2)) / 2 *100;
-        auto neededToNextLevel = neededToNextLevelAbs - experience_points;
-        
+        auto positivePoints = static_cast<unsigned long>(points);
+        auto neededToNextLevelAbs = MockmonExp::TotalExperinceForLevel(CurrentLevel+1,GetMockmonSpeciesData().SpeciesLevelUpGroup);
+        auto neededToNextLevel = neededToNextLevelAbs - experience_points;      
         //std::cout<< m_name << " required exp for nexy level " << level+1 << " is " << neededToNextLevelAbs <<'\n';
-        auto reminder = points - neededToNextLevel;
+        auto reminder = positivePoints - neededToNextLevel;
 
-        if (points < neededToNextLevel)
+        if (positivePoints < neededToNextLevel)
         {
-            experience_points += points;
+            experience_points += positivePoints;
             //std::cout<< m_name << " cant increase it's level! has " << experience_points << " and needs total of: " << neededToNextLevelAbs <<'\n';
 
         }
@@ -93,26 +122,63 @@ namespace mockmon
     }
     MockmonExp Mockmon::CheckExperiencePoints() const 
     {
-        return MockmonExp{level,experience_points};
+        return MockmonExp{CurrentLevel,experience_points};
     }
-    //level 1: 0 -100
-    //level 2: 100-300
-    //level 3: 300 - 600
-    //level 4: 600 - 1000
-    //level 5: 1500 - 2100
-    //level 6: 2100 - 2700
     void Mockmon::LevelUp()
     {
-        auto nextLevel = level+1;
+        auto nextLevel = CurrentLevel+1;
         if (m_outputEvents)
         {
-            std::cout << m_name << " level increase! [" << level << " -> " << nextLevel << "]"<<'\n';
+            std::cout << m_name << " level increase! [" << CurrentLevel << " -> " << nextLevel << "]"<<'\n';
         }
-        ++level;
-        //evolve?
-
+        ++CurrentLevel;
+        UpdateStats();
+        LearnLevelUpMoves(CurrentLevel);
     }
 
+     void Mockmon::UpdateStats()
+     {
+         CurrentStats = Stats(GetMockmonSpeciesData().SpeciesStats,IVs,EVs,CurrentLevel);
+     }
+    void Mockmon::LearnLevelUpMoves(int newLevel)
+    {
+        const auto movesFromLevelUp = GetMockmonSpeciesData().LevelUpMoves;
+        
+        for (const auto & mvs :  movesFromLevelUp)
+        {
+            if (mvs.first == newLevel)
+            {
+                for (const auto & mv : mvs.second)
+                {
+                    auto exists = std::find_if(std::begin(m_Moveset),std::end(m_Moveset),[&](const moves::EquipedMove & knownMove){return knownMove.Identifier() == mv;});
+                    if (exists == std::end(m_Moveset))
+                    {                
+                        TeachMove(mv);           
+                    }
+                }
+            }
+        }
+    }
+    
+    void Mockmon::LearnLevelUpMoves()
+    {
+        const auto movesFromLevelUp = GetMockmonSpeciesData().LevelUpMoves;
+        
+        for (const auto & mvs :  movesFromLevelUp)
+        {
+            if (mvs.first <= CurrentLevel)
+            {
+                for (const auto & mv : mvs.second)
+                {
+                    auto exists = std::find_if(std::begin(m_Moveset),std::end(m_Moveset),[&](const moves::EquipedMove & knownMove){return knownMove.Identifier() == mv;});
+                    if (exists == std::end(m_Moveset))
+                    {                
+                        TeachMove(mv);           
+                    }
+                }
+            }
+        }
+    }
     void Mockmon::ChangeName(const std::string & newName)
     {
         m_name = newName;
@@ -149,13 +215,14 @@ namespace mockmon
         {
             std::cout << GetName() << " gain " << xp << " xp points!" <<'\n';
         }
-        EVs+=defeatedMon.BaseTypeStats;
+        EVs+=defeatedMon.GetMockmonSpeciesData().SpeciesStats;
         GrantExperiencePoints(xp);
     }
 
     long Mockmon::ExpFromDefeating() const
     {  
-        auto xp = std::floor(level * m_speciesExp * (IsWild()? 1.0: 1.2));
+        auto speciesXp = GetMockmonSpeciesData().SpeciesExp;
+        auto xp = std::floor((CurrentLevel * speciesXp * (IsWild()? 1.0: 1.5)/7.0)) ;
         std::cout << GetName() << " was defeted! gives out " << xp << " xp points!" <<'\n';
         return xp;
     }

@@ -13,8 +13,9 @@ namespace mockmon
     class BattleTower
     {
         public:
-        static void StartTower (Mockmon & playerMonster);
-        static Mockmon GenerateEnemy(int requestLevel,std::string enemyName);
+        static void StartTower (Mockmon & playerMonster, unsigned int maxTowerLevel);
+        static bool TowerFloor (Mockmon & playerMonster, unsigned int floorLevel);
+        static Mockmon GenerateEnemy(int requestLevel,MockmonSpeciesId enemySpecies, std::string enemyName);
 
 
     };

@@ -1,5 +1,6 @@
 #include "battle.h"
 #include "controller.h"
+#include "random_gen.h"
 
 namespace mockmon
 {
@@ -43,7 +44,15 @@ namespace mockmon
 
     void Battle::EnemyTurn()
     {
-        auto attack = r_enemyMockmon.GetMoveSet().front().Identifier();
+        
+        auto options = r_enemyMockmon.GetMoveSet().size();
+        auto attack = moves::MoveId::Struggle;
+        if (options>0)
+        {
+            auto randomAttack = random::Randomer::GetRandom(options);
+            attack= r_enemyMockmon.GetMoveSet().at(randomAttack).Identifier();
+        }
+        
         r_enemyMockmon.AttackWith(r_playerMockmon,attack);
     }
     

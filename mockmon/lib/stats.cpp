@@ -14,6 +14,18 @@ namespace mockmon
       return *this;
     }
 
+    //this happens when we beat an enemy and gain EVS
+    Stats& Stats::operator=(const Stats& otherStats)
+    {
+      Health = std::min(otherStats.Health,MaxStatValue);
+      Attack = std::min(otherStats.Attack,MaxStatValue);
+      Defence = std::min(otherStats.Defence,MaxStatValue);
+      Special = std::min(otherStats.Special,MaxStatValue);
+      Speed = std::min(otherStats.Speed,MaxStatValue);
+      return *this;
+    }
+
+
     //this is the level up stats Increase
     Stats::Stats(const Stats & baseStats,const Stats & IVStats,const Stats & EVStats, unsigned int level)
     {

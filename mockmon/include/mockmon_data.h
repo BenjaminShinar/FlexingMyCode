@@ -8,6 +8,7 @@
 
 #include "condition.h"
 #include "stats.h"
+#include "mockmon_species.h"
 #include "mockmon_exp.h"
 
 namespace mockmon
@@ -15,12 +16,15 @@ namespace mockmon
     class Mockmon
     {   
         public:
-        explicit Mockmon(bool silent = false)
-        : m_name("Nameless"),m_outputEvents(silent),m_currentCondtion(),m_Moveset()
+        explicit Mockmon(MockmonSpeciesId species, std::string & name,bool silent = false)
+        :m_currentSpeciesId(species), m_name(name),m_outputEvents(silent),m_currentCondtion()
         {
-
+            LearnLevelUpMoves();
         }
-        int ModifyAttack(const int baseDamage,const Mockmon & target) const;
+        
+        const MockmonSpecies & GetMockmonSpeciesData() const;
+        int ModifyAttack(const moves::EquipedMove & AttackingMove,const Mockmon & target) const;
+        int ModifyAttack(const moves::BaseMove & AttackingMove,const Mockmon & target) const; //struggle
 
         void ChangeName(const std::string & newName); //needs to be somewhere else.
         void GrantExperiencePoints(long points);
@@ -39,36 +43,19 @@ namespace mockmon
         protected:
         
         private:
+        MockmonSpeciesId m_currentSpeciesId;
         std::string m_name;
-        long level =1;
+        long CurrentLevel =1;
         long experience_points = 0;
+        void LearnLevelUpMoves();
+        void LearnLevelUpMoves(int level);
         void LevelUp();
+        void UpdateStats();
         bool m_outputEvents;
         bool m_ableToBattle = true;
-        const long m_speciesExp = 35;
         std::vector<moves::EquipedMove> m_Moveset;
         const Stats IVs; //this is calculated once when the pokemon is born;
-        const Stats BaseTypeStats; // this belongs to the pokemon base class, not the indvidual;
         Stats CurrentStats; // this is calculated each level;
         Stats EVs; // this is what we gain after each battle;
     };
-
-           /*
-        name
-        id
-        original trainer id
-
-        base type
-        current type:
-        level:
-        exp:
-
-
-        stats:
-        ev
-        iv
-
-        moves:
-        */
-
 }

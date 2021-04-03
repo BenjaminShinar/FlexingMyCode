@@ -27,6 +27,7 @@ namespace mockmon
         unsigned int Speed = 1;
         
         Stats& operator+=(const Stats&);
+        Stats& operator= (const Stats&);
 
         private:
         const unsigned int MaxStatValue = 65535;

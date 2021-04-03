@@ -19,7 +19,6 @@ DFLAG=
 ifeq ($(DFLAG),O3)
 	C_OPTIMIZING=-DNDEBUG -O3
 	CPP_OPTIMIZING=-DNDEBUG -O3
-	=
 else 
 ifeq ($(DFLAG),prof)
 	C_OPTIMIZING=-pg
@@ -45,29 +44,31 @@ C_LINKER_FLAGS= -lm -pthread
 C_LINKER_LRT= -lrt
 
 
+SRC=lib
+OBJ=obj
+BIN=output
 
-LIBS_NAME = battle_tower battle controller mockmon_data moves types condition stats mockmon_exp random_gen
-MAIN_NAME = main
-LIBS = $(addprefix obj/,$(addsuffix .o,$(LIBS_NAME)))   
-MAIN = $(addprefix obj/,$(addsuffix .o,$(MAIN_NAME)))   
+SRCS=$(wildcard $(SRC)/*.cpp)
+OBJS=$(patsubst $(SRC)/%.cpp, $(OBJ)/%.o, $(SRCS))
 
-all: output/main$(OUTEXTEN)
+all: $(BIN)/main
+
+release:CPP_OPTIMIZING=-DNDEBUG -O3
+release:clean
+release:$(BIN)/main
 
 
 ########################################################
 
-obj/main.o: lib/main.cpp 
+$(OBJ)/main.o: $(SRC)/main.cpp 
 	$(CPP) $(CPP_ANSI) $(CPP_COMPILER_FLAGS) -c $(<) -o $(@)
 
-obj/%.o: lib/%.cpp include/%.h
-	$(CPP) $(CPP_ANSI) $(CPP_COMPILER_FLAGS) -c $(<) -o $(@)
-
-obj/%_test.o: test/%_test.c include/%.h
+$(OBJ)/%.o: $(SRC)/%.cpp include/%.h
 	$(CPP) $(CPP_ANSI) $(CPP_COMPILER_FLAGS) -c $(<) -o $(@)
 
 #################-EXAMPLES-####################
 
-output/main$(OUTEXTEN): $(MAIN) $(LIBS)
+$(BIN)/main: $(OBJS)
 	$(CPP) $(CPP_ANSI) $(CPP_COMPILER_FLAGS) $(^) -o $(@)
 
 
@@ -87,13 +88,15 @@ output/main$(OUTEXTEN): $(MAIN) $(LIBS)
 ########################################################
 
 .PHONY: clean 
+test:
+
 clean:
-	$(DELCMD) output\*.out output\*.exe obj\*.o
+	$(DELCMD) $(BIN)\*.out $(BIN)\*.exe $(OBJ)\*.o
 #rm -fv output/*.out obj/*.o obj/*core* ./*core* 
 
 
 
-.PRECIOUS: obj/%.o obj/%_test.o obj2/%.o obj2/%_test.o
+.PRECIOUS: $(BIN)/%.o $(BIN)/%_test.o obj2/%.o obj2/%_test.o
 .DEFAULT_GOAL:=all 
 
 #must be tab delimited, otherwise e get a missing seperator error#

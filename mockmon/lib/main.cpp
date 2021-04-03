@@ -3,35 +3,40 @@
 #include "controller.h"
 #include "mockmon_data.h"
 #include "battle_tower.h"
-
-
-#include <iostream>
-#include <sstream> 
-
+#include <stdexcept>
 #include <string>
-#include <array>
-#include <utility>
-
-
-
 
 using namespace mockmon;
 
 int main(int argc, char *argv[],char ** env)
 {
-    Mockmon m(true);
-    
-    if (argc <2)
+    std::string mockmonName{"nameless!"};
+    int maxFloor(5);
+
+    if (argc <3)
     {
-        std::string mockmonName;
         std::cout<< "how will you call your mockmon?" << '\n';
         std::cin >> mockmonName;
-        m.ChangeName(mockmonName);
     }
     else
     {
-        m.ChangeName(argv[1]);
+        mockmonName = (argv[1]);
+        std::string arg = argv[2];
+        try {
+        std::size_t pos;
+        int x = std::stoi(arg, &pos);
+        if (x > 0)
+        maxFloor= x;
+        if (pos < arg.size()) {
+            std::cerr << "Trailing characters after number: " << arg << '\n';
+        }
+        } catch (std::invalid_argument const &ex) {
+        std::cerr << "Invalid number: " << arg << '\n';
+        } catch (std::out_of_range const &ex) {
+        std::cerr << "Number out of range: " << arg << '\n';
+}
     }
+    Mockmon m(MockmonSpeciesId::Mew,mockmonName,true);
 
-    BattleTower::StartTower(m);
+    BattleTower::StartTower(m,maxFloor);
 }
