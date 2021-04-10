@@ -10,7 +10,7 @@ namespace mockmon
 {
         void BattleTower::StartTower (Mockmon & playerMonster,unsigned int maxFloor)
         {
-            int currentFloor{0};
+            auto currentFloor{0u};
             while(currentFloor < maxFloor && playerMonster.IsAbleToBattle())
             {
                 
@@ -29,6 +29,7 @@ namespace mockmon
             //playerMonster.TeachMove(moves::MoveId::WaterGun);
             //playerMonster.TeachMove(moves::MoveId::Guillotine);
             auto enemy = BattleTower::GenerateEnemy(floorLevel,MockmonSpeciesId::Ratata,"garry");
+            std::cout<< "player mockmon " << playerMonster.GetName() << " will face " << enemy.GetName() << " the level " << enemy.CheckExperiencePoints().CurrentLevel << " " << enemy.GetMockmonSpeciesData().Identifier() <<'\n';
             Battle::DoBattle(playerMonster,enemy);
             return(playerMonster.IsAbleToBattle());
             // std::array<std::pair<std::string, types::Types>, 2> typesMap = {std::make_pair("iswater", types::Types::Water), std::make_pair("isnoram", types::Types::Normal)};

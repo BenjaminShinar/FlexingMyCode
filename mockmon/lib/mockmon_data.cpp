@@ -1,4 +1,6 @@
 #include "mockmon_data.h"
+#include "random_gen.h"
+
 #include <cmath>
 #include <algorithm>
 
@@ -17,11 +19,12 @@ namespace mockmon
     void Mockmon::AttackWith(Mockmon & enemy, moves::MoveId mvid)
     {
         auto chosenMove = std::find_if(m_Moveset.begin(),m_Moveset.end(),[&](const moves::EquipedMove  & mv ){ return mv.Identifier() == mvid;});
+        
         if (chosenMove != m_Moveset.end() && chosenMove->RemainningPowerPoints()>0)
         {
             if (chosenMove->UseMove())
             {
-                auto damage = ModifyAttack(*chosenMove,enemy);          
+                auto damage = ModifyAttack(moves::BaseMove::AllMoves.at(chosenMove->Identifier()),enemy);
                 std::cout<< GetName() << " hit " << enemy.GetName() <<" with " << (*chosenMove).Identifier() <<" for " << damage << " damage!" << '\n';
                 enemy.m_currentCondtion.ChangeHealth(-1* damage);
             }
@@ -33,7 +36,7 @@ namespace mockmon
         else
         {
             const auto struggleMove = moves::BaseMove::AllMoves.at(moves::MoveId::Struggle);
-            if (struggleMove.UseMove())
+            if (moves::CheckMoveAccuracy(struggleMove))
             {
                 auto damage = ModifyAttack(struggleMove,enemy);
                 auto recoilDamage = std::max(1,damage/2);
@@ -50,23 +53,45 @@ namespace mockmon
         
     }
 
-    int Mockmon::ModifyAttack(const moves::EquipedMove & AttackingMove,const Mockmon & target) const
-    {
-        auto baseDamage = AttackingMove.BaseMoveStats.BasePower;
-        auto levelModifier = 2+((2*CurrentLevel)/5);
-        auto  statsModifier = CurrentStats.Attack / target.CurrentStats.Defence; //attack / defence
-        auto  extraModifier = 1; // stab? all others
-        return (extraModifier*(2+((levelModifier* baseDamage * statsModifier)/50)));
-    }
-
-    int Mockmon::ModifyAttack(const moves::BaseMove & AttackingMove,const Mockmon & target) const
+    int Mockmon::ModifyAttack(const moves::BaseMove & AttackingMove, const Mockmon & target)
     {
         auto baseDamage = AttackingMove.BasePower;
         auto levelModifier = 2+((2*CurrentLevel)/5);
         auto  statsModifier = CurrentStats.Attack / target.CurrentStats.Defence; //attack / defence
-        auto  extraModifier = 1; // stab? all others
+        auto criticalHitModifier {ModifyAttackForCrticalHit(AttackingMove,target)};
+        auto typeEffectivenessAndStab {ModifyAttackForType(AttackingMove,target)};
+        auto  extraModifier = 1 * criticalHitModifier * typeEffectivenessAndStab ; // stab, type, weahter, badge,status,
         return (extraModifier*(2+((levelModifier* baseDamage * statsModifier)/50)));
     }
+
+    double Mockmon::ModifyAttackForCrticalHit(const moves::BaseMove & AttackingMove,const Mockmon & target)
+    {
+        
+        auto baseChance =100* GetMockmonSpeciesData().SpeciesStats.Speed * AttackingMove.CriticalChanceBoost() / 512.0;
+        if (baseChance > random::Randomer::GetRandom())
+        {
+            
+            auto damageBoost = (5.0+(CurrentLevel*2.0))/(CurrentLevel + 5.0);
+            if (m_outputEvents)
+            {
+                std::cout << m_name << " scored a critical hit" << " boost factor: " << damageBoost <<'\n';
+            }
+            return damageBoost;
+        }
+        return 1.0;
+    }
+
+    double Mockmon::ModifyAttackForType(const moves::BaseMove & AttackingMove,const Mockmon & target)
+    {
+        auto stabModifier = AttackingMove.Type == GetMockmonSpeciesData().SpeciesType ? 1.5 : 1.0;
+        auto sameTypeResistance = AttackingMove.Type == target.GetMockmonSpeciesData().SpeciesType ? 0.75 : 1.0;
+        //need type weakness chart
+        //what if something else?
+        return stabModifier* sameTypeResistance;
+
+    }
+
+
     void Mockmon::LoseSomehow()
     {
         m_ableToBattle = false;
@@ -81,7 +106,7 @@ namespace mockmon
     {
         if (m_Moveset.size() <=moves::EquipedMove::MaxMoves)
         {
-            m_Moveset.push_back(moves::EquipedMove(moves::BaseMove::AllMoves.at(newMoveId)));
+            m_Moveset.push_back(moves::EquipedMove(moves::ConstantMove::AllMovesWrappers.at(newMoveId)));
             if (m_outputEvents)
             {
                 std::cout << m_name << " learned [" << newMoveId << "]"<<'\n';
@@ -140,6 +165,7 @@ namespace mockmon
      {
          CurrentStats = Stats(GetMockmonSpeciesData().SpeciesStats,IVs,EVs,CurrentLevel);
      }
+
     void Mockmon::LearnLevelUpMoves(int newLevel)
     {
         const auto movesFromLevelUp = GetMockmonSpeciesData().LevelUpMoves;

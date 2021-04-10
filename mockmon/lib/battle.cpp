@@ -9,7 +9,7 @@ namespace mockmon
     }
     void Battle::DoBattle(Mockmon &playerMockmon, Mockmon &enemyMockmon)
     {
-        
+        std::cout << playerMockmon.GetName() << " starts the battle with " << playerMockmon.m_currentCondtion.HP() << " HP"<<'\n';
         Battle battle(playerMockmon, enemyMockmon);
         battle.LoopBattle();
         
@@ -49,6 +49,7 @@ namespace mockmon
         auto attack = moves::MoveId::Struggle;
         if (options>0)
         {
+            
             auto randomAttack = random::Randomer::GetRandom(options);
             attack= r_enemyMockmon.GetMoveSet().at(randomAttack).Identifier();
         }

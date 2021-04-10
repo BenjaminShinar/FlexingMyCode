@@ -12,6 +12,7 @@ namespace mockmon
         MediumSlowLevelUp,
         SlowLevelUp
     };
+    
     struct MockmonExp
     {      
         const long CurrentLevel;

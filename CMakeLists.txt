@@ -3,7 +3,9 @@ project(Mockmon VERSION 0.1.0)
 
 include(CTest)
 enable_testing()
+add_compile_options(-Wall -Wextra -Wpedantic)
 add_executable(${PROJECT_NAME} mockmon-main.cpp)
+
 target_include_directories(${PROJECT_NAME} PUBLIC mockmon/include)
 
 

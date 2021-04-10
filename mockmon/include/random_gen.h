@@ -19,7 +19,6 @@ namespace mockmon::random
         private:
         static std::default_random_engine generator;
         static std::uniform_int_distribution<unsigned int> distribution;
-
     };
 
 }
