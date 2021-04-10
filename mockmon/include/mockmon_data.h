@@ -16,7 +16,7 @@ namespace mockmon
     class Mockmon
     {   
         public:
-        explicit Mockmon(MockmonSpeciesId species, std::string & name,bool silent = false)
+        explicit Mockmon(MockmonSpeciesId species,const std::string & name,bool silent = false)
         :m_currentSpeciesId(species), m_name(name),m_outputEvents(silent),m_currentCondtion()
         {
             LearnLevelUpMoves();
