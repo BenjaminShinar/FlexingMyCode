@@ -12,6 +12,7 @@ namespace mockmon
         Ratata,
         Raticate,
         Mew,
+        Weedle,
         UknownSpecies
     };
 

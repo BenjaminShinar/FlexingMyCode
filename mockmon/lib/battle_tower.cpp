@@ -10,6 +10,8 @@ namespace mockmon
 {
         void BattleTower::StartTower (Mockmon & playerMonster,unsigned int maxFloor)
         {
+            playerMonster.TeachMove(moves::MoveId::Ember);
+            playerMonster.FullRestore();
             auto currentFloor{0u};
             while(currentFloor < maxFloor && playerMonster.IsAbleToBattle())
             {
@@ -26,16 +28,11 @@ namespace mockmon
         }
         bool BattleTower::TowerFloor (Mockmon & playerMonster,unsigned int floorLevel)
         {
-            //playerMonster.TeachMove(moves::MoveId::WaterGun);
-            //playerMonster.TeachMove(moves::MoveId::Guillotine);
-            auto enemy = BattleTower::GenerateEnemy(floorLevel,MockmonSpeciesId::Ratata,"garry");
-            std::cout<< "player mockmon " << playerMonster.GetName() << " will face " << enemy.GetName() << " the level " << enemy.CheckExperiencePoints().CurrentLevel << " " << enemy.GetMockmonSpeciesData().Identifier() <<'\n';
+            auto enemy = BattleTower::GenerateEnemy(floorLevel,MockmonSpeciesId::Weedle,"garry");
+            std::cout<< "player mockmon " << playerMonster.GetName() << " will face " << enemy.GetName() << " the level " << enemy.CheckExperiencePoints().CurrentLevel << " " << enemy.GetMockmonSpeciesData().Identifier() << " with " << enemy.CurrentStats.Health.GetStat() << " HP!"  <<'\n';
             Battle::DoBattle(playerMonster,enemy);
             return(playerMonster.IsAbleToBattle());
-            // std::array<std::pair<std::string, types::Types>, 2> typesMap = {std::make_pair("iswater", types::Types::Water), std::make_pair("isnoram", types::Types::Normal)};
-            // auto a =controller::GetAnyInput("test types",typesMap);
-            // std::cout<< "testting any input: " << a <<'\n';
-            // //generate oppnenets for the player to fight
+            
         }
 
         Mockmon BattleTower::GenerateEnemy(int requestLevel,MockmonSpeciesId enemySpecies, std::string enemyName)
@@ -43,9 +40,9 @@ namespace mockmon
             Mockmon enemy(enemySpecies,enemyName,true);
             auto needexp = MockmonExp::TotalExperinceForLevel(requestLevel,enemy.GetMockmonSpeciesData().SpeciesLevelUpGroup);
             enemy.GrantExperiencePoints(needexp);
-            
-            std::cout << "enemy mockmon " <<enemy.GetName() << " is " << enemy.CheckExperiencePoints() << '\n';
+            enemy.FullRestore();
+            std::cout << "enemy mockmon " <<enemy.GetName() << " is " << enemy.CheckExperiencePoints() << " and has "<< enemy.CurrentStats.Health.GetStat() <<" hit points!"<< '\n';
             return enemy;
         }
-
+  
 }

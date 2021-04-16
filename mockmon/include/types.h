@@ -5,6 +5,18 @@
 
 namespace mockmon::types
 {
+    enum class TypeEffectivenessModifier
+    {   
+        NotEffective,
+        VeryNotEffective, 
+        NotVeryEffective,
+        NormalEffective,
+        VeryEffective,
+        SuperEffective, //4.0
+    };
+    std::ostream& operator<<(std::ostream& os,const TypeEffectivenessModifier& typeEffectivenessModifier);
+    TypeEffectivenessModifier CombineTypeModifiers(TypeEffectivenessModifier lhs,TypeEffectivenessModifier rhs);
+
     enum class Types
     {      
         Typeless,
@@ -31,14 +43,23 @@ namespace mockmon::types
     
     class TypeEffectivness
     {
+public:
+        const Types AttackingType;
+        TypeEffectivenessModifier GetTypeModifier(Types type) const;
+        bool DoubleEffective (Types type) const;
+        bool HalfEffective (Types type) const;
+        bool NoEffective (Types type) const;
+
+private:
         explicit TypeEffectivness(Types t,const std::vector<Types> & doubleEffect,const std::vector<Types> & halfEffect,const std::vector<Types> & noEffect)
         :
         AttackingType(t),DoesDoubleEffectiveTypes(doubleEffect),DoesHalfEffectiveTypes(halfEffect),DoesNothingEffectiveTypes(noEffect)
         {}
-        const Types AttackingType;
+
         const std::vector<Types> DoesDoubleEffectiveTypes;
         const std::vector<Types> DoesHalfEffectiveTypes;
         const std::vector<Types> DoesNothingEffectiveTypes;
+
 
 public:
         static std::map<Types,TypeEffectivness> TypeEffectiveChart;

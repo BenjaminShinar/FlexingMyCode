@@ -21,7 +21,9 @@ namespace mockmon::moves
             case MoveId::WaterGun: return "WaterGun";break;
             case MoveId::Slash: return "Slash";break;
             case MoveId::Guillotine: return "Guillotine";break;
-            
+            case MoveId::PoisonSting: return "Poison Sting";break;
+            case MoveId::StringShot: return "String Shot";break;
+            case MoveId::Ember: return "Ember";break;
             
             default: return "Unknown move!"; break;
         }
@@ -46,6 +48,9 @@ namespace mockmon::moves
         {MoveId::WaterGun, BaseMove(MoveId::WaterGun,types::Types::Water,100,40)},
         {MoveId::Guillotine ,BaseMove(MoveId::Guillotine ,types::Types::Normal,30,200)},
         {MoveId::Slash ,BaseMove(MoveId::Slash ,types::Types::Normal,100,70)},
+        {MoveId::PoisonSting ,BaseMove(MoveId::PoisonSting,types::Types::Poison ,100,15)}, //status
+        {MoveId::StringShot ,BaseMove(MoveId::StringShot,types::Types::Bug,95,10)}, //status
+        {MoveId::Ember ,BaseMove(MoveId::Ember,types::Types::Fire,100,40)},
         {MoveId::Struggle, BaseMove(MoveId::Struggle,types::Types::Typeless,50,30)},
     };
 
@@ -61,6 +66,9 @@ namespace mockmon::moves
         {MoveId::WaterGun, ConstantMove(MoveId::WaterGun,25,40)},
         {MoveId::Guillotine ,ConstantMove(MoveId::Guillotine ,5,8)},
         {MoveId::Slash ,ConstantMove(MoveId::Slash ,20,32)},
+        {MoveId::PoisonSting ,ConstantMove(MoveId::PoisonSting ,35,56)},
+        {MoveId::StringShot ,ConstantMove(MoveId::StringShot ,40,64)},
+        {MoveId::Ember ,ConstantMove(MoveId::Ember ,25,40)},
         {MoveId::Struggle, ConstantMove(MoveId::Struggle,500,1000)}, //probably not needed!
     };
 

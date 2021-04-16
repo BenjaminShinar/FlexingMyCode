@@ -2,8 +2,8 @@
 
 namespace mockmon
 {
-    void Condition::ChangeHealth(int amount )
-    {
-        m_HP += amount;
-    }
+    // void Condition::ChangeHealth(int amount )
+    // {
+    //     m_HP += amount;
+    // }
 }

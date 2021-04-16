@@ -13,6 +13,7 @@ namespace mockmon
         case MockmonSpeciesId::Mew : return "Mew";break;
         case MockmonSpeciesId::Ratata : return "Ratata";break;
         case MockmonSpeciesId::Raticate : return "Raticate"; break;
+        case MockmonSpeciesId::Weedle : return "Weedle"; break;
         default: return "Unknown mockmon!"; break;
         }
     }

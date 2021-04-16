@@ -15,11 +15,13 @@ namespace mockmon
 {
     class Mockmon
     {   
+        friend class Battle;
         public:
         explicit Mockmon(MockmonSpeciesId species,const std::string & name,bool silent = false)
         :m_currentSpeciesId(species), m_name(name),m_outputEvents(silent)
         {
             LearnLevelUpMoves();
+            CurrentStats.UpdateStats(Stats(GetMockmonSpeciesData().SpeciesStats,IVs,EVs,CurrentLevel));
         }
         
         const MockmonSpecies & GetMockmonSpeciesData() const;
@@ -34,13 +36,18 @@ namespace mockmon
         bool IsAbleToBattle() const;
         bool IsWild() const {return false;}
         bool TeachMove(moves::MoveId);
-        void AttackWith(Mockmon & enemy, moves::MoveId);
+
         const std::vector<moves::EquipedMove> & GetMoveSet() const;
         std::string_view GetName() const;
-        
+        bool DisplayEvent() const {return  m_outputEvents;}
+
+        //battle relatedStuff probably alot of methods should go somewhere else
+        bool GetStabModifier(const moves::BaseMove & AttackingMove);
+        types::TypeEffectivenessModifier GetTypeEffectivenessModifer(const moves::BaseMove & AttackingMove) ;
+
         private:
         
-        double ModifyAttackForCrticalHit(const moves::BaseMove & AttackingMove,const Mockmon & target);
+        double ModifyAttackForCrticalHit(const moves::BaseMove & AttackingMove);
         double ModifyAttackForType(const moves::BaseMove & AttackingMove,const Mockmon & target);
 
         void LearnLevelUpMoves();
@@ -51,6 +58,7 @@ namespace mockmon
 
         public:
         Condition m_currentCondtion{};
+        BattleStats CurrentStats; // this is calculated each level;
 
         protected:
         
@@ -62,8 +70,7 @@ namespace mockmon
         long experience_points = 0;
         bool m_ableToBattle = true;
         std::vector<moves::EquipedMove> m_Moveset;
-        const Stats IVs; //this is calculated once when the pokemon is born;
-        Stats CurrentStats; // this is calculated each level;
+        const IndividualStats IVs; //this is calculated once when the pokemon is born;
         Stats EVs; // this is what we gain after each battle;
 
 

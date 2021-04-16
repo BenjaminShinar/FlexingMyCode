@@ -24,6 +24,9 @@ namespace mockmon::moves
         Guillotine,
         Slash,
         Struggle,
+        PoisonSting,
+        StringShot,
+        Ember,
     };
 
     std::ostream& operator<<(std::ostream& os,const MoveId& moveId);

@@ -6,6 +6,8 @@
 
 namespace mockmon
 {
+    //this is too big a  class, we need to seperate the functionally accross some stuff
+    
     const MockmonSpecies & Mockmon::GetMockmonSpeciesData() const
     {
         return MockmonSpecies::AllMockmons.at(m_currentSpeciesId);
@@ -13,58 +15,10 @@ namespace mockmon
 
     bool Mockmon::IsAbleToBattle() const 
     {
-        return m_ableToBattle && m_currentCondtion.HP() >0;
+        return m_ableToBattle && CurrentStats.Health.GetStat() >0;
     }
 
-    void Mockmon::AttackWith(Mockmon & enemy, moves::MoveId mvid)
-    {
-        auto chosenMove = std::find_if(m_Moveset.begin(),m_Moveset.end(),[&](const moves::EquipedMove  & mv ){ return mv.Identifier() == mvid;});
-        
-        if (chosenMove != m_Moveset.end() && chosenMove->RemainningPowerPoints()>0)
-        {
-            if (chosenMove->UseMove())
-            {
-                auto damage = ModifyAttack(moves::BaseMove::AllMoves.at(chosenMove->Identifier()),enemy);
-                std::cout<< GetName() << " hit " << enemy.GetName() <<" with " << (*chosenMove).Identifier() <<" for " << damage << " damage!" << '\n';
-                enemy.m_currentCondtion.ChangeHealth(-1* damage);
-            }
-            else
-            {
-                std::cout<< GetName() << " missed with " << (*chosenMove).Identifier() << '\n';
-            }  
-        }
-        else
-        {
-            const auto struggleMove = moves::BaseMove::AllMoves.at(moves::MoveId::Struggle);
-            if (moves::CheckMoveAccuracy(struggleMove))
-            {
-                auto damage = ModifyAttack(struggleMove,enemy);
-                auto recoilDamage = std::max(1,damage/2);
-                std::cout<< GetName() << " struggles with  " << enemy.GetName() <<" and managed to hit for " << damage << " damage!" << '\n';
-                std::cout<< GetName() << " takes " << recoilDamage << " recoile damage while struggling!" << '\n';
-                enemy.m_currentCondtion.ChangeHealth(-1* damage);
-                m_currentCondtion.ChangeHealth(-1* recoilDamage);
-            }
-            else
-            {
-                std::cout<< GetName() << " missed with " << struggleMove.Identifier() << '\n';
-            }
-        }
-        
-    }
-
-    int Mockmon::ModifyAttack(const moves::BaseMove & AttackingMove, const Mockmon & target)
-    {
-        auto baseDamage = AttackingMove.BasePower;
-        auto levelModifier = 2+((2*CurrentLevel)/5);
-        auto  statsModifier = CurrentStats.Attack / target.CurrentStats.Defence; //attack / defence
-        auto criticalHitModifier {ModifyAttackForCrticalHit(AttackingMove,target)};
-        auto typeEffectivenessAndStab {ModifyAttackForType(AttackingMove,target)};
-        auto  extraModifier = 1 * criticalHitModifier * typeEffectivenessAndStab ; // stab, type, weahter, badge,status,
-        return (extraModifier*(2+((levelModifier* baseDamage * statsModifier)/50)));
-    }
-
-    double Mockmon::ModifyAttackForCrticalHit(const moves::BaseMove & AttackingMove,const Mockmon & target)
+    double Mockmon::ModifyAttackForCrticalHit(const moves::BaseMove & AttackingMove)
     {
         
         auto baseChance =100* GetMockmonSpeciesData().SpeciesStats.Speed * AttackingMove.CriticalChanceBoost() / 512.0;
@@ -81,25 +35,31 @@ namespace mockmon
         return 1.0;
     }
 
-    double Mockmon::ModifyAttackForType(const moves::BaseMove & AttackingMove,const Mockmon & target)
+
+    //do something else
+    bool Mockmon::GetStabModifier(const moves::BaseMove & AttackingMove) 
     {
-        auto stabModifier = AttackingMove.Type == GetMockmonSpeciesData().SpeciesType ? 1.5 : 1.0;
-        auto sameTypeResistance = AttackingMove.Type == target.GetMockmonSpeciesData().SpeciesType ? 0.75 : 1.0;
-        //need type weakness chart
-        //what if something else?
-        return stabModifier* sameTypeResistance;
-
+        return GetMockmonSpeciesData().GetStabModifier(AttackingMove.Type);
     }
-
+    
+    types::TypeEffectivenessModifier Mockmon::GetTypeEffectivenessModifer(const moves::BaseMove & AttackingMove) 
+    {
+        return GetMockmonSpeciesData().GetTypeEffetivenessModifier(AttackingMove.Type);
+    }
 
     void Mockmon::LoseSomehow()
     {
         m_ableToBattle = false;
     }
+
     void Mockmon::FullRestore()
     {
-        auto amountToMax = 100 - m_currentCondtion.HP();
-        m_currentCondtion.ChangeHealth(amountToMax);
+        CurrentStats.Health.RestStatToMax();
+        CurrentStats.Accuracy.ResetBoost();
+        CurrentStats.Attack.ResetBoost();
+        CurrentStats.Defence.ResetBoost();
+        CurrentStats.Special.ResetBoost();
+        CurrentStats.Speed.ResetBoost();
         m_ableToBattle = true;
     }
     bool Mockmon::TeachMove(moves::MoveId newMoveId)
@@ -163,7 +123,7 @@ namespace mockmon
 
      void Mockmon::UpdateStats()
      {
-         CurrentStats = Stats(GetMockmonSpeciesData().SpeciesStats,IVs,EVs,CurrentLevel);
+         CurrentStats.UpdateStats(Stats(GetMockmonSpeciesData().SpeciesStats,IVs,EVs,CurrentLevel));
      }
 
     void Mockmon::LearnLevelUpMoves(int newLevel)

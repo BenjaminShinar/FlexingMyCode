@@ -5,16 +5,47 @@
 namespace mockmon
 {
 
+    types::TypeEffectivenessModifier MockmonSpecies::GetTypeEffetivenessModifier(types::Types attackingMoveType) const
+    {
+        using types::TypeEffectivenessModifier;
+        
+        auto typeEffectives = types::TypeEffectivness::TypeEffectiveChart.at(attackingMoveType);
+
+        const auto TypesNumber = SpeciesTypes.size();
+        std::vector<types::TypeEffectivenessModifier> modifiers(TypesNumber);
+        std::transform(std::begin(SpeciesTypes),std::end(SpeciesTypes),std::begin(modifiers),[&typeEffectives](const auto & type)
+        {   
+            return  typeEffectives.GetTypeModifier(type);
+        });
+
+        if (TypesNumber == 1)
+            return modifiers.front();
+        if (TypesNumber == 2)
+            return CombineTypeModifiers(modifiers.front(),modifiers.back());
+        
+        return TypeEffectivenessModifier::NormalEffective;
+    }
+
+    bool MockmonSpecies::GetStabModifier(types::Types attackingMoveType) const
+    {
+        auto stabType = SpeciesTypes.find(attackingMoveType);
+        return (stabType != SpeciesTypes.end());
+    }
+
     const std::map<MockmonSpeciesId,MockmonSpecies> MockmonSpecies::AllMockmons
     {
         //explicit MockmonSpecies(MockmonSpeciesId speciesId,types::Types type,long speciesExp,Stats & sepeciesStats,const std::map<int,moves::MoveId> & levelUpMovesList);
-        {MockmonSpeciesId::Mew, MockmonSpecies(MockmonSpeciesId::Mew,types::Types::Normal,LevelUpGroup::MediumSlowLevelUp,64,{100,100,100,100,100},
+        {MockmonSpeciesId::Mew, MockmonSpecies(MockmonSpeciesId::Mew,
+        {types::Types::Normal},
+        LevelUpGroup::MediumSlowLevelUp,64,{100,100,100,100,100},
         {
             //moves list
             {1,{moves::MoveId::WaterGun,moves::MoveId::Guillotine}}
         }
         )},
-        {MockmonSpeciesId::Ratata, MockmonSpecies(MockmonSpeciesId::Ratata,types::Types::Normal,LevelUpGroup::MediumFastLevelUp,57,{30,56,35,25,72},
+        {MockmonSpeciesId::Ratata, MockmonSpecies(MockmonSpeciesId::Ratata,
+        {types::Types::Normal},
+        LevelUpGroup::MediumFastLevelUp,57,{30,56,35,25,72},
         {
             //moves list
             {1,{moves::MoveId::Tackle, moves::MoveId::TailWhip}},
@@ -24,7 +55,9 @@ namespace mockmon
             {34,{moves::MoveId::SuperFang}},
         }
         )},
-        {MockmonSpeciesId::Raticate, MockmonSpecies(MockmonSpeciesId::Raticate,types::Types::Normal,LevelUpGroup::MediumFastLevelUp,116,{55,81,60,50,97},
+        {MockmonSpeciesId::Raticate, MockmonSpecies(MockmonSpeciesId::Raticate,
+        {types::Types::Normal},
+        LevelUpGroup::MediumFastLevelUp,116,{55,81,60,50,97},
         {
             //moves list
             {1,{moves::MoveId::Tackle, moves::MoveId::TailWhip}},
@@ -35,8 +68,14 @@ namespace mockmon
         }
         )},
 
-        //{MockmonSpeciesId::Ratata, MockmonSpecies()},
-        //{MockmonSpeciesId::Ratata, MockmonSpecies(MockmonSpeciesId::Ratata,types::Types::Water,100,40,25,40)},
+        {MockmonSpeciesId::Weedle, MockmonSpecies(MockmonSpeciesId::Weedle,
+        {types::Types::Bug,types::Types::Poison},
+        LevelUpGroup::MediumFastLevelUp,52,{40,35,30,20,50},
+        {
+            //moves list
+            {1,{moves::MoveId::PoisonSting, moves::MoveId::StringShot}},
+        }
+        )},
     };
 
 }
