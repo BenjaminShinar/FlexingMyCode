@@ -50,28 +50,17 @@ namespace mockmon::types
         {Types::Electric, TypeEffectivness{Types::Electric,{Types::Water,Types::Flying},{Types::Electric,Types::Ground,Types::Dragon},{Types::Ground}}},
         {Types::Grass, TypeEffectivness{Types::Grass,{Types::Water,Types::Rock,Types::Ground},{Types::Fire,Types::Fire,Types::Poison,Types::Bug,Types::Dragon,Types::Steel},{}}},
         {Types::Ice, TypeEffectivness{Types::Ice,{Types::Grass,Types::Ground,Types::Flying,Types::Dragon},{Types::Fire,Types::Water,Types::Ice,Types::Steel},{}}},
-        {Types::Fighting, TypeEffectivness{Types::Fighting,{},{},{}}},
-        
-        {Types::Poison, TypeEffectivness{Types::Poison,{},{},{}}},
-        
-        {Types::Ground, TypeEffectivness{Types::Ground,{},{},{}}},
-        
-        {Types::Flying, TypeEffectivness{Types::Flying,{},{},{}}},
-        
-        {Types::Psychic, TypeEffectivness{Types::Psychic,{},{},{}}},
-        
-        {Types::Bug, TypeEffectivness{Types::Bug,{},{},{}}},
-        
-        {Types::Rock, TypeEffectivness{Types::Rock,{},{},{}}},
-        
-        {Types::Ghost, TypeEffectivness{Types::Ghost,{},{},{}}},
-        
-        {Types::Dragon, TypeEffectivness{Types::Dragon,{},{},{}}},
-        
-        {Types::Dark, TypeEffectivness{Types::Dark,{},{},{}}},
-        
-        {Types::Steel, TypeEffectivness{Types::Steel,{},{},{}}},
-        
-        {Types::Fairy, TypeEffectivness{Types::Fairy,{},{},{}}},
+        {Types::Fighting, TypeEffectivness{Types::Fighting,{Types::Normal,Types::Ice,Types::Rock,Types::Dark,Types::Steel},{Types::Poison,Types::Flying,Types::Psychic,Types::Bug,Types::Fairy},{Types::Ghost}}},
+        {Types::Poison, TypeEffectivness{Types::Poison,{Types::Grass,Types::Fairy},{Types::Poison,Types::Flying,Types::Rock,Types::Ghost},{Types::Steel}}},
+        {Types::Ground, TypeEffectivness{Types::Ground,{Types::Fire,Types::Electric,Types::Poison,Types::Rock,Types::Steel},{Types::Grass,Types::Bug},{Types::Ground}}},
+        {Types::Flying, TypeEffectivness{Types::Flying,{Types::Grass,Types::Fighting,Types::Bug},{Types::Electric,Types::Rock,Types::Steel},{}}},
+        {Types::Psychic, TypeEffectivness{Types::Psychic,{Types::Fighting,Types::Poison},{Types::Bug,Types::Steel},{Types::Dark}}},        
+        {Types::Bug, TypeEffectivness{Types::Bug,{Types::Grass,Types::Psychic,Types::Dark},{Types::Fire,Types::Fighting,Types::Poison,Types::Flying,Types::Ghost,Types::Steel,Types::Fairy},{}}},
+        {Types::Rock, TypeEffectivness{Types::Rock,{Types::Water,Types::Ice,Types::Flying,Types::Bug},{Types::Fighting,Types::Ground,Types::Steel},{}}},
+        {Types::Ghost, TypeEffectivness{Types::Ghost,{Types::Psychic,Types::Ghost},{Types::Dark},{Types::Normal}}},
+        {Types::Dragon, TypeEffectivness{Types::Dragon,{Types::Dragon},{Types::Steel},{Types::Fairy}}},
+        {Types::Dark, TypeEffectivness{Types::Dark,{Types::Psychic,Types::Ghost},{Types::Fighting,Types::Dark,Types::Fairy},{}}},
+        {Types::Steel, TypeEffectivness{Types::Steel,{Types::Ice,Types::Rock,Types::Fairy},{Types::Fire,Types::Water,Types::Electric,Types::Steel},{}}},
+        {Types::Fairy, TypeEffectivness{Types::Fairy,{Types::Fighting,Types::Dragon,Types::Dark},{Types::Fire,Types::Poison,Types::Steel},{}}},
      };
 }
