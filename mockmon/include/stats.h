@@ -7,48 +7,13 @@
 namespace mockmon
 {
    
-   
-    struct IndividualStats
+    struct SpeciesStats
     {
-        explicit IndividualStats(unsigned int attack,unsigned int defence,unsigned int special,unsigned int speed):
-        Attack(attack),
-        Defence(defence),
-        Special(special),
-        Speed(speed),
-        Health(CalculateHealth())
+        explicit SpeciesStats(unsigned int attack,unsigned int defence,unsigned int special,unsigned int speed,unsigned health):
+        Attack(attack),Defence(defence),Special(special),Speed(speed),Health(health)
         {
 
         }
-
-        explicit IndividualStats():
-        Attack(9),
-        Defence(8),
-        Special(8),
-        Speed(8),
-        Health(CalculateHealth())
-        {
-
-        }
-        
-        const unsigned int Attack;
-        const unsigned int Defence;
-        const unsigned int Special;
-        const unsigned int Speed;
-        const unsigned int Health;
-        private:
-        unsigned int CalculateHealth() const
-        {
-            auto a1 = (Attack & 0x1) <<0;
-            auto a2 = (Defence & 0x1) <<1;
-            auto a3 = (Speed & 0x1) << 2;
-            auto a4 = (Special & 0x1) <<3;
-
-            return (a1 |a2 |a3|a4);
-        }
-    };
- 
-     struct SpeciesStats
-    {
 
         const unsigned int Attack{1};
         const unsigned int Defence{1};
@@ -56,27 +21,46 @@ namespace mockmon
         const unsigned int Speed{1};
         const unsigned int Health{1};
     };
+
+    struct IndividualStats : public SpeciesStats
+    {
+        private:
+        static unsigned int CalculateHealth(unsigned int attack,unsigned int defence,unsigned int special,unsigned int speed)
+        {
+            auto a1 = (attack & 0x1) <<0;
+            auto a2 = (defence & 0x1) <<1;
+            auto a3 = (speed & 0x1) << 2;
+            auto a4 = (special & 0x1) <<3;
+
+             return (a1 |a2 |a3|a4);
+        }
+        public:
+        explicit IndividualStats(unsigned int attack,unsigned int defence,unsigned int special,unsigned int speed):
+        SpeciesStats(attack,defence,special,speed,CalculateHealth(attack,defence,special,speed))
+        {
+
+        }
+
+        explicit IndividualStats(): SpeciesStats(9u,8u,8u,8u,CalculateHealth(9u,8u,8u,8u))
+        {
+        } 
+    };
+ 
+
     //think about how this should work
     struct Stats
     {
         // base, iv,evs
         explicit Stats() = default;
-        Stats(unsigned int health,unsigned int attack,unsigned int defence,unsigned int special,unsigned int speed):
-        Health(health),Attack(attack),Defence(defence),Special(special),Speed(speed)
-        {
+        explicit Stats(const SpeciesStats & baseStats,const IndividualStats & IVStats,const Stats & EVStats, unsigned int level);
 
-        }
-        Stats(const SpeciesStats & baseStats,const IndividualStats & IVStats,const Stats & EVStats, unsigned int level);
-
-        unsigned int Health = 1;
-        unsigned int Attack = 9;
-        unsigned int Defence = 8;
-        unsigned int Special = 8;
-        unsigned int Speed = 8;
+        unsigned int Health{0};
+        unsigned int Attack{0};
+        unsigned int Defence{0};
+        unsigned int Special{0};
+        unsigned int Speed{0};
         
         Stats& operator+=(const SpeciesStats&);
-        //Stats& operator= (const Stats&);
-
         private:
         const unsigned int MaxStatValue = 65535;
         unsigned int ModifyStat(unsigned int base, unsigned int iv, unsigned int ev, unsigned int level);
@@ -110,7 +94,7 @@ namespace mockmon
         private:
         void ChangeCurrentStat(int statChange) {m_current_stat = std::clamp(statChange,0,m_max_stat);}
         int m_max_stat;
-         int m_current_stat;
+        int m_current_stat;
     };
 
     struct BattleStats

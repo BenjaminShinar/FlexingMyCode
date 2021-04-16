@@ -21,9 +21,9 @@ namespace mockmon
         :m_currentSpeciesId(species), m_name(name),m_outputEvents(silent)
         {
             LearnLevelUpMoves();
-            CurrentStats.UpdateStats(Stats(GetMockmonSpeciesData().SpeciesStats,IVs,EVs,CurrentLevel));
+            CurrentStats.UpdateStats(Stats(GetMockmonSpeciesData().MockmonSpeciesStats,IVs,EVs,CurrentLevel));
         }
-        
+        unsigned int GetCurrentLevel() const;
         const MockmonSpecies & GetMockmonSpeciesData() const;
         int ModifyAttack(const moves::BaseMove & AttackingMove,const Mockmon & target);
         void ChangeName(const std::string & newName); //needs to be somewhere else.

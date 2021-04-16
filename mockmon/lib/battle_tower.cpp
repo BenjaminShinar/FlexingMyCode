@@ -3,6 +3,7 @@
 #include "types.h"
 #include "controller.h"
 #include "types.h"
+#include "random_gen.h"
 #include <array>
 #include <utility>
 
@@ -11,6 +12,8 @@ namespace mockmon
         void BattleTower::StartTower (Mockmon & playerMonster,unsigned int maxFloor)
         {
             playerMonster.TeachMove(moves::MoveId::Ember);
+            playerMonster.TeachMove(moves::MoveId::WaterGun);
+            playerMonster.TeachMove(moves::MoveId::Guillotine);
             playerMonster.FullRestore();
             auto currentFloor{0u};
             while(currentFloor < maxFloor && playerMonster.IsAbleToBattle())
@@ -28,8 +31,14 @@ namespace mockmon
         }
         bool BattleTower::TowerFloor (Mockmon & playerMonster,unsigned int floorLevel)
         {
-            auto enemy = BattleTower::GenerateEnemy(floorLevel,MockmonSpeciesId::Weedle,"garry");
-            std::cout<< "player mockmon " << playerMonster.GetName() << " will face " << enemy.GetName() << " the level " << enemy.CheckExperiencePoints().CurrentLevel << " " << enemy.GetMockmonSpeciesData().Identifier() << " with " << enemy.CurrentStats.Health.GetStat() << " HP!"  <<'\n';
+            const auto RandomizeEnemyType =  [](){ const auto x {random::Randomer::GetRandom(2)};
+            if (x==0) return MockmonSpeciesId::Ratata;
+            if (x==1) return MockmonSpeciesId::Weedle;
+            return MockmonSpeciesId::Raticate;
+            };
+            
+            auto enemy = BattleTower::GenerateEnemy(floorLevel,RandomizeEnemyType(),"garry");
+            std::cout<< "player mockmon " << playerMonster.GetName() << " will face " << enemy.GetName() << " the level " << enemy.GetCurrentLevel() << " " << enemy.GetMockmonSpeciesData().Identifier() << " with " << enemy.CurrentStats.Health.GetStat() << " HP!"  <<'\n';
             Battle::DoBattle(playerMonster,enemy);
             return(playerMonster.IsAbleToBattle());
             

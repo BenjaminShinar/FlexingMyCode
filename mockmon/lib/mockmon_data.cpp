@@ -13,6 +13,11 @@ namespace mockmon
         return MockmonSpecies::AllMockmons.at(m_currentSpeciesId);
     }
 
+    unsigned int Mockmon::GetCurrentLevel() const
+    {
+        return CurrentLevel;
+    }
+    
     bool Mockmon::IsAbleToBattle() const 
     {
         return m_ableToBattle && CurrentStats.Health.GetStat() >0;
@@ -21,7 +26,7 @@ namespace mockmon
     double Mockmon::ModifyAttackForCrticalHit(const moves::BaseMove & AttackingMove)
     {
         
-        auto baseChance =100* GetMockmonSpeciesData().SpeciesStats.Speed * AttackingMove.CriticalChanceBoost() / 512.0;
+        auto baseChance =100* GetMockmonSpeciesData().MockmonSpeciesStats.Speed * AttackingMove.CriticalChanceBoost() / 512.0;
         if (baseChance > random::Randomer::GetRandom())
         {
             
@@ -62,6 +67,7 @@ namespace mockmon
         CurrentStats.Speed.ResetBoost();
         m_ableToBattle = true;
     }
+
     bool Mockmon::TeachMove(moves::MoveId newMoveId)
     {
         if (m_Moveset.size() <=moves::EquipedMove::MaxMoves)
@@ -83,6 +89,7 @@ namespace mockmon
     {
         return m_Moveset;
     }
+
     void Mockmon::GrantExperiencePoints(long points)
     {
         if (points <= 0) return;
@@ -123,7 +130,7 @@ namespace mockmon
 
      void Mockmon::UpdateStats()
      {
-         CurrentStats.UpdateStats(Stats(GetMockmonSpeciesData().SpeciesStats,IVs,EVs,CurrentLevel));
+         CurrentStats.UpdateStats(Stats(GetMockmonSpeciesData().MockmonSpeciesStats,IVs,EVs,CurrentLevel));
      }
 
     void Mockmon::LearnLevelUpMoves(int newLevel)
@@ -201,7 +208,7 @@ namespace mockmon
         {
             std::cout << GetName() << " gain " << xp << " xp points!" <<'\n';
         }
-        EVs+=defeatedMon.GetMockmonSpeciesData().SpeciesStats;
+        EVs+=defeatedMon.GetMockmonSpeciesData().MockmonSpeciesStats;
         GrantExperiencePoints(xp);
     }
 

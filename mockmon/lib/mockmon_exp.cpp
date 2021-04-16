@@ -27,10 +27,12 @@ namespace mockmon
         return std::floor(4*(std::pow(level,3)/5));
 
     }
+    
     unsigned long MockmonExp::MediumFastLevelUpGroup(unsigned int level)
     {
         return (std::pow(level,3));
     }
+
     unsigned long MockmonExp::MediumSlowLevelUpGroup(unsigned int level)
     {
         auto a = std::floor(6*(std::pow(level,3)/5));

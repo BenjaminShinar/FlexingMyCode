@@ -9,10 +9,10 @@ namespace mockmon
 {
     enum class MockmonSpeciesId
     {      
+        Weedle,
         Ratata,
         Raticate,
         Mew,
-        Weedle,
         UknownSpecies
     };
 

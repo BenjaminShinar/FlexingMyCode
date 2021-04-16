@@ -92,5 +92,13 @@ namespace mockmon::moves
 
     bool CheckMoveAccuracy(const BaseMove& attack);
 
-
+    enum class MovesDamageTypes
+    {
+        NormalDamage,
+        AugmentedAmount, // damage based on the normal amount, and other parts? 
+        FixedAmount, //always the same
+        ScalingAmount, //based on a stat that isn't attack/defence/special
+        OneHitKnockOut //all the damage
+    };
+    
 }

@@ -7,7 +7,7 @@
 
 namespace mockmon
 {
-   
+   //non voltile conditions, paralyzed, burn, freeze, poision, toxic
     class Condition
     {
         public:
@@ -16,5 +16,4 @@ namespace mockmon
         private:
         //int m_HP = 50;
     };
-
 }

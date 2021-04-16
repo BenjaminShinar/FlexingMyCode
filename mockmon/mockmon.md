@@ -5,35 +5,35 @@ A small project that I can be motivated to work on. A simple version of a battli
 ## Tasks and Stages
 
 - [ ] Basic program structure
-- [ ] Player choice modules - allow the user to choose an action
-- [ ] Create the minimal mockmon class (entity)
-- [ ] The most simple battle possible - the user has a mockmon and needs to choose the correct option to win
-- [ ] Design minimal enntities for moves (attacks) and mockmon stats
+- [x] Player choice modules - allow the user to choose an action
+- [x] Create the minimal mockmon class (entity)
+- [x] The most simple battle possible - the user has a mockmon and needs to choose the correct option to win
+- [x] Design minimal enntities for moves (attacks) and mockmon stats
 - [ ] ... TBC
 
 ### Mockmon battle mock
 
-- [ ] a battle with a win / lose conditions
-- [ ] user can choose actions vs opponent
+- [x] a battle with a win / lose conditions
+- [x] user can choose actions vs opponent
 - [ ] moves that do something and moves that fail
-- [ ] opponent can do something against user
+- [x] opponent can do something against user
 - [ ] moves effect mockmon stats rather than directly the outcome
 - [ ] mockmon stats effect the battle outcome
 - [ ] moves can hit or miss
 - [ ] moves can cause status effect
 - [ ] moves are effected by stats (accuracy, power)
 - [ ] status effects (poison, sleep, confision, etc...)
-- [ ] the type system! super, normal and not very effective!
+- [x] the type system! super, normal and not very effective!
 - [ ] ... TBC battles are between trainers
 
 ### What's a mockmon, actually?
 
 - [ ] basic mockmon class
-- [ ] stats
-- [ ] type(s)
-- [ ] moveset
+- [x] stats
+- [x] type(s)
+- [x] moveset
 - [ ] status
-- [ ] progression (exp)
+- [x] progression (exp)
 - [ ] uniqeness (iv, ev, unique id)
 - [ ] mockmon evolution
 

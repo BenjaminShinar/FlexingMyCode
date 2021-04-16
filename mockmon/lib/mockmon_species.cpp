@@ -36,16 +36,18 @@ namespace mockmon
     {
         //explicit MockmonSpecies(MockmonSpeciesId speciesId,types::Types type,long speciesExp,Stats & sepeciesStats,const std::map<int,moves::MoveId> & levelUpMovesList);
         {MockmonSpeciesId::Mew, MockmonSpecies(MockmonSpeciesId::Mew,
-        {types::Types::Normal},
-        LevelUpGroup::MediumSlowLevelUp,64,{100,100,100,100,100},
+        {types::Types::Psychic},
+        LevelUpGroup::MediumSlowLevelUp,64,
+        SpeciesStats{100,100,100,100,100},
         {
             //moves list
-            {1,{moves::MoveId::WaterGun,moves::MoveId::Guillotine}}
+            {1,{moves::MoveId::Tackle}}
         }
         )},
         {MockmonSpeciesId::Ratata, MockmonSpecies(MockmonSpeciesId::Ratata,
         {types::Types::Normal},
-        LevelUpGroup::MediumFastLevelUp,57,{30,56,35,25,72},
+        LevelUpGroup::MediumFastLevelUp,57,
+        SpeciesStats{30,56,35,25,72},
         {
             //moves list
             {1,{moves::MoveId::Tackle, moves::MoveId::TailWhip}},
@@ -57,7 +59,8 @@ namespace mockmon
         )},
         {MockmonSpeciesId::Raticate, MockmonSpecies(MockmonSpeciesId::Raticate,
         {types::Types::Normal},
-        LevelUpGroup::MediumFastLevelUp,116,{55,81,60,50,97},
+        LevelUpGroup::MediumFastLevelUp,116,
+        SpeciesStats{55,81,60,50,97},
         {
             //moves list
             {1,{moves::MoveId::Tackle, moves::MoveId::TailWhip}},
@@ -70,7 +73,8 @@ namespace mockmon
 
         {MockmonSpeciesId::Weedle, MockmonSpecies(MockmonSpeciesId::Weedle,
         {types::Types::Bug,types::Types::Poison},
-        LevelUpGroup::MediumFastLevelUp,52,{40,35,30,20,50},
+        LevelUpGroup::MediumFastLevelUp,52,
+        SpeciesStats{40,35,30,20,50},
         {
             //moves list
             {1,{moves::MoveId::PoisonSting, moves::MoveId::StringShot}},

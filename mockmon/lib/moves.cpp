@@ -7,6 +7,14 @@
 
 namespace mockmon::moves
 {
+    /*
+    stats modifers (increase attck, decrease enemy defence, accuracy)
+    status : confused, poison, paralyzed,etc
+    moves that deal unique amount of damage (set amount, percent, bylevel)
+    moves with recoil damage,
+    */
+
+    //
     std::string moveToStr(const MoveId baseMove)
     {
         switch (baseMove)
@@ -95,6 +103,7 @@ namespace mockmon::moves
     {
         return m_currentPowerPoints;
     }
+    
     std::optional<moves::MoveId> EquipedMove::UseMove()
     {
         if (0 < RemainningPowerPoints())

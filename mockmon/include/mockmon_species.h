@@ -25,7 +25,7 @@ namespace mockmon
         SpeciesTypes(types),
         SpeciesLevelUpGroup(speciesLevelUpGroup),
         SpeciesExp(speciesExp),
-        SpeciesStats(speciesStats),
+        MockmonSpeciesStats(speciesStats),
         LevelUpMoves(levelUpMoves)     
         {
         }
@@ -33,7 +33,7 @@ namespace mockmon
         const std::set<types::Types> SpeciesTypes;
         const LevelUpGroup SpeciesLevelUpGroup;
         const int SpeciesExp; // how much exp this mockmon gives
-        const SpeciesStats SpeciesStats; // this belongs to the pokemon base class, not the indvidual;
+        const SpeciesStats MockmonSpeciesStats; // this belongs to the pokemon base class, not the indvidual;
         const std::map<int,std::vector<moves::MoveId>> LevelUpMoves;
         bool GetStabModifier(types::Types attackingMoveType) const;
         types::TypeEffectivenessModifier GetTypeEffetivenessModifier(types::Types attackingMoveType) const;

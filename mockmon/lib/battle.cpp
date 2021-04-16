@@ -99,10 +99,11 @@ namespace mockmon
         }
     }
 
+    //this is normal attack
     double Battle::ModifyAttack(const moves::BaseMove & AttackingMove,Mockmon & attacker,Mockmon & defender)
     {
         auto baseDamage = AttackingMove.BasePower;
-        auto levelModifier = 2+((2*attacker.CurrentLevel)/5);
+        auto levelModifier = 2+((2*attacker.GetCurrentLevel())/5);
         auto statsModifier = attacker.CurrentStats.Attack.GetStat() / defender.CurrentStats.Defence.GetStat(); //attack / defence
         auto criticalHitModifier {attacker.ModifyAttackForCrticalHit(AttackingMove)};
         auto stabModifer {attacker.GetStabModifier(AttackingMove) ? 1.5 : 1.0}; //stab
@@ -112,21 +113,24 @@ namespace mockmon
         return (extraModifier*(2+((levelModifier* baseDamage * statsModifier)/50)));
     }
 
-        void Battle::AttackWith(moves::MoveId mvid,Mockmon & attacker,Mockmon & defender)
+ 
+    void Battle::AttackWith(moves::MoveId mvid,Mockmon & attacker,Mockmon & defender)
     {
         auto chosenMove = std::find_if(attacker.m_Moveset.begin(),attacker.m_Moveset.end(),[&](const moves::EquipedMove  & mv ){ return mv.Identifier() == mvid;});
         
         if (chosenMove != attacker.m_Moveset.end() && chosenMove->RemainningPowerPoints()>0)
         {
-            if (chosenMove->UseMove())
+            auto baseMove = moves::BaseMove::AllMoves.at(chosenMove->Identifier());
+
+            if (chosenMove->UseMove() && moves::CheckMoveAccuracy(baseMove))
             {
-                auto damage = static_cast<int>(ModifyAttack(moves::BaseMove::AllMoves.at(chosenMove->Identifier()),attacker,defender));
-                std::cout<< attacker.GetName() << " hit " << defender.GetName() <<" with " << (*chosenMove).Identifier() <<" for " << damage << " damage!" << '\n';
+                auto damage = static_cast<int>(ModifyAttack(baseMove,attacker,defender));
+                std::cout<< attacker.GetName() << " hit " << defender.GetName() <<" with " << baseMove.Identifier() <<" for " << damage << " damage!" << '\n';
                 defender.CurrentStats.Health.ChangeHealth(-1* damage);
             }
             else
             {
-                std::cout<< attacker.GetName() << " missed with " << (*chosenMove).Identifier() << '\n';
+                std::cout<< attacker.GetName() << " missed with " << baseMove.Identifier() << '\n';
             }  
         }
         else
