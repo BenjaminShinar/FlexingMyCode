@@ -1,2 +1,2 @@
 include_directories(include)
-add_library(mockmon lib/main.cpp lib/battle_tower.cpp lib/battle.cpp lib/controller.cpp lib/condition.cpp lib/mockmon_data.cpp lib/mockmon_exp.cpp lib/mockmon_species.cpp lib/moves.cpp lib/random_gen.cpp  lib/stats.cpp lib/types.cpp lib/evolution.cpp lib/speciesId.cpp lib/specialized_moves.cpp) 
+add_library(mockmon lib/main.cpp lib/battle_tower.cpp lib/battle.cpp lib/controller.cpp lib/condition.cpp lib/mockmon_data.cpp lib/mockmon_exp.cpp lib/mockmon_species.cpp lib/moves.cpp lib/random_gen.cpp  lib/stats.cpp lib/types.cpp lib/evolution.cpp lib/speciesId.cpp lib/specialized_moves.cpp lib/arena.cpp lib/interfaces.cpp) 

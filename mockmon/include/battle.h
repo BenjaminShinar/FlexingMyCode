@@ -20,7 +20,7 @@ namespace mockmon
         
         static double GetTypeEffetiveness(types::TypeEffectivenessModifier modifier);
         void AttackWith(moves::MoveId mvid,Mockmon & attacker,Mockmon & defender);
-        double ModifyAttack(const moves::BaseMove & AttackingMove,Mockmon & attacker, Mockmon & defender);
+        double ModifyAttack(const moves::SimpleMove & AttackingMove,Mockmon & attacker, Mockmon & defender);
 
         
         private:

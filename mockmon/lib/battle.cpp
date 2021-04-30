@@ -1,6 +1,8 @@
 #include "battle.h"
 #include "controller.h"
 #include "random_gen.h"
+#include "specialized_moves.h"
+
 #include <algorithm>
 #include <numeric>
 
@@ -100,7 +102,7 @@ namespace mockmon
     }
 
     //this is normal attack
-    double Battle::ModifyAttack(const moves::BaseMove & AttackingMove,Mockmon & attacker,Mockmon & defender)
+    double Battle::ModifyAttack(const moves::SimpleMove & AttackingMove,Mockmon & attacker,Mockmon & defender)
     {
         auto baseDamage = AttackingMove.BasePower;
         auto levelModifier = 2+((2*attacker.GetCurrentLevel())/5);
@@ -117,39 +119,15 @@ namespace mockmon
     void Battle::AttackWith(moves::MoveId mvid,Mockmon & attacker,Mockmon & defender)
     {
         auto chosenMove = std::find_if(attacker.m_Moveset.begin(),attacker.m_Moveset.end(),[&](const moves::EquipedMove  & mv ){ return mv.Identifier() == mvid;});
+        Arena arena;//spikes, screens, weather, etc;
+        auto usedMove{moves::MoveId::Struggle};
         
         if (chosenMove != attacker.m_Moveset.end() && chosenMove->RemainningPowerPoints()>0)
         {
-            auto baseMove = moves::BaseMove::AllMoves.at(chosenMove->Identifier());
-
-            if (chosenMove->UseMove() && moves::CheckMoveAccuracy(baseMove))
-            {
-                auto damage = static_cast<int>(ModifyAttack(baseMove,attacker,defender));
-                std::cout<< attacker.GetName() << " hit " << defender.GetName() <<" with " << baseMove.Identifier() <<" for " << damage << " damage!" << '\n';
-                defender.CurrentStats.Health.ChangeHealth(-1* damage);
-            }
-            else
-            {
-                std::cout<< attacker.GetName() << " missed with " << baseMove.Identifier() << '\n';
-            }  
+            usedMove = chosenMove->Identifier();
         }
-        else
-        {
-            const auto struggleMove = moves::BaseMove::AllMoves.at(moves::MoveId::Struggle);
-            if (moves::CheckMoveAccuracy(struggleMove))
-            {
-                auto damage = static_cast<int>(ModifyAttack(struggleMove,attacker,defender));
-                auto recoilDamage =static_cast<int>(std::max(1.0,damage/2.0));
-                std::cout<< attacker.GetName() << " struggles with  " << defender.GetName() <<" and managed to hit for " << damage << " damage!" << '\n';
-                std::cout<< attacker.GetName() << " takes " << recoilDamage << " recoile damage while struggling!" << '\n';
-                defender.CurrentStats.Health.ChangeHealth(-1* damage);
-                attacker.CurrentStats.Health.ChangeHealth(-1* recoilDamage);
-            }
-            else
-            {
-                std::cout<< attacker.GetName() << " missed with " << struggleMove.Identifier() << '\n';
-            }
-        }
+        const auto & compositeMove = moves::CompositeMove::AllCompositeMoves.at(usedMove);
+        compositeMove.Perform(*this,arena,attacker,defender);
         
     }
 }

@@ -41,7 +41,7 @@ namespace mockmon
         SpeciesStats{100,100,100,100,100},
         {
             //moves list
-            {1,{moves::MoveId::Tackle}}
+            {1,{moves::MoveId::Tackle, moves::MoveId::Struggle}}
         }
         )},
         {MockmonSpeciesId::Ratata, MockmonSpecies(MockmonSpeciesId::Ratata,
@@ -50,11 +50,13 @@ namespace mockmon
         SpeciesStats{30,56,35,25,72},
         {
             //moves list
-            {1,{moves::MoveId::Tackle, moves::MoveId::TailWhip}},
-            {7,{moves::MoveId::QuickAttack}},
-            {14,{moves::MoveId::HyperFang}},
-            {23,{moves::MoveId::FocusEnergy}},
-            {34,{moves::MoveId::SuperFang}},
+                        {1,{moves::MoveId::Tackle}},
+
+            // {1,{moves::MoveId::Tackle, moves::MoveId::TailWhip}},
+            // {7,{moves::MoveId::QuickAttack}},
+            // {14,{moves::MoveId::HyperFang}},
+            // {23,{moves::MoveId::FocusEnergy}},
+            // {34,{moves::MoveId::SuperFang}},
         }
         )},
         {MockmonSpeciesId::Raticate, MockmonSpecies(MockmonSpeciesId::Raticate,
@@ -77,7 +79,8 @@ namespace mockmon
         SpeciesStats{40,35,30,20,50},
         {
             //moves list
-            {1,{moves::MoveId::PoisonSting, moves::MoveId::StringShot}},
+             {1,{moves::MoveId::Struggle}},
+            //{1,{moves::MoveId::PoisonSting, moves::MoveId::StringShot}},
         }
         )},
     };

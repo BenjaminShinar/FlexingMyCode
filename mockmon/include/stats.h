@@ -72,6 +72,8 @@ namespace mockmon
         public:
         BattleSingleStat(T statValue ):m_stat(statValue){}
         T GetStat() const {return m_stat* m_currentBoost;};
+        T GetBaseStat() const {m_currentBoost;};
+        double GetBoost() const {return m_currentBoost;};
         void ResetBoost() {m_currentBoost = 1.0;}
         void ChangeBoost(double boost) {m_currentBoost+=boost;};
         void ChangeStat(T statValue) {m_stat= statValue;}

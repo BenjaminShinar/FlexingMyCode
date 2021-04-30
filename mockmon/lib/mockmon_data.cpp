@@ -23,7 +23,7 @@ namespace mockmon
         return m_ableToBattle && CurrentStats.Health.GetStat() >0;
     }
 
-    double Mockmon::ModifyAttackForCrticalHit(const moves::BaseMove & AttackingMove)
+    double Mockmon::ModifyAttackForCrticalHit(const moves::SimpleMove & AttackingMove)
     {
         
         auto baseChance =100* GetMockmonSpeciesData().MockmonSpeciesStats.Speed * AttackingMove.CriticalChanceBoost() / 512.0;
@@ -42,12 +42,12 @@ namespace mockmon
 
 
     //do something else
-    bool Mockmon::GetStabModifier(const moves::BaseMove & AttackingMove) 
+    bool Mockmon::GetStabModifier(const moves::SimpleMove & AttackingMove) 
     {
         return GetMockmonSpeciesData().GetStabModifier(AttackingMove.Type);
     }
     
-    types::TypeEffectivenessModifier Mockmon::GetTypeEffectivenessModifer(const moves::BaseMove & AttackingMove) 
+    types::TypeEffectivenessModifier Mockmon::GetTypeEffectivenessModifer(const moves::SimpleMove & AttackingMove) 
     {
         return GetMockmonSpeciesData().GetTypeEffetivenessModifier(AttackingMove.Type);
     }

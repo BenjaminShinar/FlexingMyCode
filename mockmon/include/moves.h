@@ -2,7 +2,7 @@
 
 #include "types.h"
 #include "interfaces.h"
-//#include <string_view>
+
 #include <string>
 #include <string_view>
 #include <iostream>
@@ -27,24 +27,35 @@ namespace mockmon::moves
         PoisonSting,
         StringShot,
         Ember,
+        SwordsDance,
+        SonicBoom,
     };
-
+    std::string moveToStr(const MoveId baseMove);
     std::ostream& operator<<(std::ostream& os,const MoveId& moveId);
-    
+        
     
     struct BaseMove: public IdentifiybleModule<moves::MoveId>
     {
-        explicit BaseMove(moves::MoveId moveId, types::Types type, unsigned int accuracy, unsigned int power):
+        explicit BaseMove(moves::MoveId moveId, types::Types type):
         IdentifiybleModule(moveId),
-        Type(type),BaseAccuracy(accuracy),BasePower(power)
+        Type(type)
+        {
+        }
+
+        const types::Types Type;
+    };
+
+    struct SimpleMove: public BaseMove
+    {
+        explicit SimpleMove(moves::MoveId moveId, types::Types type, unsigned int accuracy, unsigned int power):
+        BaseMove(moveId,type),BaseAccuracy(accuracy),BasePower(power)
         {
         }
         double CriticalChanceBoost() const;
-        const types::Types Type;
         const unsigned int BaseAccuracy;
         const unsigned int BasePower;
 
-        static const std::map<moves::MoveId,BaseMove> AllMoves;
+        static const std::map<moves::MoveId,SimpleMove> AllMoves;
 
     };
 
@@ -90,7 +101,7 @@ namespace mockmon::moves
 
     };
 
-    bool CheckMoveAccuracy(const BaseMove& attack);
+    bool CheckMoveAccuracy(const SimpleMove& attack);
 
     enum class MovesDamageTypes
     {

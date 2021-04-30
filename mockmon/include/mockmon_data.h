@@ -25,7 +25,7 @@ namespace mockmon
         }
         unsigned int GetCurrentLevel() const;
         const MockmonSpecies & GetMockmonSpeciesData() const;
-        int ModifyAttack(const moves::BaseMove & AttackingMove,const Mockmon & target);
+        int ModifyAttack(const moves::SimpleMove & AttackingMove,const Mockmon & target);
         void ChangeName(const std::string & newName); //needs to be somewhere else.
         void GrantExperiencePoints(long points);
         MockmonExp CheckExperiencePoints() const;
@@ -42,13 +42,13 @@ namespace mockmon
         bool DisplayEvent() const {return  m_outputEvents;}
 
         //battle relatedStuff probably alot of methods should go somewhere else
-        bool GetStabModifier(const moves::BaseMove & AttackingMove);
-        types::TypeEffectivenessModifier GetTypeEffectivenessModifer(const moves::BaseMove & AttackingMove) ;
+        bool GetStabModifier(const moves::SimpleMove & AttackingMove);
+        types::TypeEffectivenessModifier GetTypeEffectivenessModifer(const moves::SimpleMove & AttackingMove) ;
 
         private:
         
-        double ModifyAttackForCrticalHit(const moves::BaseMove & AttackingMove);
-        double ModifyAttackForType(const moves::BaseMove & AttackingMove,const Mockmon & target);
+        double ModifyAttackForCrticalHit(const moves::SimpleMove & AttackingMove);
+        double ModifyAttackForType(const moves::SimpleMove & AttackingMove,const Mockmon & target);
 
         void LearnLevelUpMoves();
         void LearnLevelUpMoves(int level);

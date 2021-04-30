@@ -105,3 +105,6 @@ clean:
 #use ralative paths to c so it will work both regardless of computer (home or lab)
 #sometimes we need -lm to inlude the math library
 #h files arent always updated properly, depends on how many times they are included and which of the files is changed
+
+#for windows:
+#mingw32-make.exe instead of make

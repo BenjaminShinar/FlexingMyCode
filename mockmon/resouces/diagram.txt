@@ -1,0 +1,12 @@
+@startuml
+'struggle
+start
+: user chose a move;
+if (move hits?) then (hit)
+: do damage;
+stop
+else (miss)
+: end turn;
+end
+
+@enduml
