@@ -44,15 +44,14 @@ namespace mockmon
             {1,{moves::MoveId::Tackle, moves::MoveId::Struggle}}
         }
         )},
-        {MockmonSpeciesId::Ratata, MockmonSpecies(MockmonSpeciesId::Ratata,
+        {MockmonSpeciesId::Rattata, MockmonSpecies(MockmonSpeciesId::Rattata,
         {types::Types::Normal},
         LevelUpGroup::MediumFastLevelUp,57,
         SpeciesStats{30,56,35,25,72},
         {
             //moves list
-                        {1,{moves::MoveId::Tackle}},
 
-            // {1,{moves::MoveId::Tackle, moves::MoveId::TailWhip}},
+            {1,{moves::MoveId::Tackle, moves::MoveId::TailWhip}},
             // {7,{moves::MoveId::QuickAttack}},
             // {14,{moves::MoveId::HyperFang}},
             // {23,{moves::MoveId::FocusEnergy}},

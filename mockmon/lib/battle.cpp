@@ -101,12 +101,19 @@ namespace mockmon
         }
     }
 
+    double GetStatsModifier(const moves::SimpleMove & AttackingMove,const Mockmon & attacker,const Mockmon & defender)  
+    {
+        //this should be extracted from the move
+        const auto attackingStat = StatsTypes::Attack;
+        const auto defendingStat = StatsTypes::Defence;
+        return (attacker.CurrentStats.m_battleStats.at(attackingStat).GetStat() / defender.CurrentStats.m_battleStats.at(defendingStat).GetStat()); //attack / defence
+    }
     //this is normal attack
     double Battle::ModifyAttack(const moves::SimpleMove & AttackingMove,Mockmon & attacker,Mockmon & defender)
     {
         auto baseDamage = AttackingMove.BasePower;
         auto levelModifier = 2+((2*attacker.GetCurrentLevel())/5);
-        auto statsModifier = attacker.CurrentStats.Attack.GetStat() / defender.CurrentStats.Defence.GetStat(); //attack / defence
+        auto statsModifier = GetStatsModifier(AttackingMove,attacker,defender);
         auto criticalHitModifier {attacker.ModifyAttackForCrticalHit(AttackingMove)};
         auto stabModifer {attacker.GetStabModifier(AttackingMove) ? 1.5 : 1.0}; //stab
         auto typeMofider {defender.GetTypeEffectivenessModifer(AttackingMove)};  //typeResistancs and weakness
@@ -115,7 +122,8 @@ namespace mockmon
         return (extraModifier*(2+((levelModifier* baseDamage * statsModifier)/50)));
     }
 
- 
+    
+
     void Battle::AttackWith(moves::MoveId mvid,Mockmon & attacker,Mockmon & defender)
     {
         auto chosenMove = std::find_if(attacker.m_Moveset.begin(),attacker.m_Moveset.end(),[&](const moves::EquipedMove  & mv ){ return mv.Identifier() == mvid;});

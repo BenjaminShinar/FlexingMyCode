@@ -43,11 +43,21 @@ namespace mockmon::moves
         return o;
     }
 
-    MoveOutcome BoostAttackMove(Battle &battle, Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender, double boostAmount)
+    MoveOutcome ChangeSelfStatMove(Battle &battle, Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender, StatsTypes effectedStat, StatModifiersLevels modifer)
     {
-        const auto previous = attacker.CurrentStats.Attack.GetStat();
-        attacker.CurrentStats.Attack.ChangeBoost(boostAmount);
-        MoveOutcome o{AppendAll({attacker.GetName(), "used", "with", moves::moveToStr(AttackingMove.Identifier()), "and increasd Attack stat with a boost of", std::to_string(boostAmount), ".from", std::to_string(previous), "to", std::to_string(attacker.CurrentStats.Attack.GetStat())})};
+        auto & statRef =  attacker.CurrentStats.m_battleStats.at(effectedStat);
+        const auto previous = statRef.GetStat();
+        statRef.AddModifier(modifer);
+        MoveOutcome o{AppendAll({attacker.GetName(), "used", "with", moves::moveToStr(AttackingMove.Identifier()), "and changed stat from", std::to_string(previous), "to", std::to_string(statRef.GetStat())})};
+        return o;
+    }
+
+        MoveOutcome ChangeOpponentStatMove(Battle &battle, Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender, StatsTypes effectedStat, StatModifiersLevels modifer)
+    {
+        auto & statRef =  defender.CurrentStats.m_battleStats.at(effectedStat);
+        const auto previous = statRef.GetStat();
+        statRef.AddModifier(modifer);
+        MoveOutcome o{AppendAll({attacker.GetName(), "used", "with", moves::moveToStr(AttackingMove.Identifier()), "and changed", defender.GetName(),"stat from", std::to_string(previous), "to", std::to_string(statRef.GetStat())})};
         return o;
     }
 
@@ -57,11 +67,18 @@ namespace mockmon::moves
         MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", moves::moveToStr(AttackingMove.Identifier()), "for", std::to_string(damage), " damage!"})};
         return o;
     }
+
 #pragma endregion
 
-    ExMove CreateAttackBoostingMove(const double attackBoost)
+    ExMove CreateSelfBoostingMove(StatsTypes effectedStat, StatModifiersLevels modifer)
     {
-        auto bounded = std::bind(&BoostAttackMove, _1, _2, _3, _4, _5, attackBoost);
+        auto bounded = std::bind(&ChangeSelfStatMove, _1, _2, _3, _4, _5,effectedStat, modifer);
+        return bounded;
+    }
+
+    ExMove CreateOpponentBoostingMove(StatsTypes effectedStat, StatModifiersLevels modifer)
+    {
+        auto bounded = std::bind(&ChangeOpponentStatMove, _1, _2, _3, _4, _5,effectedStat, modifer);
         return bounded;
     }
 
@@ -89,7 +106,9 @@ namespace mockmon::moves
         //how this works?
         {MoveId::Tackle, CompositeMove(MoveId::Tackle, {CreateNormalDamagingMove()})},
         {MoveId::Struggle, CompositeMove(MoveId::Struggle, {CreateNormalDamagingMove(), CreateNormalRecoilDamagingMove(2.0)})},
-        {MoveId::SwordsDance, CompositeMove(MoveId::SwordsDance, {CreateAttackBoostingMove(2.0)})},
+        {MoveId::SwordsDance, CompositeMove(MoveId::SwordsDance, {CreateSelfBoostingMove(StatsTypes::Attack,StatModifiersLevels::GreatlyIncrease)})},
+        {MoveId::TailWhip, CompositeMove(MoveId::TailWhip, {CreateOpponentBoostingMove(StatsTypes::Defence,StatModifiersLevels::Decrese)})},
+
         {MoveId::SonicBoom, CompositeMove(MoveId::SonicBoom, {CreateDirectDamagingMoveByPassImmunity(20)})},
         // {MoveId::TailWhip,SimpleMove(MoveId::TailWhip,types::Types::Normal,100,5)},
         // {MoveId::QuickAttack,SimpleMove(MoveId::QuickAttack,types::Types::Normal,100,40)},

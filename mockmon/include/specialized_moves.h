@@ -48,7 +48,10 @@ namespace mockmon::moves
 
     ExMove CreateNormalDamagingMove();
     ExMove CreateNormalRecoilDamagingMove(const double divFactor);
-    ExMove CreateAttackBoostingMove(const double attackBoost);
+    ExMove CreateSelfBoostingMove(StatsTypes effectedStat, StatModifiersLevels modifer);
+    ExMove CreateOpponentBoostingMove(StatsTypes effectedStat, StatModifiersLevels modifer);
+
+
     ExMove CreateDirectDamagingMoveByPassImmunity(const double setDamage);
 
 }

@@ -60,11 +60,14 @@ namespace mockmon
     void Mockmon::FullRestore()
     {
         CurrentStats.Health.RestStatToMax();
-        CurrentStats.Accuracy.ResetBoost();
-        CurrentStats.Attack.ResetBoost();
-        CurrentStats.Defence.ResetBoost();
-        CurrentStats.Special.ResetBoost();
-        CurrentStats.Speed.ResetBoost();
+
+        CurrentStats.m_battleStats.at(StatsTypes::Attack).ResetBoost();
+        CurrentStats.m_battleStats.at(StatsTypes::Defence).ResetBoost();
+        CurrentStats.m_battleStats.at(StatsTypes::Evasion).ResetBoost();
+        CurrentStats.m_battleStats.at(StatsTypes::Special).ResetBoost();
+        CurrentStats.m_battleStats.at(StatsTypes::Speed).ResetBoost();
+
+        CurrentStats.m_battleStats.at(StatsTypes::Accuracy).ResetBoost();
         m_ableToBattle = true;
     }
 

@@ -34,7 +34,7 @@ namespace mockmon
         bool BattleTower::TowerFloor (Mockmon & playerMonster,unsigned int floorLevel)
         {
             const auto RandomizeEnemyType =  [](){ const auto x {random::Randomer::GetRandom(2)};
-            if (x==0) return MockmonSpeciesId::Ratata;
+            if (x==0) return MockmonSpeciesId::Rattata;
             if (x==1) return MockmonSpeciesId::Weedle;
             return MockmonSpeciesId::Raticate;
             };
