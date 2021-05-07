@@ -106,7 +106,7 @@ namespace mockmon::moves
     std::string EquipedMove::Describe() const
     {
       std::string description("move is ");
-        description.append(moveToStr(Identifier())).append(" it has ").append(std::to_string(RemainningPowerPoints())).append(" power points left");
+        description.append(Stringify(Identifier())).append(" it has ").append(std::to_string(RemainningPowerPoints())).append(" power points left");
       return description;
     }
 }

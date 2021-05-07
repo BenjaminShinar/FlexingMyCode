@@ -1,12 +1,8 @@
 #include "identifiers/mockmon_species_id.h"
 
-#include <iostream>
-
-
-//this is the base class of each mockmon, the shared data between them.
 namespace mockmon
 {
-    std::string speciesToStr(const MockmonSpeciesId speceis)
+    std::string Stringify(const MockmonSpeciesId speceis)
     {
         switch (speceis)
         {
@@ -164,10 +160,10 @@ namespace mockmon
         default: return "Unknown mockmon!"; break;
         }
     }
-
-    std::ostream& operator<<(std::ostream& os,const MockmonSpeciesId& speceis)
+    
+    std::ostream &operator<<(std::ostream &os, const MockmonSpeciesId &e)
     {
-        os << speciesToStr(speceis);
+        os << Stringify(e);
         return os;
     }
 }

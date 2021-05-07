@@ -3,7 +3,7 @@
 namespace mockmon::types
 {
 
-    std::string TypeEffectivenessToStr(const TypeEffectivenessModifier typeEffectivenessModifier)
+    std::string Stringify(const TypeEffectivenessModifier typeEffectivenessModifier)
     {
         switch (typeEffectivenessModifier)
         {
@@ -17,9 +17,9 @@ namespace mockmon::types
         }
     }
 
-    std::ostream& operator<<(std::ostream& os,const TypeEffectivenessModifier & typeEffectivenessModifier)
+    std::ostream &operator<<(std::ostream &os, const TypeEffectivenessModifier &e)
     {
-        os << TypeEffectivenessToStr(typeEffectivenessModifier);
+        os << Stringify(e);
         return os;
     }
 }

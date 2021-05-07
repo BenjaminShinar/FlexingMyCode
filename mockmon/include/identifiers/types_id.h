@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 #include <iostream>
 namespace mockmon::types
 {
@@ -24,5 +25,7 @@ namespace mockmon::types
         Steel,
         Fairy
     };
-    std::ostream& operator<<(std::ostream& os,const Types& type);
+    std::string Stringify(const Types type);
+    std::ostream &operator<<(std::ostream &os, const Types &type);
+
 }

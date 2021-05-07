@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 #include <iostream>
 
 namespace mockmon::types
@@ -12,5 +13,7 @@ namespace mockmon::types
         VeryEffective,
         SuperEffective, //4.0
     };
-    std::ostream& operator<<(std::ostream& os,const TypeEffectivenessModifier& typeEffectivenessModifier);
+    std::string Stringify(const TypeEffectivenessModifier typeEffectivenessModifier);
+        std::ostream &operator<<(std::ostream &os, const TypeEffectivenessModifier &e);
+
 }

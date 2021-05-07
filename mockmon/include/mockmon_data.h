@@ -42,7 +42,7 @@ namespace mockmon
         const std::vector<moves::EquipedMove> & GetMoveSet() const;
         std::string_view GetName() const;
         bool DisplayEvent() const {return  m_outputEvents;}
-        TrainerAIID GetTrainerAIID() const {return m_trainer_ai_id;}
+        TrainerAI GetTrainerAIID() const {return m_trainer_ai_id;}
         //battle relatedStuff probably alot of methods should go somewhere else
         bool GetStabModifier(const moves::SimpleMove & AttackingMove);
         types::TypeEffectivenessModifier GetTypeEffectivenessModifer(const moves::SimpleMove & AttackingMove) ;
@@ -66,7 +66,7 @@ namespace mockmon
         
         private:
         MockmonSpeciesId m_currentSpeciesId;
-        TrainerAIID m_trainer_ai_id;
+        TrainerAI m_trainer_ai_id;
         std::string m_name;
         bool m_outputEvents;
         long CurrentLevel =1;

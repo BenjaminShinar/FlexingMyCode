@@ -1,4 +1,6 @@
 #pragma once
+#include <string>
+#include <iostream>
 
 namespace mockmon
 {
@@ -18,4 +20,8 @@ namespace mockmon
         IncreasedEvenFurther = 5,  //350/100
         Highest = 6,               //400/100
     };
+
+    std::string Stringify(const StatModifiersLevels statModifiersLevels);
+        std::ostream &operator<<(std::ostream &os, const StatModifiersLevels &e);
+
 }

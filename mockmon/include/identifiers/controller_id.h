@@ -1,5 +1,5 @@
 #pragma once
-#include <string.h>
+#include <string>
 #include <iostream>
 namespace mockmon::controller
 {
@@ -15,6 +15,7 @@ namespace mockmon::controller
         START,
         SELECT
     };
-    std::ostream& operator<<(std::ostream& os,const controllerEnum& ctrl);
-    std::string controllerToStr(const controllerEnum ctrler);
+    std::string Stringify(const controllerEnum ctrl);
+    std::ostream &operator<<(std::ostream &os, const controllerEnum &e);
+
 }

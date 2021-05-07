@@ -2,9 +2,6 @@
 
 
 #include "identifiers/mockmon_species_id.h"
-#include "identifiers/moves_id.h"
-#include "identifiers/types_id.h"
-#include "identifiers/type_effectiveness_id.h"
 #include "identifiers/level_up_groups_id.h"
 
 #include "moves.h"

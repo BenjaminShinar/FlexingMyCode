@@ -1,12 +1,9 @@
 #include "identifiers/types_id.h"
 
-#include <string>
-#include <iostream>
-
 namespace mockmon::types
 {
 
-    std::string typeToStr(const Types type)
+    std::string Stringify(const Types type)
     {
         switch (type)
         {
@@ -32,10 +29,10 @@ namespace mockmon::types
             default: return "Unknown Type!"; break;
         }
     }
-
-    std::ostream& operator<<(std::ostream& os,const Types& type)
+    std::ostream &operator<<(std::ostream &os, const Types &e)
     {
-        os << typeToStr(type);
+        os << Stringify(e);
         return os;
     }
+
 }

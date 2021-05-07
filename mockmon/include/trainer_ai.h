@@ -1,19 +1,7 @@
 #pragma once
 
-#include <string>
-#include <iostream>
-#include <algorithm>
-#include <map>
+#include "identifiers/trainer_ai_id.h"
 
 namespace mockmon
 {
-    enum class TrainerAIID
-    {
-        PlayerChoice,
-        RandomChoice,
-        PreferSuperEffective
-    };
-
-        std::ostream &operator<<(std::ostream &os, const TrainerAIID &trainer_ai_id);
-
 }

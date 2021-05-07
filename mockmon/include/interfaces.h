@@ -6,7 +6,8 @@
 #include <initializer_list>
 
 namespace mockmon
-{
+{   
+
     std::string AppendAll(const std::initializer_list<std::string_view> &words);
 
     template <typename T, std::enable_if_t<std::is_enum_v<T>, bool> = true>

@@ -31,7 +31,7 @@ namespace mockmon::moves
     {
         auto damage = static_cast<int>(battle.ModifyAttack(AttackingMove, attacker, defender));
         defender.CurrentStats.Health.ChangeHealth(-1 * damage);
-        MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", moves::moveToStr(AttackingMove.Identifier()), "for", std::to_string(damage), " damage!"})};
+        MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(AttackingMove.Identifier()), "for", std::to_string(damage), " damage!"})};
         return o;
     }
 
@@ -39,7 +39,7 @@ namespace mockmon::moves
     {
         auto damage = std::max(1, static_cast<int>(battle.ModifyAttack(AttackingMove, attacker, attacker) / divisionFactor));
         attacker.CurrentStats.Health.ChangeHealth(-1 * damage);
-        MoveOutcome o{AppendAll({attacker.GetName(), "takes", std::to_string(damage), "recoil damage from", moves::moveToStr(AttackingMove.Identifier())})};
+        MoveOutcome o{AppendAll({attacker.GetName(), "takes", std::to_string(damage), "recoil damage from", Stringify(AttackingMove.Identifier())})};
         return o;
     }
 
@@ -48,7 +48,7 @@ namespace mockmon::moves
         auto & statRef =  attacker.CurrentStats.m_battleStats.at(effectedStat);
         const auto previous = statRef.GetStat();
         statRef.AddModifier(modifer);
-        MoveOutcome o{AppendAll({attacker.GetName(), "used", "with", moves::moveToStr(AttackingMove.Identifier()), "and changed stat from", std::to_string(previous), "to", std::to_string(statRef.GetStat())})};
+        MoveOutcome o{AppendAll({attacker.GetName(), "used", "with",Stringify(AttackingMove.Identifier()), "and changed stat from", std::to_string(previous), "to", std::to_string(statRef.GetStat())})};
         return o;
     }
 
@@ -57,14 +57,14 @@ namespace mockmon::moves
         auto & statRef =  defender.CurrentStats.m_battleStats.at(effectedStat);
         const auto previous = statRef.GetStat();
         statRef.AddModifier(modifer);
-        MoveOutcome o{AppendAll({attacker.GetName(), "used", "with", moves::moveToStr(AttackingMove.Identifier()), "and changed", defender.GetName(),"stat from", std::to_string(previous), "to", std::to_string(statRef.GetStat())})};
+        MoveOutcome o{AppendAll({attacker.GetName(), "used", "with", Stringify(AttackingMove.Identifier()), "and changed", defender.GetName(),"stat from", std::to_string(previous), "to", std::to_string(statRef.GetStat())})};
         return o;
     }
 
     MoveOutcome DirectDamageByPassResistance(Battle &battle, Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender, double damage)
     {
         defender.CurrentStats.Health.ChangeHealth(-1 * damage);
-        MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", moves::moveToStr(AttackingMove.Identifier()), "for", std::to_string(damage), " damage!"})};
+        MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(AttackingMove.Identifier()), "for", std::to_string(damage), " damage!"})};
         return o;
     }
 

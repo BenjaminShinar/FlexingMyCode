@@ -1,6 +1,6 @@
 #pragma once
+#include <string>
 #include <iostream>
-
 namespace mockmon::moves
 {
     enum class MoveId
@@ -171,6 +171,8 @@ namespace mockmon::moves
         Withdraw,
         Wrap
     };
-    std::string moveToStr(const MoveId baseMove);
-    std::ostream &operator<<(std::ostream &os, const MoveId &moveId);
+    std::string Stringify(const MoveId moveId);
+        std::ostream &operator<<(std::ostream &os, const MoveId &e);
+
+
 }

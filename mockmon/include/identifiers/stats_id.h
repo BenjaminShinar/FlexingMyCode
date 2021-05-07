@@ -1,5 +1,6 @@
 #pragma once
-
+#include <string>
+#include <iostream>
 namespace mockmon
 {
     enum class StatsTypes
@@ -12,4 +13,7 @@ namespace mockmon
         Accuracy,
         Evasion,
     };
+    std::string Stringify(const StatsTypes statType);
+    std::ostream &operator<<(std::ostream &os, const StatsTypes &e);
+
 }

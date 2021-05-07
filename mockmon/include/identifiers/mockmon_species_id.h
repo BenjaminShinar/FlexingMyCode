@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 #include <iostream>
 namespace mockmon
 {
@@ -158,6 +159,8 @@ namespace mockmon
         UknownSpecies
     };
 
-    std::ostream &operator<<(std::ostream &os, const MockmonSpeciesId &mockmonSpeciesId);
+    std::string Stringify( const MockmonSpeciesId mockmonSpeciesId);
+    std::ostream &operator<<(std::ostream &os, const MockmonSpeciesId &e);
+
 
 }

@@ -4,8 +4,7 @@
 namespace mockmon::moves
 {
 
-  //
-    std::string moveToStr(const MoveId baseMove)
+    std::string Stringify(const MoveId baseMove)
     {
         switch (baseMove)
         {
@@ -178,9 +177,9 @@ namespace mockmon::moves
         }
     }
 
-    std::ostream& operator<<(std::ostream& os,const MoveId& type)
+    std::ostream &operator<<(std::ostream &os, const MoveId &e)
     {
-        os << moveToStr(type);
+        os << Stringify(e);
         return os;
     }
 }

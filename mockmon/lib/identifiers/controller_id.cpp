@@ -1,7 +1,8 @@
 #include "identifiers/controller_id.h"
+
 namespace mockmon::controller
 {
-    std::string controllerToStr(const controller::controllerEnum ctrler)
+    std::string Stringify(const controllerEnum ctrler)
     {
         switch (ctrler)
         {
@@ -26,9 +27,10 @@ namespace mockmon::controller
         }
     }
 
-   std::ostream& operator<<(std::ostream& os,const controllerEnum& ctrl)
+    std::ostream &operator<<(std::ostream &os, const controllerEnum &e)
     {
-        os << controllerToStr(ctrl);
+        os << Stringify(e);
         return os;
     }
+
 }
