@@ -1,14 +1,16 @@
-//#include <format>
-
 #include "mockmon\include\main.h"
+
 #include <string>
 #include <iostream>
+#include <fmt\format.h>
 
-int main(int argc, char *argv[], char **env)
+
+int main(int argc, char *argv[])
 {
     std::string mockmonName{"nameless!"};
     int maxFloor(5);
-
+    
+    
     if (argc < 3)
     {
 
@@ -40,6 +42,6 @@ int main(int argc, char *argv[], char **env)
             std::cerr << "Number out of range: " << arg << '\n';
         }
     }
-
+    fmt::print("starting! {}\n", mockmonName);
     StartGame(mockmonName, maxFloor);
 }

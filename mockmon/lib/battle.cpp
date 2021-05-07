@@ -42,14 +42,31 @@ namespace mockmon
     {
         // std::array<std::pair<std::string, controller::controllerEnum>, 2> actions = {std::make_pair("Win", controller::controllerEnum::ACTION_A), std::make_pair("Lose", controller::controllerEnum::CANCEL_B)};
         // auto cmd = controller::GetAnyInput("what will you do in battle?", actions);
+        Arena arena;//spikes, screens, weather, etc;
+
         int round =0;
         while (r_playerMockmon.IsAbleToBattle() && r_enemyMockmon.IsAbleToBattle())
         {
             std::cout << r_playerMockmon.GetName() <<" is engaging in battle with " << r_enemyMockmon.GetName()<< " starting round " << ++round <<'\n';
-            PlayerTurn();
-            if (r_enemyMockmon.IsAbleToBattle())
+            const auto playerMV =r_playerMockmon.DecideMove(r_enemyMockmon);
+            const auto enemyMV =r_enemyMockmon.DecideMove(r_playerMockmon);
+    
+            if (DetermineOrder())
             {
-                EnemyTurn();
+
+                AttackWith(playerMV,r_playerMockmon,r_enemyMockmon);
+                if (r_enemyMockmon.IsAbleToBattle())
+                {
+                    AttackWith(enemyMV,r_enemyMockmon,r_playerMockmon);
+                }
+            }
+            else
+            {
+                AttackWith(enemyMV,r_enemyMockmon,r_playerMockmon);
+                if (r_playerMockmon.IsAbleToBattle())
+                {
+                    AttackWith(playerMV,r_playerMockmon,r_enemyMockmon);
+                }
             }
         }
         auto endAction = r_playerMockmon.IsAbleToBattle()? controller::controllerEnum::ACTION_A : controller::controllerEnum::CANCEL_B;
@@ -58,13 +75,30 @@ namespace mockmon
         std::cout << "Battle ended at round " <<  round << " winner: "<< winner<<'\n';
     }
 
-    void Battle::PlayerTurn()
+    bool Battle::DetermineOrder()
+    {
+        //ignoring priority moves for now.
+        const auto playerSpeed {r_playerMockmon.CurrentStats.m_battleStats.at(StatsTypes::Speed).GetStat()};
+        const auto enemySpeed {r_enemyMockmon.CurrentStats.m_battleStats.at(StatsTypes::Speed).GetStat()};
+        if (playerSpeed > enemySpeed)
+        {
+            return true;
+        }
+        if (playerSpeed < enemySpeed)
+        {
+            return false;
+        }
+        //speed tie
+        return (random::Randomer::GetRandom(2) ==0);
+    }
+
+    void Battle::PlayerTurn(moves::MoveId mv)
     {
         auto attack = controller::GetAnyInput("which move to use?",r_playerMockmon.GetMoveSet());
         AttackWith(attack,r_playerMockmon,r_enemyMockmon);
     }
 
-    void Battle::EnemyTurn()
+    void Battle::EnemyTurn(moves::MoveId mv)
     {
         
         auto options = r_enemyMockmon.GetMoveSet().size();

@@ -3,44 +3,15 @@
 #include <vector>
 #include <map>
 
+#include "identifiers/types_id.h"
+#include "identifiers/type_effectiveness_id.h"
+
 namespace mockmon::types
 {
-    enum class TypeEffectivenessModifier
-    {   
-        NotEffective,
-        VeryNotEffective, 
-        NotVeryEffective,
-        NormalEffective,
-        VeryEffective,
-        SuperEffective, //4.0
-    };
-    std::ostream& operator<<(std::ostream& os,const TypeEffectivenessModifier& typeEffectivenessModifier);
+
     TypeEffectivenessModifier CombineTypeModifiers(TypeEffectivenessModifier lhs,TypeEffectivenessModifier rhs);
 
-    enum class Types
-    {      
-        Typeless,
-        Normal,
-        Fire,
-        Water,
-        Electric,
-        Grass,
-        Ice,
-        Fighting,
-        Poison,
-        Ground,
-        Flying,
-        Psychic,
-        Bug,
-        Rock,
-        Ghost,
-        Dragon,
-        Dark,
-        Steel,
-        Fairy
-    };
-    std::ostream& operator<<(std::ostream& os,const Types& type);
-    
+
     class TypeEffectivness
     {
 public:

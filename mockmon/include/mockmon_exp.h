@@ -1,18 +1,11 @@
 #pragma once
 
+#include "identifiers/level_up_groups_id.h"
 #include <string>
 #include <iostream>
 
 namespace mockmon
-{
-    enum class LevelUpGroup
-    {
-        FastLevelUp,
-        MediumFastLevelUp,
-        MediumSlowLevelUp,
-        SlowLevelUp
-    };
-    
+{ 
     struct MockmonExp
     {      
         const long CurrentLevel;

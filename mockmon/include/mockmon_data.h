@@ -10,12 +10,14 @@
 #include "stats.h"
 #include "mockmon_species.h"
 #include "mockmon_exp.h"
+#include "trainer_ai.h"
 
 namespace mockmon
 {
     class Mockmon
     {   
         friend class Battle;
+        friend class Arena;
         public:
         explicit Mockmon(MockmonSpeciesId species,const std::string & name,bool silent = false)
         :m_currentSpeciesId(species), m_name(name),m_outputEvents(silent)
@@ -36,11 +38,11 @@ namespace mockmon
         bool IsAbleToBattle() const;
         bool IsWild() const {return false;}
         bool TeachMove(moves::MoveId);
-
+        moves::MoveId DecideMove(const Mockmon & enemy);
         const std::vector<moves::EquipedMove> & GetMoveSet() const;
         std::string_view GetName() const;
         bool DisplayEvent() const {return  m_outputEvents;}
-
+        TrainerAIID GetTrainerAIID() const {return m_trainer_ai_id;}
         //battle relatedStuff probably alot of methods should go somewhere else
         bool GetStabModifier(const moves::SimpleMove & AttackingMove);
         types::TypeEffectivenessModifier GetTypeEffectivenessModifer(const moves::SimpleMove & AttackingMove) ;
@@ -64,6 +66,7 @@ namespace mockmon
         
         private:
         MockmonSpeciesId m_currentSpeciesId;
+        TrainerAIID m_trainer_ai_id;
         std::string m_name;
         bool m_outputEvents;
         long CurrentLevel =1;

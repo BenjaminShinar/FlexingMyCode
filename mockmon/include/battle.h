@@ -1,7 +1,13 @@
 #pragma once
 
+
+#include "identifiers/moves_id.h"
+#include "identifiers/type_effectiveness_id.h"
+
+
 #include "controller.h"
 #include "mockmon_data.h"
+
 
 #include <string>
 #include <iostream>
@@ -25,10 +31,10 @@ namespace mockmon
         
         private:
         void DetermineBattle(controller::controllerEnum action);
-        void PlayerTurn();
-        void EnemyTurn();
+        void PlayerTurn(moves::MoveId mv);
+        void EnemyTurn(moves::MoveId mv);
         void LoopBattle();
-       
+        bool DetermineOrder();
         Mockmon & r_playerMockmon;
         Mockmon & r_enemyMockmon;
         

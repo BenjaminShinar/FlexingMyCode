@@ -1,5 +1,6 @@
 #pragma once
 
+#include "identifiers/types_id.h"
 #include "moves.h"
 #include "mockmon_data.h"
 #include "Battle.h"
