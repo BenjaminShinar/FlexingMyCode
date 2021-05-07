@@ -2,6 +2,7 @@
 #include "controller.h"
 #include "random_gen.h"
 #include "specialized_moves.h"
+#include "trainer_ai.h"
 
 #include <algorithm>
 #include <numeric>
@@ -48,8 +49,9 @@ namespace mockmon
         while (r_playerMockmon.IsAbleToBattle() && r_enemyMockmon.IsAbleToBattle())
         {
             std::cout << r_playerMockmon.GetName() <<" is engaging in battle with " << r_enemyMockmon.GetName()<< " starting round " << ++round <<'\n';
-            const auto playerMV =r_playerMockmon.DecideMove(r_enemyMockmon);
-            const auto enemyMV =r_enemyMockmon.DecideMove(r_playerMockmon);
+   
+            const auto playerMV = GetAI(r_playerMockmon.GetTrainerAIID())(r_playerMockmon,r_enemyMockmon);
+            const auto enemyMV = GetAI(r_enemyMockmon.GetTrainerAIID())(r_enemyMockmon,r_playerMockmon);
     
             if (DetermineOrder())
             {
@@ -92,27 +94,6 @@ namespace mockmon
         return (random::Randomer::GetRandom(2) ==0);
     }
 
-    void Battle::PlayerTurn(moves::MoveId mv)
-    {
-        auto attack = controller::GetAnyInput("which move to use?",r_playerMockmon.GetMoveSet());
-        AttackWith(attack,r_playerMockmon,r_enemyMockmon);
-    }
-
-    void Battle::EnemyTurn(moves::MoveId mv)
-    {
-        
-        auto options = r_enemyMockmon.GetMoveSet().size();
-        auto attack = moves::MoveId::Struggle;
-        if (options>0)
-        {
-            
-            auto randomAttack = random::Randomer::GetRandom(options);
-            attack= r_enemyMockmon.GetMoveSet().at(randomAttack).Identifier();
-        }
-        
-        AttackWith(attack,r_enemyMockmon,r_playerMockmon);    
-    }
-    
     void Battle::DetermineBattle(controller::controllerEnum action)
     {
 
@@ -166,7 +147,7 @@ namespace mockmon
         
         if (chosenMove != attacker.m_Moveset.end() && chosenMove->RemainningPowerPoints()>0)
         {
-            usedMove = chosenMove->Identifier();
+            usedMove = chosenMove->UseMove().value_or(moves::MoveId::Struggle);
         }
         const auto & compositeMove = moves::CompositeMove::AllCompositeMoves.at(usedMove);
         compositeMove.Perform(*this,arena,attacker,defender);

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "identifiers/trainer_ai_id.h"
 #include "moves.h"
 //#include <string_view>
 #include <string>
@@ -10,7 +11,7 @@
 #include "stats.h"
 #include "mockmon_species.h"
 #include "mockmon_exp.h"
-#include "trainer_ai.h"
+
 
 namespace mockmon
 {
@@ -19,8 +20,8 @@ namespace mockmon
         friend class Battle;
         friend class Arena;
         public:
-        explicit Mockmon(MockmonSpeciesId species,const std::string & name,bool silent = false)
-        :m_currentSpeciesId(species), m_name(name),m_outputEvents(silent)
+        explicit Mockmon(MockmonSpeciesId species,const std::string & name,TrainerAI trainerAi = TrainerAI::RandomChoice,bool silent = false)
+        :m_currentSpeciesId(species), m_name(name),m_trainer_ai_id(trainerAi),m_outputEvents(silent)
         {
             LearnLevelUpMoves();
             CurrentStats.UpdateStats(Stats(GetMockmonSpeciesData().MockmonSpeciesStats,IVs,EVs,CurrentLevel));
@@ -38,7 +39,6 @@ namespace mockmon
         bool IsAbleToBattle() const;
         bool IsWild() const {return false;}
         bool TeachMove(moves::MoveId);
-        moves::MoveId DecideMove(const Mockmon & enemy);
         const std::vector<moves::EquipedMove> & GetMoveSet() const;
         std::string_view GetName() const;
         bool DisplayEvent() const {return  m_outputEvents;}

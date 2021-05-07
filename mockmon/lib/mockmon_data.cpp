@@ -90,11 +90,6 @@ namespace mockmon
         return false;
     }
 
-    moves::MoveId Mockmon::DecideMove(const Mockmon & enemy)
-    {
-        return GetMoveSet().front().Identifier();
-    }
-
     const std::vector<moves::EquipedMove> & Mockmon::GetMoveSet() const
     {
         return m_Moveset;

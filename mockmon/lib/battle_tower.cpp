@@ -48,7 +48,7 @@ namespace mockmon
 
         Mockmon BattleTower::GenerateEnemy(int requestLevel,MockmonSpeciesId enemySpecies, std::string enemyName)
         {
-            Mockmon enemy(enemySpecies,enemyName,true);
+            Mockmon enemy(enemySpecies,enemyName,TrainerAI::RandomChoice,true);
             auto needexp = MockmonExp::TotalExperinceForLevel(requestLevel,enemy.GetMockmonSpeciesData().SpeciesLevelUpGroup);
             enemy.GrantExperiencePoints(needexp);
             enemy.FullRestore();

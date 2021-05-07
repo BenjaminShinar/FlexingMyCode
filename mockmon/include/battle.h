@@ -8,7 +8,6 @@
 #include "controller.h"
 #include "mockmon_data.h"
 
-
 #include <string>
 #include <iostream>
 
@@ -31,8 +30,6 @@ namespace mockmon
         
         private:
         void DetermineBattle(controller::controllerEnum action);
-        void PlayerTurn(moves::MoveId mv);
-        void EnemyTurn(moves::MoveId mv);
         void LoopBattle();
         bool DetermineOrder();
         Mockmon & r_playerMockmon;
