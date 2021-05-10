@@ -33,13 +33,9 @@ namespace mockmon
         }
         bool BattleTower::TowerFloor (Mockmon & playerMonster,unsigned int floorLevel)
         {
-            const auto RandomizeEnemyType =  [](){ const auto x {random::Randomer::GetRandom(2)};
-            if (x==0) return MockmonSpeciesId::Rattata;
-            if (x==1) return MockmonSpeciesId::Rattata;
-            return MockmonSpeciesId::Raticate;
-            };
+            const auto RandomizeEnemyType = random::Randomer::GetOneOption({MockmonSpeciesId::Rattata,MockmonSpeciesId::Weedle});
             
-            auto enemy = BattleTower::GenerateEnemy(floorLevel,RandomizeEnemyType(),"garry");
+            auto enemy = BattleTower::GenerateEnemy(floorLevel,RandomizeEnemyType,"garry");
             std::cout<< "player mockmon " << playerMonster.GetName() << " will face " << enemy.GetName() << " the level " << enemy.GetCurrentLevel() << " " << enemy.GetMockmonSpeciesData().Identifier() << " with " << enemy.CurrentStats.Health.GetStat() << " HP!"  <<'\n';
             Battle::DoBattle(playerMonster,enemy);
             return(playerMonster.IsAbleToBattle());

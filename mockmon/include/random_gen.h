@@ -1,6 +1,7 @@
 #pragma once
 
 #include <random>
+#include <initializer_list>
 
 namespace mockmon::random
 {
@@ -15,6 +16,18 @@ namespace mockmon::random
         static unsigned int GetRandom(unsigned int mod)
         {
             return GetRandom() % mod;
+        }
+
+        //returns one option from the list
+        template<typename T>
+        static T GetOneOption(const std::initializer_list<T> & options)
+        {
+            const auto n_options =  options.size();
+            const auto chosen = GetRandom(n_options);
+            auto a = std::begin(options);
+            std::advance(a,chosen);
+            return *a;
+
         }
         private:
         static std::default_random_engine generator;

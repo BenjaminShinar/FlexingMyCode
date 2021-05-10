@@ -14,7 +14,7 @@ namespace mockmon
         return MockmonSpecies::AllMockmons.at(m_currentSpeciesId);
     }
 
-    unsigned int Mockmon::GetCurrentLevel() const
+    unsigned int Mockmon::GetCurrentLevel() const 
     {
         return CurrentLevel;
     }

@@ -5,9 +5,8 @@
 #include "mockmon_data.h"
 #include "Battle.h"
 #include "arena.h"
-#include <initializer_list>
 #include <functional>
-
+#include <map>
 namespace mockmon::moves
 {
     //some way to describe what happened
@@ -26,7 +25,7 @@ namespace mockmon::moves
     {
         public:
 
-        explicit CompositeMove(moves::MoveId moveId,const std::initializer_list<ExMove> & componenets):
+        explicit CompositeMove(moves::MoveId moveId,const std::vector<ExMove> & componenets):
         DescribleModule(moveId)
         ,MoveComponenets(componenets)
         {
@@ -49,8 +48,8 @@ namespace mockmon::moves
 
     ExMove CreateNormalDamagingMove();
     ExMove CreateNormalRecoilDamagingMove(const double divFactor);
-    ExMove CreateSelfBoostingMove(StatsTypes effectedStat, StatModifiersLevels modifer);
-    ExMove CreateOpponentBoostingMove(StatsTypes effectedStat, StatModifiersLevels modifer);
+    ExMove CreateSelfStatChangingMove(StatsTypes effectedStat, StatModifiersLevels modifer);
+    ExMove CreateOpponentStatChangingMove(StatsTypes effectedStat, StatModifiersLevels modifer);
 
 
     ExMove CreateDirectDamagingMoveByPassImmunity(const double setDamage);
