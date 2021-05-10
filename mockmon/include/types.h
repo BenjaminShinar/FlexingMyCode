@@ -14,7 +14,12 @@ namespace mockmon::types
 
     class TypeEffectivness
     {
-public:
+        public:
+        explicit TypeEffectivness(Types t,const std::vector<Types> & doubleEffect,const std::vector<Types> & halfEffect,const std::vector<Types> & noEffect)
+        :
+        AttackingType(t),DoesDoubleEffectiveTypes(doubleEffect),DoesHalfEffectiveTypes(halfEffect),DoesNothingEffectiveTypes(noEffect)
+        {}
+
         const Types AttackingType;
         TypeEffectivenessModifier GetTypeModifier(Types type) const;
         bool DoubleEffective (Types type) const;
@@ -22,10 +27,7 @@ public:
         bool NoEffective (Types type) const;
 
 private:
-        explicit TypeEffectivness(Types t,const std::vector<Types> & doubleEffect,const std::vector<Types> & halfEffect,const std::vector<Types> & noEffect)
-        :
-        AttackingType(t),DoesDoubleEffectiveTypes(doubleEffect),DoesHalfEffectiveTypes(halfEffect),DoesNothingEffectiveTypes(noEffect)
-        {}
+
 
         const std::vector<Types> DoesDoubleEffectiveTypes;
         const std::vector<Types> DoesHalfEffectiveTypes;

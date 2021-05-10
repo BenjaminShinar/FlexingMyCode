@@ -110,6 +110,7 @@ namespace mockmon::moves
         {MoveId::TailWhip, CompositeMove(MoveId::TailWhip, {CreateOpponentBoostingMove(StatsTypes::Defence,StatModifiersLevels::Decrese)})},
 
         {MoveId::SonicBoom, CompositeMove(MoveId::SonicBoom, {CreateDirectDamagingMoveByPassImmunity(20)})},
+        {MoveId::QuickAttack, CompositeMove(MoveId::QuickAttack, {CreateNormalDamagingMove()})},
         // {MoveId::TailWhip,SimpleMove(MoveId::TailWhip,types::Types::Normal,100,5)},
         // {MoveId::QuickAttack,SimpleMove(MoveId::QuickAttack,types::Types::Normal,100,40)},
         // {MoveId::HyperFang,SimpleMove(MoveId::HyperFang,types::Types::Normal,90,80)},

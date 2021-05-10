@@ -14,9 +14,9 @@ namespace mockmon
 
     struct SpeciesStats
     {
-        explicit SpeciesStats(unsigned int attack, unsigned int defence, unsigned int special, unsigned int speed, unsigned health) : Attack(attack), Defence(defence), Special(special), Speed(speed), Health(health)
-        {
-        }
+        // explicit SpeciesStats(unsigned int attack, unsigned int defence, unsigned int special, unsigned int speed, unsigned health) : Attack(attack), Defence(defence), Special(special), Speed(speed), Health(health)
+        // {
+        // }
 
         const unsigned int Attack{1};
         const unsigned int Defence{1};
@@ -39,12 +39,12 @@ namespace mockmon
         }
 
     public:
-        explicit IndividualStats(unsigned int attack, unsigned int defence, unsigned int special, unsigned int speed) : SpeciesStats(attack, defence, special, speed, CalculateHealth(attack, defence, special, speed))
+        explicit IndividualStats(unsigned int attack, unsigned int defence, unsigned int special, unsigned int speed) : SpeciesStats{attack, defence, special, speed, CalculateHealth(attack, defence, special, speed)}
         {
         }
 
         //this is for enemies
-        explicit IndividualStats() : SpeciesStats(9u, 8u, 8u, 8u, CalculateHealth(9u, 8u, 8u, 8u))
+        explicit IndividualStats() : SpeciesStats{9u, 8u, 8u, 8u, CalculateHealth(9u, 8u, 8u, 8u)}
         {
         }
     };

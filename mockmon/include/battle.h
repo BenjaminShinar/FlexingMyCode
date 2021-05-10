@@ -31,7 +31,7 @@ namespace mockmon
         private:
         void DetermineBattle(controller::controllerEnum action);
         void LoopBattle();
-        bool DetermineOrder();
+        bool DetermineOrder(const moves::MoveId playerMv,const moves::MoveId enemyMv);
         Mockmon & r_playerMockmon;
         Mockmon & r_enemyMockmon;
         

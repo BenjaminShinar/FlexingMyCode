@@ -35,7 +35,7 @@ namespace mockmon
         {
             const auto RandomizeEnemyType =  [](){ const auto x {random::Randomer::GetRandom(2)};
             if (x==0) return MockmonSpeciesId::Rattata;
-            if (x==1) return MockmonSpeciesId::Weedle;
+            if (x==1) return MockmonSpeciesId::Rattata;
             return MockmonSpeciesId::Raticate;
             };
             

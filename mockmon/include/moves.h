@@ -2,6 +2,7 @@
 
 #include "types.h"
 #include "identifiers/moves_id.h"
+#include "identifiers/priority_id.h"
 #include "interfaces.h"
 
 #include <string>
@@ -26,14 +27,14 @@ namespace mockmon::moves
 
     struct SimpleMove : public BaseMove
     {
-        explicit SimpleMove(moves::MoveId moveId, types::Types type, unsigned int accuracy, unsigned int power) : BaseMove(moveId, type), BaseAccuracy(accuracy), BasePower(power)
-        {
-        }
-        double CriticalChanceBoost() const;
+
         const unsigned int BaseAccuracy;
         const unsigned int BasePower;
 
         static const std::map<moves::MoveId, SimpleMove> AllMoves;
+        explicit SimpleMove(moves::MoveId moveId, types::Types type, unsigned int accuracy, unsigned int power) : BaseMove(moveId, type), BaseAccuracy(accuracy), BasePower(power)
+        {
+        }
     };
 
     //this the wrapped constant version the move,how it's handled from the outside
@@ -44,7 +45,6 @@ namespace mockmon::moves
 
         static const std::map<moves::MoveId, ConstantMove> AllMovesWrappers;
 
-    private:
         explicit ConstantMove(moves::MoveId moveId, unsigned int basePP, unsigned int maxPP) : IdentifiybleModule(moveId),
                                                                                                BaseStartingPowerPoints(basePP), BaseMaxPowerPoints(maxPP)
         {
@@ -77,7 +77,8 @@ namespace mockmon::moves
     };
 
     bool CheckMoveAccuracy(const SimpleMove &attack);
-
+    double CriticalChanceBoost(moves::MoveId mvId);
+    Priority GetMovePriority(moves::MoveId mvId);
     enum class MovesDamageTypes
     {
         NormalDamage,

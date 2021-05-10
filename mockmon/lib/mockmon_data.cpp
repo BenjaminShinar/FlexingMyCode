@@ -27,7 +27,7 @@ namespace mockmon
     double Mockmon::ModifyAttackForCrticalHit(const moves::SimpleMove & AttackingMove)
     {
         
-        auto baseChance =100* GetMockmonSpeciesData().MockmonSpeciesStats.Speed * AttackingMove.CriticalChanceBoost() / 512.0;
+        auto baseChance =100* GetMockmonSpeciesData().MockmonSpeciesStats.Speed * moves::CriticalChanceBoost(AttackingMove.Identifier()) / 512.0;
         if (baseChance > random::Randomer::GetRandom())
         {
             

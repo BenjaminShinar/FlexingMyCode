@@ -53,7 +53,7 @@ namespace mockmon
             const auto playerMV = GetAI(r_playerMockmon.GetTrainerAIID())(r_playerMockmon,r_enemyMockmon);
             const auto enemyMV = GetAI(r_enemyMockmon.GetTrainerAIID())(r_enemyMockmon,r_playerMockmon);
     
-            if (DetermineOrder())
+            if (DetermineOrder(playerMV,enemyMV))
             {
 
                 AttackWith(playerMV,r_playerMockmon,r_enemyMockmon);
@@ -77,9 +77,19 @@ namespace mockmon
         std::cout << "Battle ended at round " <<  round << " winner: "<< winner<<'\n';
     }
 
-    bool Battle::DetermineOrder()
+    bool Battle::DetermineOrder(const moves::MoveId playerMv,const moves::MoveId enemyMv)
     {
-        //ignoring priority moves for now.
+        {
+        //priority moves.
+
+            const auto playerPriority {GetMovePriority(playerMv)};
+            const auto enemyPriority {GetMovePriority(enemyMv)};
+            if (playerPriority != enemyPriority)
+            {
+                return playerPriority >enemyPriority;
+            }
+        }
+        // same priority
         const auto playerSpeed {r_playerMockmon.CurrentStats.m_battleStats.at(StatsTypes::Speed).GetStat()};
         const auto enemySpeed {r_enemyMockmon.CurrentStats.m_battleStats.at(StatsTypes::Speed).GetStat()};
         if (playerSpeed > enemySpeed)
