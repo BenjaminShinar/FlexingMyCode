@@ -6,6 +6,7 @@
 #include "Battle.h"
 #include "arena.h"
 #include <functional>
+#include <initializer_list>
 #include <map>
 namespace mockmon::moves
 {
@@ -18,6 +19,7 @@ namespace mockmon::moves
     
     //this is a move typedef
     using ExMove = std::function<MoveOutcome(Battle& battle,Arena & arena, const moves::SimpleMove & AttackingMove,Mockmon & attacker,Mockmon & defender)>;
+    using ExDamageByState= std::function<double(const Mockmon & mockmonToChoose)>;
 
     //this should replace the BaseMoveclass
     //we need some outcome?
@@ -25,7 +27,7 @@ namespace mockmon::moves
     {
         public:
 
-        explicit CompositeMove(moves::MoveId moveId,const std::vector<ExMove> & componenets):
+        explicit CompositeMove(moves::MoveId moveId,const std::initializer_list<ExMove> & componenets):
         DescribleModule(moveId)
         ,MoveComponenets(componenets)
         {
@@ -53,5 +55,7 @@ namespace mockmon::moves
 
 
     ExMove CreateDirectDamagingMoveByPassImmunity(const double setDamage);
+    ExMove CreateDirectDamagingMoveTargetStateByPassImmunity(const ExDamageByState & dmgByStateCalc);
+    ExMove CreateDirectDamagingMoveAttackerStateByPassImmunity(const ExDamageByState & dmgByStateCalc);
 
 }

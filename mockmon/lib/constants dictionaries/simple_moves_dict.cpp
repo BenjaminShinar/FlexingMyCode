@@ -1,6 +1,6 @@
 #include "moves.h"
 #include "random_gen.h"
-#include <interfaces.h>
+#include "interfaces.h"
 
 namespace mockmon::moves
 {
@@ -19,7 +19,7 @@ namespace mockmon::moves
         MakeDictionaryPair<SimpleMove>(MoveId::QuickAttack,types::Types::Normal,100,40),
         MakeDictionaryPair<SimpleMove>(MoveId::HyperFang,types::Types::Normal,90,80),
         MakeDictionaryPair<SimpleMove>(MoveId::FocusEnergy,types::Types::Normal,100,5),
-        MakeDictionaryPair<SimpleMove>(MoveId::SuperFang,types::Types::Normal,90,5),
+        
         MakeDictionaryPair<SimpleMove>(MoveId::WaterGun,types::Types::Water,100,40),
         MakeDictionaryPair<SimpleMove>(MoveId::Guillotine ,types::Types::Normal,30,200),
         MakeDictionaryPair<SimpleMove>(MoveId::Slash ,types::Types::Normal,100,70),
@@ -28,8 +28,15 @@ namespace mockmon::moves
         MakeDictionaryPair<SimpleMove>(MoveId::Ember,types::Types::Fire,100,40),
         MakeDictionaryPair<SimpleMove>(MoveId::Struggle,types::Types::Typeless,50,30),
         MakeDictionaryPair<SimpleMove>(MoveId::SwordsDance,types::Types::Normal,100,0), //boosting
-        MakeDictionaryPair<SimpleMove>(MoveId::SonicBoom,types::Types::Normal,90,0), //set Damage
         MakeDictionaryPair<SimpleMove>(MoveId::QuickAttack,types::Types::Normal,100,40), //priority
+
+        //set damage moves
+        MakeDictionaryPair<SimpleMove>(MoveId::SonicBoom,types::Types::Normal,90,0), //set Damage
+        MakeDictionaryPair<SimpleMove>(MoveId::SuperFang,types::Types::Normal,90,0), //set Damage
+        MakeDictionaryPair<SimpleMove>(MoveId::SeismicToss,types::Types::Normal,100,0), //set Damage
+        MakeDictionaryPair<SimpleMove>(MoveId::DragonRage,types::Types::Dragon,100,0), //set Damage
+        MakeDictionaryPair<SimpleMove>(MoveId::NightShade,types::Types::Ghost,100,0), //set Damage
+        MakeDictionaryPair<SimpleMove>(MoveId::Psywave,types::Types::Psychic,100,0), //set Damage
 
 
     };

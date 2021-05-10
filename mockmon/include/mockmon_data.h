@@ -66,8 +66,9 @@ namespace mockmon
         
         private:
         MockmonSpeciesId m_currentSpeciesId;
-        TrainerAI m_trainer_ai_id;
+        
         std::string m_name;
+        TrainerAI m_trainer_ai_id;
         bool m_outputEvents;
         long CurrentLevel =1;
         long experience_points = 0;

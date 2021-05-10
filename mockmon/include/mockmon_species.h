@@ -24,7 +24,7 @@ namespace mockmon
     {   
         public:
         explicit MockmonSpecies()=delete;
-        explicit MockmonSpecies(MockmonSpeciesId speciesId,std::set<types::Types> types,LevelUpGroup speciesLevelUpGroup,int speciesExp, const SpeciesStats && speciesStats, std::map<int,std::vector<moves::MoveId>> && levelUpMoves):
+        explicit MockmonSpecies(MockmonSpeciesId speciesId,const std::set<types::Types> & types,LevelUpGroup speciesLevelUpGroup,int speciesExp, const SpeciesStats & speciesStats,const std::map<int,std::vector<moves::MoveId>> & levelUpMoves):
         IdentifiybleModule(speciesId),
         SpeciesTypes(types),
         SpeciesLevelUpGroup(speciesLevelUpGroup),

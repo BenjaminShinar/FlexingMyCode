@@ -8,7 +8,7 @@
 #include <vector>
 namespace mockmon
 {   
-    //needed in type effectivness chart file, because we are skipping braced initilization.
+    //needed because we are skipping braced initilization.
     template <typename T>
     using vector_type_T=std::vector<T>;
     
@@ -44,10 +44,10 @@ namespace mockmon
     };
 
     //creates dictionary items when the key is the first argument for the object
-    // no idea why it sometimes works ans sometimes doesnt
+    // no idea why it sometimes works ans sometimes doesnt, has maybe const, may double ref...
     // this requires a public ctor... maybe i can make this a friend class/function?
     template <typename T,typename K, typename ... Args,std::enable_if_t<std::is_constructible_v<T,K,Args ...>,bool> = true>
-    const std::pair<K,T> MakeDictionaryPair(const K & key,const Args ... args)
+    std::pair<K,T> MakeDictionaryPair(const K & key,const Args ... args)
     {       
         const T t(key,args ...);
         return (std::pair<K,T>(key,t));

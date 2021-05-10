@@ -1,6 +1,9 @@
 #include "specialized_moves.h"
+#include "random_gen.h"
 #include <functional>
 #include <utility>
+#include <math.h>
+
 
 namespace mockmon::moves
 {
@@ -68,6 +71,22 @@ namespace mockmon::moves
         return o;
     }
 
+    MoveOutcome DirectDamageByTargetCalculation(Battle &battle, Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender, const ExDamageByState & dmgByStateCalc)
+    {
+        const auto damage = std::round(dmgByStateCalc(defender));
+        defender.CurrentStats.Health.ChangeHealth(-1 * damage);
+        MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(AttackingMove.Identifier()), "for", std::to_string(damage), " damage!"})};
+        return o;
+    }
+
+        MoveOutcome DirectDamageByAttackerCalculation(Battle &battle, Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender, const ExDamageByState & dmgByStateCalc)
+    {
+        const auto damage = std::round(dmgByStateCalc(attacker));
+        defender.CurrentStats.Health.ChangeHealth(-1 * damage);
+        MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(AttackingMove.Identifier()), "for", std::to_string(damage), " damage!"})};
+        return o;
+    }
+
 #pragma endregion
 
 #pragma region exposed methods
@@ -97,7 +116,17 @@ namespace mockmon::moves
     }
 
     
+    ExMove CreateDirectDamagingMoveTargetStateByPassImmunity(const ExDamageByState & dmgByStateCalc)
+    {
+        auto bounded = std::bind(&DirectDamageByTargetCalculation, _1, _2, _3, _4, _5, dmgByStateCalc);
+        return bounded;
+    }
 
+    ExMove CreateDirectDamagingMoveAttackerStateByPassImmunity(const ExDamageByState & dmgByStateCalc)
+    {
+        auto bounded = std::bind(&DirectDamageByAttackerCalculation, _1, _2, _3, _4, _5, dmgByStateCalc);
+        return bounded;
+    }
 
     ExMove CreateNormalDamagingMove()
     {
