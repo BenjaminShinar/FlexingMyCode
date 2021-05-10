@@ -22,6 +22,6 @@ namespace mockmon
     };
 
     std::string Stringify(const StatModifiersLevels statModifiersLevels);
-        std::ostream &operator<<(std::ostream &os, const StatModifiersLevels &e);
+    std::ostream &operator<<(std::ostream &os, const StatModifiersLevels &e);
 
 }
