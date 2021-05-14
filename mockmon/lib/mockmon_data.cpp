@@ -39,7 +39,7 @@ namespace mockmon
     //do something else
     bool Mockmon::GetStabModifier(const moves::SimpleMove & AttackingMove) 
     {
-        return GetMockmonSpeciesData().GetStabModifier(AttackingMove.Type);
+        return GetMockmonSpeciesData().IsSpeciesOfType(AttackingMove.Type);
     }
     
     types::TypeEffectivenessModifier Mockmon::GetTypeEffectivenessModifer(const moves::SimpleMove & AttackingMove) 
@@ -160,7 +160,7 @@ namespace mockmon
                     auto exists = std::find_if(std::begin(m_Moveset),std::end(m_Moveset),[&](const moves::EquipedMove & knownMove){return knownMove.Identifier() == mv;});
                     if (exists == std::end(m_Moveset))
                     {                
-                        TeachMove(mv);           
+                        TeachMove(mv);
                     }
                 }
             }
@@ -200,7 +200,7 @@ namespace mockmon
         long xp =static_cast<long>(std::floor((NominatorValue*NominatorModifiers)/Denominator));
         if (m_outputEvents)
         {
-            std::cout << GetName() << " gain " << xp << " xp points!" <<'\n';
+            std::cout << AppendAll({GetName(),"gain" ,std::to_string(xp),"xp points!"}) <<'\n';
         }
         EVs+=defeatedMon.GetMockmonSpeciesData().MockmonSpeciesStats;
         GrantExperiencePoints(xp);
@@ -210,7 +210,7 @@ namespace mockmon
     {  
         auto speciesXp = GetMockmonSpeciesData().SpeciesExp;
         auto xp = std::floor((CurrentLevel * speciesXp * (IsWild()? 1.0: 1.5)/7.0)) ;
-        std::cout << GetName() << " was defeted! gives out " << xp << " xp points!" <<'\n';
+        std::cout << AppendAll({GetName(),"was defeted! gives out" ,std::to_string(xp),"xp points!"}) <<'\n';
         return xp;
     }
 }

@@ -24,6 +24,7 @@ namespace mockmon::moves
         MakeDictionaryPair<SimpleMove>(MoveId::Guillotine ,types::Types::Normal,30,200),
         MakeDictionaryPair<SimpleMove>(MoveId::Slash ,types::Types::Normal,100,70),
         MakeDictionaryPair<SimpleMove>(MoveId::PoisonSting,types::Types::Poison ,100,15), //status
+        MakeDictionaryPair<SimpleMove>(MoveId::PoisonPowder,types::Types::Poison ,75,0), //status
         MakeDictionaryPair<SimpleMove>(MoveId::StringShot,types::Types::Bug,95,10), //status
         MakeDictionaryPair<SimpleMove>(MoveId::Ember,types::Types::Fire,100,40),
         MakeDictionaryPair<SimpleMove>(MoveId::Struggle,types::Types::Typeless,50,30),

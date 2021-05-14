@@ -14,7 +14,7 @@
 namespace mockmon::moves
 {
     //unique move name
-
+    types::Types GetMoveType(moves::MoveId mvId);
     struct BaseMove : public IdentifiybleModule<moves::MoveId>
     {
         explicit BaseMove(moves::MoveId moveId, types::Types type) : IdentifiybleModule(moveId),

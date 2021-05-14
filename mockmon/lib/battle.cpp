@@ -1,5 +1,5 @@
 #include "battle.h"
-#include "controller.h"
+#include "game_driver/controller.h"
 #include "random_gen.h"
 #include "specialized_moves.h"
 #include "moves_stats_targeting.h"
@@ -44,8 +44,6 @@ namespace mockmon
     {
         // std::array<std::pair<std::string, controller::controllerEnum>, 2> actions = {std::make_pair("Win", controller::controllerEnum::ACTION_A), std::make_pair("Lose", controller::controllerEnum::CANCEL_B)};
         // auto cmd = controller::GetAnyInput("what will you do in battle?", actions);
-        Arena arena;//spikes, screens, weather, etc;
-
         int round =0;
         while (r_playerMockmon.IsAbleToBattle() && r_enemyMockmon.IsAbleToBattle())
         {
@@ -143,7 +141,7 @@ namespace mockmon
     {
         auto baseDamage = AttackingMove.BasePower;
         auto levelModifier = 2+((2*attacker.GetCurrentLevel())/5);
-        auto statsModifier = GetStatsModifier(attacker,StatsTypes::Attack,defender,StatsTypes::Defence);
+        auto statsModifier = GetStatsModifier(attacker,attackingStat,defender,defendingStat);
         
         auto criticalHitModifier = [](Mockmon & attacker,const moves::MoveId mv){
             if (IsCriticalHit(attacker,mv))
@@ -164,7 +162,6 @@ namespace mockmon
     void Battle::AttackWith(moves::MoveId mvid,Mockmon & attacker,Mockmon & defender)
     {
         auto chosenMove = std::find_if(attacker.m_Moveset.begin(),attacker.m_Moveset.end(),[&](const moves::EquipedMove  & mv ){ return mv.Identifier() == mvid;});
-        Arena arena;//spikes, screens, weather, etc;
         auto usedMove{moves::MoveId::Struggle};
         
         if (chosenMove != attacker.m_Moveset.end() && chosenMove->RemainningPowerPoints()>0)
@@ -172,7 +169,7 @@ namespace mockmon
             usedMove = chosenMove->UseMove().value_or(moves::MoveId::Struggle);
         }
         const auto & compositeMove = moves::CompositeMove::AllCompositeMoves.at(usedMove);
-        compositeMove.Perform(arena,attacker,defender);
+        compositeMove.Perform(m_arena,attacker,defender);
         
     }
 }

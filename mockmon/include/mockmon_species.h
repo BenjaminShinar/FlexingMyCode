@@ -19,7 +19,7 @@
 //this is the base class of each mockmon, the shared data between them.
 namespace mockmon
 {
-
+    
     class MockmonSpecies: public IdentifiybleModule<MockmonSpeciesId>
     {   
         public:
@@ -34,14 +34,15 @@ namespace mockmon
         {
         }
         virtual ~MockmonSpecies()=default; //we might want some inheritance for special mockmon cases, who knows 
+        
+        bool IsSpeciesOfType(types::Types type) const;
+        types::TypeEffectivenessModifier GetTypeEffetivenessModifier(types::Types attackingMoveType) const;
+        
         const std::set<types::Types> SpeciesTypes;
         const LevelUpGroup SpeciesLevelUpGroup;
         const int SpeciesExp; // how much exp this mockmon gives
         const SpeciesStats MockmonSpeciesStats; // this belongs to the pokemon base class, not the indvidual;
         const std::map<int,std::vector<moves::MoveId>> LevelUpMoves;
-        bool GetStabModifier(types::Types attackingMoveType) const;
-        types::TypeEffectivenessModifier GetTypeEffetivenessModifier(types::Types attackingMoveType) const;
-        
 
         static const std::map<MockmonSpeciesId,MockmonSpecies> AllMockmons;
     };

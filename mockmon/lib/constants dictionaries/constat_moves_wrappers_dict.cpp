@@ -17,6 +17,7 @@ namespace mockmon::moves
         MakeDictionaryPair<ConstantMove>(MoveId::Guillotine ,5,8),
         MakeDictionaryPair<ConstantMove>(MoveId::Slash ,20,32),
         MakeDictionaryPair<ConstantMove>(MoveId::PoisonSting ,35,56),
+        MakeDictionaryPair<ConstantMove>(MoveId::PoisonPowder ,35,56),
         MakeDictionaryPair<ConstantMove>(MoveId::StringShot ,40,64),
         MakeDictionaryPair<ConstantMove>(MoveId::Ember ,25,40),
         MakeDictionaryPair<ConstantMove>(MoveId::Struggle,500,1000), //probably not needed!

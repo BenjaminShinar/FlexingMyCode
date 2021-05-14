@@ -60,7 +60,7 @@ namespace mockmon
 
 
         public:
-        Condition m_currentCondtion{};
+        condition::Condition m_currentCondtion{};
         BattleStats CurrentStats; // this is calculated each level;
 
         protected:

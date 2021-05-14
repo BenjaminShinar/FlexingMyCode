@@ -1,16 +1,19 @@
+#include "interfaces.h"
 #include "trainer_ai.h"
 #include "random_gen.h"
-#include "controller.h"
+#include "game_driver/controller.h"
+
 
 namespace mockmon
 {
 
  moves::MoveId PlayerInputChoice(Mockmon & attacker,Mockmon & defender)
  {
-    return controller::GetAnyInput("which move to use?",attacker.GetMoveSet());    
+    const auto prompt = AppendAll({"which move should",attacker.GetName(), "attack",defender.GetName(), "with?"});
+    return controller::GetAnyInput(prompt,attacker.GetMoveSet());    
  }
 
-moves::MoveId RandomChoice(Mockmon & attacker,Mockmon & defender)
+moves::MoveId RandomChoice(Mockmon & attacker,Mockmon &)
  {
     const auto possibleOptions = attacker.GetMoveSet().size();
     if (possibleOptions>0)

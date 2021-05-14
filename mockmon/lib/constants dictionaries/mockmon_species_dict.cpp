@@ -19,7 +19,7 @@ namespace mockmon
         mp_i_vec_Mv
         {
             //moves list
-            {1,{moves::MoveId::Tackle, moves::MoveId::Struggle}}
+            {1,{moves::MoveId::Tackle}}
         }
         ),
         MakeDictionaryPair<MockmonSpecies>(MockmonSpeciesId::Rattata,
@@ -55,7 +55,7 @@ namespace mockmon
         SpeciesStats{40,35,30,20,50},
         mp_i_vec_Mv{
             //moves list
-             {1,{moves::MoveId::Struggle}},
+             {1,{moves::MoveId::PoisonSting}},
             //{1,{moves::MoveId::PoisonSting, moves::MoveId::StringShot}},
         }
         ),

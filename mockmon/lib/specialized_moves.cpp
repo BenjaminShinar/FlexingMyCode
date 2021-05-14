@@ -53,7 +53,7 @@ namespace mockmon::moves
         auto & statRef =  attacker.CurrentStats.m_battleStats.at(effectedStat);
         const auto previous = statRef.GetStat();
         statRef.AddModifier(modifer);
-        MoveOutcome o{AppendAll({attacker.GetName(), "used", "with",Stringify(AttackingMove.Identifier()), "and changed stat from", std::to_string(previous), "to", std::to_string(statRef.GetStat())})};
+        MoveOutcome o{AppendAll({attacker.GetName(), "used",Stringify(AttackingMove.Identifier()), "and changed stat from", std::to_string(previous), "to", std::to_string(statRef.GetStat())})};
         return o;
     }
 
@@ -62,14 +62,14 @@ namespace mockmon::moves
         auto & statRef =  defender.CurrentStats.m_battleStats.at(effectedStat);
         const auto previous = statRef.GetStat();
         statRef.AddModifier(modifer);
-        MoveOutcome o{AppendAll({attacker.GetName(), "used", "with", Stringify(AttackingMove.Identifier()), "and changed", defender.GetName(),"stat from", std::to_string(previous), "to", std::to_string(statRef.GetStat())})};
+        MoveOutcome o{AppendAll({attacker.GetName(), "used", Stringify(AttackingMove.Identifier()), "and changed", defender.GetName(),"stat from", std::to_string(previous), "to", std::to_string(statRef.GetStat())})};
         return o;
     }
 
     MoveOutcome DirectDamageByPassResistance(Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender, double damage)
     {
         defender.CurrentStats.Health.ChangeHealth(-1 * damage);
-        MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(AttackingMove.Identifier()), "for", std::to_string(damage), " damage!"})};
+        MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(AttackingMove.Identifier()), "for", std::to_string(damage), "damage!"})};
         return o;
     }
 
@@ -77,16 +77,48 @@ namespace mockmon::moves
     {
         const auto damage = std::round(dmgByStateCalc(defender));
         defender.CurrentStats.Health.ChangeHealth(-1 * damage);
-        MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(AttackingMove.Identifier()), "for", std::to_string(damage), " damage!"})};
+        MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(AttackingMove.Identifier()), "for", std::to_string(damage), "damage!"})};
         return o;
     }
 
-        MoveOutcome DirectDamageByAttackerCalculation(Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender, const ExDamageByState & dmgByStateCalc)
+    MoveOutcome DirectDamageByAttackerCalculation(Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender, const ExDamageByState & dmgByStateCalc)
     {
         const auto damage = std::round(dmgByStateCalc(attacker));
         defender.CurrentStats.Health.ChangeHealth(-1 * damage);
-        MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(AttackingMove.Identifier()), "for", std::to_string(damage), " damage!"})};
+        MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(AttackingMove.Identifier()), "for", std::to_string(damage), "damage!"})};
         return o;
+    }
+
+    MoveOutcome AddConditionStatus(Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender, const StatusInflicment statusConditionInflicment)
+    {
+        if (defender.GetMockmonSpeciesData().IsSpeciesOfType(statusConditionInflicment.moveType))
+        {
+            MoveOutcome o{AppendAll({defender.GetName(), "cant be efflicted with", Stringify(statusConditionInflicment.AfflicteCondition),"by",Stringify(AttackingMove.Identifier()) })};    
+            return o;
+        }
+        if (defender.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.AfflicteCondition))
+        {
+            //already afflicted
+            MoveOutcome o{AppendAll({defender.GetName(), "is already", Stringify(statusConditionInflicment.AfflicteCondition),".",Stringify(AttackingMove.Identifier()), "failed!"})};    
+            return o;
+        }
+        if (random::Randomer::GetRandom() <= statusConditionInflicment.ChanceToAfflictCondtion)
+        {
+            defender.m_currentCondtion.CauseCondition(statusConditionInflicment.AfflicteCondition);
+            if (defender.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.AfflicteCondition))
+            {
+                //success
+                MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(AttackingMove.Identifier()), "!", defender.GetName(),"is now", Stringify(statusConditionInflicment.AfflicteCondition)})};
+                return o;    
+            }
+        }
+
+        //failed to afflict / missed
+        MoveOutcome o{AppendAll({attacker.GetName(),"tried to use",Stringify(AttackingMove.Identifier()), "but it failed to inflict condition",Stringify(statusConditionInflicment.AfflicteCondition)})};    
+        return o;
+            
+
+        
     }
 
 #pragma endregion
@@ -136,37 +168,13 @@ namespace mockmon::moves
         return bounded;
     }
 
+
+    ExMove CreateOpponentConditionMove(const StatusInflicment statusConditionInflicment)
+    {
+        auto bounded = std::bind(&AddConditionStatus, _1, _2, _3, _4,statusConditionInflicment);
+        return bounded;
+    }
+
 #pragma endregion
-    // double SeisemeticToss(const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender)
-    // {
-    //     return attacker.GetCurrentLevel();
-    // }
-
-    // double NightShade(const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender)
-    // {
-    //     return attacker.GetCurrentLevel();
-    // }
-
-    // double DragonRage(const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender)
-    // {
-    //     auto typeMofider{defender.GetTypeEffectivenessModifer(AttackingMove)}; //typeResistancs and weakness
-    //     if (typeMofider == types::TypeEffectivenessModifier::NotEffective)
-    //         return 0.0;
-
-    //     return 40.0;
-    // }
-
-    // double SuperFang(const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender)
-    // {
-
-    //     //always does half
-    //     return std::max(1, defender.CurrentStats.Health.GetStat());
-    // }
-
-    // double SonicBoom(const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender)
-    // {
-    //     //always does half
-    //     return std::max(1, defender.CurrentStats.Health.GetStat());
-    // }
 
 }

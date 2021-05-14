@@ -8,6 +8,11 @@
 
 namespace mockmon::moves
 {
+
+    types::Types GetMoveType(moves::MoveId mvId)
+    {
+        return SimpleMove::AllMoves.at(mvId).Type;
+    }
     double CriticalChanceBoost(moves::MoveId mvId)
     {
         switch (mvId)

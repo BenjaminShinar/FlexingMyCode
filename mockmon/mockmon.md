@@ -13,18 +13,72 @@ A small project that I can be motivated to work on. A simple version of a battli
 
 ### Mockmon battle mock
 
+#### basics
 - [x] a battle with a win / lose conditions
 - [x] user can choose actions vs opponent
 - [ ] moves that do something and moves that fail
 - [x] opponent can do something against user
-- [ ] moves effect mockmon stats rather than directly the outcome
+- [x] moves effect mockmon stats rather than directly the outcome
+- [ ] two turn moves
+- [ ] moves that block/protect against other moves
+- [ ] moves that are dependent on status/condition
+- [ ] unique moves (mimic, metronome, mirror move, counter)
 - [ ] mockmon stats effect the battle outcome
-- [ ] moves can hit or miss
+- [x] critical hits
+- [x] moves can hit or miss
 - [ ] moves can cause status effect
 - [ ] moves are effected by stats (accuracy, power)
 - [ ] status effects (poison, sleep, confision, etc...)
 - [x] the type system! super, normal and not very effective!
 - [ ] ... TBC battles are between trainers
+
+#### conditions
+- [ ] inflict condition
+- [ ] remove condition
+- [ ] conditions can't be inflicted based on typing
+- [ ] conditions go away after x turns...
+- [ ] conditions go away after haze or some other move
+- [ ] voltaile contions - bind, flinch, recharging?, semi invurnable?
+- [ ] Gen 1 synergy of toxic, burn, leech seed with each other.
+- [ ] which conditions work with each other and which are cancelled?
+- [ ] which conditions work with moves special effects (dig, charging/recharging)?
+
+##### burn
+- [ ] inflict damage
+- [ ] doesn't effect fire types
+- [ ] halfs phyiscal moves
+
+##### frozen
+- [ ] can't move
+- [ ] doesn't effect ice types
+- [ ] thawed by fire attacks (and other attacks?)
+
+##### paralyzed
+- [ ] a chance to not move
+- [ ] speed reduction
+- [ ] can be caused by different types of attacks, and mockmon of the same type aren't effected by it.
+
+##### poison / badly poison (toxic)
+- [ ] inflict damage
+- [ ] doesn't effect poison types, and maybe steel types.
+- [ ] badly poison increases the damgage it inflicts each turn.
+- [ ] effects in the outer world
+
+##### sleep
+- [ ] won't move
+- [ ] chance to wake up
+- [ ] maximum sleeping turns
+- [ ] effected by dream eater
+
+##### confused
+- [ ] chance to hitself with a special attack (no type, no critical hit)
+- [ ] chance to snap out of confusion
+- [ ] how it works with multiturn abilities
+
+
+
+##### leech seed
+##### subsitute
 
 ### What's a mockmon, actually?
 
@@ -34,7 +88,8 @@ A small project that I can be motivated to work on. A simple version of a battli
 - [x] moveset
 - [ ] status
 - [x] progression (exp)
-- [ ] uniqeness (iv, ev, unique id)
+- [x] uniqeness of stats (iv, ev)
+- [ ] mockmon uniquness (name, unique id)
 - [ ] mockmon evolution
 
 ### This is supposed to be a game
@@ -49,3 +104,12 @@ A small project that I can be motivated to work on. A simple version of a battli
 
 ### Controller stuff
 - [ ] dpad, action, cancel, start select
+
+
+
+## Build system
+use cmake to build
+use external packages from package managments
+
+## Testing?
+can i use automated testing?

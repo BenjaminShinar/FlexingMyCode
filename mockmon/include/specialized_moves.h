@@ -18,6 +18,13 @@ namespace mockmon::moves
         std::string m_moveOutcomeDescrition;
 
     };
+
+    struct StatusInflicment
+    {   
+        const types::Types moveType;
+        const condition::ConditionId AfflicteCondition;
+        const unsigned int ChanceToAfflictCondtion;
+    };
     
     //this is a move typedef
     using ExMove = std::function<MoveOutcome(Arena & arena, const moves::SimpleMove & AttackingMove,Mockmon & attacker,Mockmon & defender)>;
@@ -54,7 +61,7 @@ namespace mockmon::moves
     ExMove CreateNormalRecoilDamagingMove(const double divFactor);
     ExMove CreateSelfStatChangingMove(StatsTypes effectedStat, StatModifiersLevels modifer);
     ExMove CreateOpponentStatChangingMove(StatsTypes effectedStat, StatModifiersLevels modifer);
-
+    ExMove CreateOpponentConditionMove(const StatusInflicment statusConditionInflicment);
 
     ExMove CreateDirectDamagingMoveByPassImmunity(const double setDamage);
     ExMove CreateDirectDamagingMoveTargetStateByPassImmunity(const ExDamageByState & dmgByStateCalc);

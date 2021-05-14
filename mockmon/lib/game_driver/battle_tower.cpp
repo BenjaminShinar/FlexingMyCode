@@ -1,7 +1,7 @@
-#include "battle_tower.h"
+#include "game_driver/battle_tower.h"
+#include "game_driver/controller.h"
 #include "battle.h"
 #include "types.h"
-#include "controller.h"
 #include "types.h"
 #include "random_gen.h"
 #include <array>
@@ -14,8 +14,10 @@ namespace mockmon
             // playerMonster.TeachMove(moves::MoveId::Ember);
             // playerMonster.TeachMove(moves::MoveId::WaterGun);
             //playerMonster.TeachMove(moves::MoveId::Guillotine);
-            playerMonster.TeachMove(moves::MoveId::DragonRage);
-            playerMonster.TeachMove(moves::MoveId::Psywave);
+            //playerMonster.TeachMove(moves::MoveId::DragonRage);
+            //playerMonster.TeachMove(moves::MoveId::Psywave);
+            playerMonster.TeachMove(moves::MoveId::PoisonSting);
+            playerMonster.TeachMove(moves::MoveId::PoisonPowder);
             playerMonster.FullRestore();
             auto currentFloor{0u};
             while(currentFloor < maxFloor && playerMonster.IsAbleToBattle())

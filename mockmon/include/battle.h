@@ -5,9 +5,9 @@
 #include "identifiers/type_effectiveness_id.h"
 
 
-#include "controller.h"
+#include "game_driver/controller.h"
 #include "mockmon_data.h"
-
+#include "arena.h"
 #include <string>
 #include <iostream>
 
@@ -34,6 +34,7 @@ namespace mockmon
         void LoopBattle();
         bool DetermineOrder(const moves::MoveId playerMv,const moves::MoveId enemyMv);
         static bool IsCriticalHit(Mockmon & attackingMockmon, const moves::MoveId mv);
+        Arena m_arena;
         Mockmon & r_playerMockmon;
         Mockmon & r_enemyMockmon;
 

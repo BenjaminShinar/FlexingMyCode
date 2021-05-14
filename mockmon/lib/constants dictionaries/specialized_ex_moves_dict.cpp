@@ -24,7 +24,10 @@ namespace mockmon::moves
         MakeDictionaryPair<CompositeMove>(MoveId::NightShade, il_exMV{CreateDirectDamagingMoveAttackerStateByPassImmunity([](const Mockmon & m){return std::max(1.0,m.GetCurrentLevel()*1.0);})}),
         MakeDictionaryPair<CompositeMove>(MoveId::Psywave, il_exMV{CreateDirectDamagingMoveAttackerStateByPassImmunity([](const Mockmon & m){return std::max(1.0,1.0 + random::Randomer::GetRandom(m.GetCurrentLevel()));})}),
 
-
+        // moves that can efflict Status
+        //CreateOpponentConditionMove
+        MakeDictionaryPair<CompositeMove>(MoveId::PoisonSting,il_exMV{CreateNormalDamagingMove(MovesTargeting::PurePhysical),CreateOpponentConditionMove({types::Types::Poison,condition::ConditionId::Poison,30})}),
+        MakeDictionaryPair<CompositeMove>(MoveId::PoisonPowder,il_exMV{CreateOpponentConditionMove({types::Types::Poison,condition::ConditionId::Poison,100})}),
         // {MoveId::TailWhip,SimpleMove(MoveId::TailWhip,types::Types::Normal,100,5)},
         // {MoveId::QuickAttack,SimpleMove(MoveId::QuickAttack,types::Types::Normal,100,40)},
         // {MoveId::HyperFang,SimpleMove(MoveId::HyperFang,types::Types::Normal,90,80)},

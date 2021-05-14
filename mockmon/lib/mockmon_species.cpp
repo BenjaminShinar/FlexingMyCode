@@ -26,10 +26,10 @@ namespace mockmon
         return TypeEffectivenessModifier::NormalEffective;
     }
 
-    bool MockmonSpecies::GetStabModifier(types::Types attackingMoveType) const
+    bool MockmonSpecies::IsSpeciesOfType(types::Types type) const
     {
-        auto stabType = SpeciesTypes.find(attackingMoveType);
-        return (stabType != SpeciesTypes.end());
+        auto matchedType = SpeciesTypes.find(type);
+        return (matchedType != SpeciesTypes.end());
     }
 
 }
