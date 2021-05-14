@@ -3,8 +3,7 @@ cmake_minimum_required(VERSION 3.0.0)
 
 project(Mockmon VERSION 0.1.0)
 
-include(CTest)
-enable_testing()
+
 add_compile_options(-Wall -Wextra -Wpedantic)
 add_executable(${PROJECT_NAME} mockmon-main.cpp)
 
@@ -19,7 +18,10 @@ target_link_libraries(${PROJECT_NAME} PRIVATE fmt::fmt-header-only)
 target_compile_features(mockmon PUBLIC cxx_std_17)
 
 
-
+include(CTest)
+enable_testing()
+add_executable(testing mockmon-test.cpp)
+add_test(TestingMain testing)
 
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
