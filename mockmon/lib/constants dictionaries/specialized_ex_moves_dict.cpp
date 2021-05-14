@@ -10,11 +10,11 @@ namespace mockmon::moves
 
     const std::map<moves::MoveId, CompositeMove> CompositeMove::AllCompositeMoves{
         //how this works?
-        MakeDictionaryPair<CompositeMove>(MoveId::Tackle,il_exMV{CreateNormalDamagingMove()}),
-        MakeDictionaryPair<CompositeMove>(MoveId::Struggle, il_exMV{CreateNormalDamagingMove(), CreateNormalRecoilDamagingMove(2.0)}),
+        MakeDictionaryPair<CompositeMove>(MoveId::Tackle,il_exMV{CreateNormalDamagingMove(MovesTargeting::PurePhysical)}),
+        MakeDictionaryPair<CompositeMove>(MoveId::Struggle, il_exMV{CreateNormalDamagingMove(MovesTargeting::PurePhysical), CreateNormalRecoilDamagingMove(2.0)}),
         MakeDictionaryPair<CompositeMove>(MoveId::SwordsDance, il_exMV{CreateSelfStatChangingMove(StatsTypes::Attack,StatModifiersLevels::GreatlyIncrease)}),
         MakeDictionaryPair<CompositeMove>(MoveId::TailWhip, il_exMV{CreateOpponentStatChangingMove(StatsTypes::Defence,StatModifiersLevels::Decrese)}),
-        MakeDictionaryPair<CompositeMove>(MoveId::QuickAttack, il_exMV{CreateNormalDamagingMove()}),
+        MakeDictionaryPair<CompositeMove>(MoveId::QuickAttack, il_exMV{CreateNormalDamagingMove(MovesTargeting::PurePhysical)}),
         
         //set damage moves
         MakeDictionaryPair<CompositeMove>(MoveId::SonicBoom, il_exMV{CreateDirectDamagingMoveByPassImmunity(20)}),

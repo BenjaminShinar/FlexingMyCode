@@ -1,4 +1,5 @@
 #include "specialized_moves.h"
+#include "moves_stats_targeting.h"
 #include "random_gen.h"
 #include <functional>
 #include <utility>
@@ -9,7 +10,7 @@ namespace mockmon::moves
 {
     using namespace std::placeholders; //import this for _1,_2,
 
-    void CompositeMove::Perform(Battle &battle, Arena &arena, Mockmon &attacker, Mockmon &defender) const
+    void CompositeMove::Perform(Arena &arena, Mockmon &attacker, Mockmon &defender) const
     {
         const auto simpleAttackingMove = SimpleMove::AllMoves.at(Identifier());
 
@@ -17,7 +18,7 @@ namespace mockmon::moves
         {
             for (auto &mv : MoveComponenets)
             {
-                const auto outomce = mv(battle, arena, simpleAttackingMove, attacker, defender);
+                const auto outomce = mv(arena, simpleAttackingMove, attacker, defender);
                 std::cout << outomce.m_moveOutcomeDescrition << '\n';
             }
         }
@@ -30,23 +31,24 @@ namespace mockmon::moves
     //here are some other attacks, will eventually need refactoring
 #pragma region attacks
 
-    MoveOutcome RegularMove(Battle &battle, Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender)
+    MoveOutcome RegularMove(Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender,const MovesTargeting & movesTargeting)
     {
-        auto damage = static_cast<int>(battle.ModifyAttack(AttackingMove, attacker, defender));
+        const auto targetingPair{MoveStatsTargeting::AllStatsTargeting.at(movesTargeting)};
+        auto damage = static_cast<int>(Battle::ModifyAttack(AttackingMove, attacker,targetingPair.AttackerStat, defender,targetingPair.DefenderStat));
         defender.CurrentStats.Health.ChangeHealth(-1 * damage);
         MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(AttackingMove.Identifier()), "for", std::to_string(damage), " damage!"})};
         return o;
     }
 
-    MoveOutcome RecoilDamageMove(Battle &battle, Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender, double divisionFactor)
+    MoveOutcome RecoilDamageMove(Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender, double divisionFactor)
     {
-        auto damage = std::max(1, static_cast<int>(battle.ModifyAttack(AttackingMove, attacker, attacker) / divisionFactor));
+        auto damage = std::max(1, static_cast<int>(Battle::ModifyAttack(AttackingMove, attacker,StatsTypes::Attack, attacker,StatsTypes::Defence) / divisionFactor));
         attacker.CurrentStats.Health.ChangeHealth(-1 * damage);
         MoveOutcome o{AppendAll({attacker.GetName(), "takes", std::to_string(damage), "recoil damage from", Stringify(AttackingMove.Identifier())})};
         return o;
     }
 
-    MoveOutcome ChangeSelfStatMove(Battle &battle, Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender, StatsTypes effectedStat, StatModifiersLevels modifer)
+    MoveOutcome ChangeSelfStatMove(Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender, StatsTypes effectedStat, StatModifiersLevels modifer)
     {
         auto & statRef =  attacker.CurrentStats.m_battleStats.at(effectedStat);
         const auto previous = statRef.GetStat();
@@ -55,7 +57,7 @@ namespace mockmon::moves
         return o;
     }
 
-    MoveOutcome ChangeOpponentStatMove(Battle &battle, Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender, StatsTypes effectedStat, StatModifiersLevels modifer)
+    MoveOutcome ChangeOpponentStatMove(Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender, StatsTypes effectedStat, StatModifiersLevels modifer)
     {
         auto & statRef =  defender.CurrentStats.m_battleStats.at(effectedStat);
         const auto previous = statRef.GetStat();
@@ -64,14 +66,14 @@ namespace mockmon::moves
         return o;
     }
 
-    MoveOutcome DirectDamageByPassResistance(Battle &battle, Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender, double damage)
+    MoveOutcome DirectDamageByPassResistance(Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender, double damage)
     {
         defender.CurrentStats.Health.ChangeHealth(-1 * damage);
         MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(AttackingMove.Identifier()), "for", std::to_string(damage), " damage!"})};
         return o;
     }
 
-    MoveOutcome DirectDamageByTargetCalculation(Battle &battle, Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender, const ExDamageByState & dmgByStateCalc)
+    MoveOutcome DirectDamageByTargetCalculation(Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender, const ExDamageByState & dmgByStateCalc)
     {
         const auto damage = std::round(dmgByStateCalc(defender));
         defender.CurrentStats.Health.ChangeHealth(-1 * damage);
@@ -79,7 +81,7 @@ namespace mockmon::moves
         return o;
     }
 
-        MoveOutcome DirectDamageByAttackerCalculation(Battle &battle, Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender, const ExDamageByState & dmgByStateCalc)
+        MoveOutcome DirectDamageByAttackerCalculation(Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender, const ExDamageByState & dmgByStateCalc)
     {
         const auto damage = std::round(dmgByStateCalc(attacker));
         defender.CurrentStats.Health.ChangeHealth(-1 * damage);
@@ -93,44 +95,45 @@ namespace mockmon::moves
 
     ExMove CreateSelfStatChangingMove(StatsTypes effectedStat, StatModifiersLevels modifer)
     {
-        auto bounded = std::bind(&ChangeSelfStatMove, _1, _2, _3, _4, _5,effectedStat, modifer);
+        auto bounded = std::bind(&ChangeSelfStatMove, _1, _2, _3, _4,effectedStat, modifer);
         return bounded;
     }
 
     ExMove CreateOpponentStatChangingMove(StatsTypes effectedStat, StatModifiersLevels modifer)
     {
-        auto bounded = std::bind(&ChangeOpponentStatMove, _1, _2, _3, _4, _5,effectedStat, modifer);
+        auto bounded = std::bind(&ChangeOpponentStatMove, _1, _2, _3, _4, effectedStat, modifer);
         return bounded;
     }
 
     ExMove CreateNormalRecoilDamagingMove(const double divFactor)
     {
-        auto bounded = std::bind(&RecoilDamageMove, _1, _2, _3, _4, _5, divFactor);
+        auto bounded = std::bind(&RecoilDamageMove, _1, _2, _3, _4, divFactor);
         return bounded;
     }
 
     ExMove CreateDirectDamagingMoveByPassImmunity(const double setDamage)
     {
-        auto bounded = std::bind(&DirectDamageByPassResistance, _1, _2, _3, _4, _5, setDamage);
+        auto bounded = std::bind(&DirectDamageByPassResistance, _1, _2, _3, _4,setDamage);
         return bounded;
     }
 
     
     ExMove CreateDirectDamagingMoveTargetStateByPassImmunity(const ExDamageByState & dmgByStateCalc)
     {
-        auto bounded = std::bind(&DirectDamageByTargetCalculation, _1, _2, _3, _4, _5, dmgByStateCalc);
+        auto bounded = std::bind(&DirectDamageByTargetCalculation, _1, _2, _3, _4,dmgByStateCalc);
         return bounded;
     }
 
     ExMove CreateDirectDamagingMoveAttackerStateByPassImmunity(const ExDamageByState & dmgByStateCalc)
     {
-        auto bounded = std::bind(&DirectDamageByAttackerCalculation, _1, _2, _3, _4, _5, dmgByStateCalc);
+        auto bounded = std::bind(&DirectDamageByAttackerCalculation, _1, _2, _3, _4, dmgByStateCalc);
         return bounded;
     }
 
-    ExMove CreateNormalDamagingMove()
+    ExMove CreateNormalDamagingMove(const MovesTargeting movesTargeting)
     {
-        return RegularMove;
+        auto bounded = std::bind(&RegularMove, _1, _2, _3, _4,movesTargeting);
+        return bounded;
     }
 
 #pragma endregion

@@ -2,6 +2,7 @@
 #include "controller.h"
 #include "random_gen.h"
 #include "specialized_moves.h"
+#include "moves_stats_targeting.h"
 #include "trainer_ai.h"
 
 #include <algorithm>
@@ -126,20 +127,31 @@ namespace mockmon
         }
     }
 
-    double GetStatsModifier(const moves::SimpleMove & AttackingMove,const Mockmon & attacker,const Mockmon & defender)  
+    double GetStatsModifier(const Mockmon & attacker,const StatsTypes attackingStat,const Mockmon & defender,const StatsTypes defendingStat)  
     {
-        //this should be extracted from the move
-        const auto attackingStat = StatsTypes::Attack;
-        const auto defendingStat = StatsTypes::Defence;
         return (attacker.CurrentStats.m_battleStats.at(attackingStat).GetStat() / defender.CurrentStats.m_battleStats.at(defendingStat).GetStat()); //attack / defence
     }
+
+    bool Battle::IsCriticalHit(Mockmon & attackingMockmon, const moves::MoveId mv)
+    {
+        auto baseChance =100* attackingMockmon.GetMockmonSpeciesData().MockmonSpeciesStats.Speed * moves::CriticalChanceBoost(mv) / 512.0;
+        return baseChance > random::Randomer::GetRandom();
+    }
+
     //this is normal attack
-    double Battle::ModifyAttack(const moves::SimpleMove & AttackingMove,Mockmon & attacker,Mockmon & defender)
+    double Battle::ModifyAttack(const moves::SimpleMove & AttackingMove,Mockmon & attacker,const StatsTypes attackingStat, Mockmon & defender,const StatsTypes defendingStat)
     {
         auto baseDamage = AttackingMove.BasePower;
         auto levelModifier = 2+((2*attacker.GetCurrentLevel())/5);
-        auto statsModifier = GetStatsModifier(AttackingMove,attacker,defender);
-        auto criticalHitModifier {attacker.ModifyAttackForCrticalHit(AttackingMove)};
+        auto statsModifier = GetStatsModifier(attacker,StatsTypes::Attack,defender,StatsTypes::Defence);
+        
+        auto criticalHitModifier = [](Mockmon & attacker,const moves::MoveId mv){
+            if (IsCriticalHit(attacker,mv))
+            return (attacker.ModifyAttackForCrticalHit());
+            else
+            return 1.0;
+        }(attacker,AttackingMove.Identifier()); 
+        
         auto stabModifer {attacker.GetStabModifier(AttackingMove) ? 1.5 : 1.0}; //stab
         auto typeMofider {defender.GetTypeEffectivenessModifer(AttackingMove)};  //typeResistancs and weakness
         auto typeEffectivenessAndStab {stabModifer *  GetTypeEffetiveness(typeMofider)}; //typeResistancs and weakness
@@ -160,7 +172,7 @@ namespace mockmon
             usedMove = chosenMove->UseMove().value_or(moves::MoveId::Struggle);
         }
         const auto & compositeMove = moves::CompositeMove::AllCompositeMoves.at(usedMove);
-        compositeMove.Perform(*this,arena,attacker,defender);
+        compositeMove.Perform(arena,attacker,defender);
         
     }
 }

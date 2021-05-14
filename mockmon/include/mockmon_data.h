@@ -26,6 +26,7 @@ namespace mockmon
             LearnLevelUpMoves();
             CurrentStats.UpdateStats(Stats(GetMockmonSpeciesData().MockmonSpeciesStats,IVs,EVs,CurrentLevel));
         }
+
         unsigned int GetCurrentLevel() const;
         const MockmonSpecies & GetMockmonSpeciesData() const;
         int ModifyAttack(const moves::SimpleMove & AttackingMove,const Mockmon & target);
@@ -49,7 +50,7 @@ namespace mockmon
 
         private:
         
-        double ModifyAttackForCrticalHit(const moves::SimpleMove & AttackingMove);
+        double ModifyAttackForCrticalHit();
         double ModifyAttackForType(const moves::SimpleMove & AttackingMove,const Mockmon & target);
 
         void LearnLevelUpMoves();

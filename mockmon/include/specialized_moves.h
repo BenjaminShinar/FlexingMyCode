@@ -1,6 +1,8 @@
 #pragma once
 
 #include "identifiers/types_id.h"
+#include "identifiers/stat_modifiers_id.h"
+#include "identifiers/moves_stats_targeting_id.h"
 #include "moves.h"
 #include "mockmon_data.h"
 #include "Battle.h"
@@ -18,7 +20,7 @@ namespace mockmon::moves
     };
     
     //this is a move typedef
-    using ExMove = std::function<MoveOutcome(Battle& battle,Arena & arena, const moves::SimpleMove & AttackingMove,Mockmon & attacker,Mockmon & defender)>;
+    using ExMove = std::function<MoveOutcome(Arena & arena, const moves::SimpleMove & AttackingMove,Mockmon & attacker,Mockmon & defender)>;
     using ExDamageByState= std::function<double(const Mockmon & mockmonToChoose)>;
 
     //this should replace the BaseMoveclass
@@ -36,7 +38,7 @@ namespace mockmon::moves
         explicit CompositeMove(const CompositeMove & other ) = default;
         CompositeMove(CompositeMove && other ) = default;
 
-        void Perform(Battle& battle,Arena & arena, Mockmon & attacker,Mockmon & defender) const;
+        void Perform(Arena & arena, Mockmon & attacker,Mockmon & defender) const;
 
         std::vector<ExMove> MoveComponenets;
         std::string Describe() const override
@@ -48,7 +50,7 @@ namespace mockmon::moves
 
     };
 
-    ExMove CreateNormalDamagingMove();
+    ExMove CreateNormalDamagingMove(const MovesTargeting movesTargeting);
     ExMove CreateNormalRecoilDamagingMove(const double divFactor);
     ExMove CreateSelfStatChangingMove(StatsTypes effectedStat, StatModifiersLevels modifer);
     ExMove CreateOpponentStatChangingMove(StatsTypes effectedStat, StatModifiersLevels modifer);

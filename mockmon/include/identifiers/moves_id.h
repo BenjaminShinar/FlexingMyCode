@@ -172,7 +172,6 @@ namespace mockmon::moves
         Wrap
     };
     std::string Stringify(const MoveId moveId);
-        std::ostream &operator<<(std::ostream &os, const MoveId &e);
-
+    std::ostream &operator<<(std::ostream &os, const MoveId &e);
 
 }

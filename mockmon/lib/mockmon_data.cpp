@@ -24,21 +24,15 @@ namespace mockmon
         return m_ableToBattle && CurrentStats.Health.GetStat() >0;
     }
 
-    double Mockmon::ModifyAttackForCrticalHit(const moves::SimpleMove & AttackingMove)
+    double Mockmon::ModifyAttackForCrticalHit()
     {
-        
-        auto baseChance =100* GetMockmonSpeciesData().MockmonSpeciesStats.Speed * moves::CriticalChanceBoost(AttackingMove.Identifier()) / 512.0;
-        if (baseChance > random::Randomer::GetRandom())
+                
+        auto damageBoost = (5.0+(CurrentLevel*2.0))/(CurrentLevel + 5.0);
+        if (m_outputEvents)
         {
-            
-            auto damageBoost = (5.0+(CurrentLevel*2.0))/(CurrentLevel + 5.0);
-            if (m_outputEvents)
-            {
-                std::cout << m_name << " scored a critical hit" << " boost factor: " << damageBoost <<'\n';
-            }
-            return damageBoost;
+            std::cout << m_name << " scored a critical hit" << " boost factor: " << damageBoost <<'\n';
         }
-        return 1.0;
+        return damageBoost;
     }
 
 
@@ -61,14 +55,10 @@ namespace mockmon
     void Mockmon::FullRestore()
     {
         CurrentStats.Health.RestStatToMax();
-
-        CurrentStats.m_battleStats.at(StatsTypes::Attack).ResetBoost();
-        CurrentStats.m_battleStats.at(StatsTypes::Defence).ResetBoost();
-        CurrentStats.m_battleStats.at(StatsTypes::Evasion).ResetBoost();
-        CurrentStats.m_battleStats.at(StatsTypes::Special).ResetBoost();
-        CurrentStats.m_battleStats.at(StatsTypes::Speed).ResetBoost();
-
-        CurrentStats.m_battleStats.at(StatsTypes::Accuracy).ResetBoost();
+        for (auto & stat : CurrentStats.m_battleStats)
+        {
+            stat.second.ResetBoost();
+        }
         m_ableToBattle = true;
     }
 
@@ -123,10 +113,9 @@ namespace mockmon
     }
     void Mockmon::LevelUp()
     {
-        auto nextLevel = CurrentLevel+1;
         if (m_outputEvents)
         {
-            std::cout << m_name << " level increase! [" << CurrentLevel << " -> " << nextLevel << "]"<<'\n';
+            std::cout << m_name << " level increase! [" << CurrentLevel << " -> " << (CurrentLevel+1) << "]"<<'\n';
         }
         ++CurrentLevel;
         UpdateStats();
