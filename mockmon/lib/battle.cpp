@@ -56,18 +56,12 @@ namespace mockmon
             {
 
                 AttackWith(playerMV,r_playerMockmon,r_enemyMockmon);
-                if (r_enemyMockmon.IsAbleToBattle())
-                {
-                    AttackWith(enemyMV,r_enemyMockmon,r_playerMockmon);
-                }
+                AttackWith(enemyMV,r_enemyMockmon,r_playerMockmon);
             }
             else
             {
                 AttackWith(enemyMV,r_enemyMockmon,r_playerMockmon);
-                if (r_playerMockmon.IsAbleToBattle())
-                {
-                    AttackWith(playerMV,r_playerMockmon,r_enemyMockmon);
-                }
+                AttackWith(playerMV,r_playerMockmon,r_enemyMockmon);
             }
         }
         auto endAction = r_playerMockmon.IsAbleToBattle()? controller::controllerEnum::ACTION_A : controller::controllerEnum::CANCEL_B;
@@ -100,7 +94,7 @@ namespace mockmon
             return false;
         }
         //speed tie
-        return (random::Randomer::GetRandom(2) ==0);
+        return (random::Randomer::CheckPercentage(50));
     }
 
     void Battle::DetermineBattle(controller::controllerEnum action)
@@ -133,14 +127,13 @@ namespace mockmon
     bool Battle::IsCriticalHit(Mockmon & attackingMockmon, const moves::MoveId mv)
     {
         auto baseChance =100* attackingMockmon.GetMockmonSpeciesData().MockmonSpeciesStats.Speed * moves::CriticalChanceBoost(mv) / 512.0;
-        return baseChance > random::Randomer::GetRandom();
+        return random::Randomer::CheckPercentage(baseChance);
     }
 
     //this is normal attack
     double Battle::ModifyAttack(const moves::SimpleMove & AttackingMove,Mockmon & attacker,const StatsTypes attackingStat, Mockmon & defender,const StatsTypes defendingStat)
     {
-        auto baseDamage = AttackingMove.BasePower;
-        auto levelModifier = 2+((2*attacker.GetCurrentLevel())/5);
+            auto levelModifier = 2+((2*attacker.GetCurrentLevel())/5);
         auto statsModifier = GetStatsModifier(attacker,attackingStat,defender,defendingStat);
         
         auto criticalHitModifier = [](Mockmon & attacker,const moves::MoveId mv){
@@ -154,22 +147,34 @@ namespace mockmon
         auto typeMofider {defender.GetTypeEffectivenessModifer(AttackingMove)};  //typeResistancs and weakness
         auto typeEffectivenessAndStab {stabModifer *  GetTypeEffetiveness(typeMofider)}; //typeResistancs and weakness
         auto  extraModifier = 1 * criticalHitModifier * typeEffectivenessAndStab ; // weahter, badge,status,
-        return (extraModifier*(2+((levelModifier* baseDamage * statsModifier)/50)));
+        return (extraModifier*(2+((levelModifier* AttackingMove.BasePower * statsModifier)/50)));
     }
 
     
 
     void Battle::AttackWith(moves::MoveId mvid,Mockmon & attacker,Mockmon & defender)
     {
-        auto chosenMove = std::find_if(attacker.m_Moveset.begin(),attacker.m_Moveset.end(),[&](const moves::EquipedMove  & mv ){ return mv.Identifier() == mvid;});
-        auto usedMove{moves::MoveId::Struggle};
-        
-        if (chosenMove != attacker.m_Moveset.end() && chosenMove->RemainningPowerPoints()>0)
+        if (attacker.IsAbleToBattle() && defender.IsAbleToBattle())
         {
-            usedMove = chosenMove->UseMove().value_or(moves::MoveId::Struggle);
+            auto chosenMove = std::find_if(attacker.m_Moveset.begin(),attacker.m_Moveset.end(),
+                [&](const moves::EquipedMove  & mv ){ return mv.Identifier() == mvid;});
+            auto usedMove{moves::MoveId::Struggle};
+
+            attacker.m_currentCondtion.PulseBeforeTurn(); //assuming pulse before turn can't hurt the mockmon and cause it to faint or be unable to attack. maybe here we also switch moves to sleep/hurtself/        
+
+            if (chosenMove != attacker.m_Moveset.end() && chosenMove->RemainningPowerPoints()>0)
+            {
+                usedMove = chosenMove->UseMove().value_or(moves::MoveId::Struggle);
+            }
+            const auto & compositeMove = moves::CompositeMove::AllCompositeMoves.at(usedMove);
+            compositeMove.Perform(m_arena,attacker,defender);
+
         }
-        const auto & compositeMove = moves::CompositeMove::AllCompositeMoves.at(usedMove);
-        compositeMove.Perform(m_arena,attacker,defender);
-        
+        if (attacker.IsAbleToBattle() && defender.IsAbleToBattle())
+        {
+            //if one of use was knocked out... don't pulse
+            // this is a gen 1 thing!
+            attacker.m_currentCondtion.PulseAfterTurn();
+        }
     }
 }

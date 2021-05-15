@@ -123,6 +123,8 @@ namespace mockmon
     public:
         HealthStat(int statValue) : m_max_stat(statValue), m_current_stat(statValue) {}
         int GetStat() const { return m_current_stat; }
+        int GetMaxStat() const { return m_max_stat; }
+
         void RestStatToMax() { m_current_stat = m_max_stat; }
         void ChangeHealth(int statChange) { ChangeCurrentStat(m_current_stat + statChange); }
         void ChangeStatMax(int statValue) { m_max_stat = statValue; }

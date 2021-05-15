@@ -17,6 +17,11 @@ namespace mockmon::random
         {
             return GetRandom() % mod;
         }
+        
+        static bool CheckPercentage(unsigned int chance)
+        {
+            return chance > GetRandom();
+        }
 
         //returns one option from the list
         template<typename T>

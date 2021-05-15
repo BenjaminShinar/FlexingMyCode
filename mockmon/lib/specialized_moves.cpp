@@ -1,6 +1,8 @@
 #include "specialized_moves.h"
 #include "moves_stats_targeting.h"
 #include "random_gen.h"
+#include "mockmon_conditions/poison_conditon_pulse.h"
+#include "mockmon_conditions/sleep_condition_pulse.h"
 #include <functional>
 #include <utility>
 #include <math.h>
@@ -26,6 +28,24 @@ namespace mockmon::moves
         {
             std::cout << attacker.GetName() << " missed with " << simpleAttackingMove.Identifier() << '\n';
         }
+    }
+
+
+    condition::pulser_uq_ptr MakeCondition(condition::ConditionId conditionid,Mockmon & enemy)
+    {
+        using namespace condition;
+        switch (conditionid)
+        {
+        case ConditionId::Poison:
+            return std::make_unique<PoisonCondition>(enemy, 16.0);
+            break;
+        case ConditionId::Sleep:
+                    return std::make_unique<SleepCondition>(enemy, 3);
+
+        default:
+            break;
+        }
+        return std::make_unique<PoisonCondition>(enemy, 16.0);
     }
 
     //here are some other attacks, will eventually need refactoring
@@ -102,9 +122,9 @@ namespace mockmon::moves
             MoveOutcome o{AppendAll({defender.GetName(), "is already", Stringify(statusConditionInflicment.AfflicteCondition),".",Stringify(AttackingMove.Identifier()), "failed!"})};    
             return o;
         }
-        if (random::Randomer::GetRandom() <= statusConditionInflicment.ChanceToAfflictCondtion)
+        if (random::Randomer::CheckPercentage(statusConditionInflicment.ChanceToAfflictCondtion))
         {
-            defender.m_currentCondtion.CauseCondition(statusConditionInflicment.AfflicteCondition);
+            defender.m_currentCondtion.CauseCondition(MakeCondition(statusConditionInflicment.AfflicteCondition,defender));
             if (defender.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.AfflicteCondition))
             {
                 //success

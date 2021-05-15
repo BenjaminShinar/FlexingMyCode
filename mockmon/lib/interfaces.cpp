@@ -3,8 +3,6 @@
 namespace mockmon
 {
 
-
-
     std::string AppendAll(const std::initializer_list<std::string_view> &words)
     {
         

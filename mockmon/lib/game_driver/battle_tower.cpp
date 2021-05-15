@@ -16,7 +16,7 @@ namespace mockmon
             //playerMonster.TeachMove(moves::MoveId::Guillotine);
             //playerMonster.TeachMove(moves::MoveId::DragonRage);
             //playerMonster.TeachMove(moves::MoveId::Psywave);
-            playerMonster.TeachMove(moves::MoveId::PoisonSting);
+            playerMonster.TeachMove(moves::MoveId::SleepPowder);
             playerMonster.TeachMove(moves::MoveId::PoisonPowder);
             playerMonster.FullRestore();
             auto currentFloor{0u};
@@ -25,6 +25,9 @@ namespace mockmon
                 
                 if (!TowerFloor(playerMonster,++currentFloor))
                     std::cout << "player mockmon " << playerMonster.GetName() << " has fallen in floor "  << currentFloor <<'\n';
+                
+                playerMonster.m_currentCondtion.RemoveAllConditions();
+
             }
 
             if (playerMonster.IsAbleToBattle())
@@ -32,10 +35,11 @@ namespace mockmon
                 std::cout << "player mockmon " << playerMonster.GetName() << " has conquered all "  << maxFloor << " of the tower!" <<'\n';
             }
 
+
         }
         bool BattleTower::TowerFloor (Mockmon & playerMonster,unsigned int floorLevel)
         {
-            const auto RandomizeEnemyType = random::Randomer::GetOneOption({MockmonSpeciesId::Rattata,MockmonSpeciesId::Weedle});
+            const auto RandomizeEnemyType = random::Randomer::GetOneOption({MockmonSpeciesId::Weedle,MockmonSpeciesId::Rattata});
             
             auto enemy = BattleTower::GenerateEnemy(floorLevel,RandomizeEnemyType,"garry");
             std::cout<< "player mockmon " << playerMonster.GetName() << " will face " << enemy.GetName() << " the level " << enemy.GetCurrentLevel() << " " << enemy.GetMockmonSpeciesData().Identifier() << " with " << enemy.CurrentStats.Health.GetStat() << " HP!"  <<'\n';

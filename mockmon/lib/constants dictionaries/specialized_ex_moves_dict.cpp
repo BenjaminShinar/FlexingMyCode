@@ -28,6 +28,7 @@ namespace mockmon::moves
         //CreateOpponentConditionMove
         MakeDictionaryPair<CompositeMove>(MoveId::PoisonSting,il_exMV{CreateNormalDamagingMove(MovesTargeting::PurePhysical),CreateOpponentConditionMove({types::Types::Poison,condition::ConditionId::Poison,30})}),
         MakeDictionaryPair<CompositeMove>(MoveId::PoisonPowder,il_exMV{CreateOpponentConditionMove({types::Types::Poison,condition::ConditionId::Poison,100})}),
+        MakeDictionaryPair<CompositeMove>(MoveId::SleepPowder,il_exMV{CreateOpponentConditionMove({types::Types::Grass,condition::ConditionId::Sleep,100})}),
         // {MoveId::TailWhip,SimpleMove(MoveId::TailWhip,types::Types::Normal,100,5)},
         // {MoveId::QuickAttack,SimpleMove(MoveId::QuickAttack,types::Types::Normal,100,40)},
         // {MoveId::HyperFang,SimpleMove(MoveId::HyperFang,types::Types::Normal,90,80)},

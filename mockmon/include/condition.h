@@ -1,12 +1,16 @@
 #pragma once
 #include "identifiers/condition_id.h"
+#include "mockmon_conditions/base_conditon_pulse.h"
 #include <string>
 #include <iostream>
-
+#include <memory>
+#include <vector>
 
 
 namespace mockmon::condition
 {
+  using pulser_uq_ptr = std::unique_ptr<ConditonPulseEffect>;
+
    //non voltile conditions, paralyzed, burn, freeze, poision, toxic
    // also voltaile conditions, at least for now
 
@@ -21,19 +25,22 @@ namespace mockmon::condition
     badly poison - check after turn, cause damage? maybe faint? increase the damage counter?
   */
 
+
     class Condition
     {
         public:
         bool IsAffiliatedWithCondition(ConditionId conditionId) const;
-        void CauseCondition(ConditionId conditionId);
+        void CauseCondition(pulser_uq_ptr && pulser);
         void RemoveCondition(ConditionId conditionId);
+        void RemoveAllConditions();
         //void CausePoison();
         //void CauseSleep();
         // int HP() const {return m_HP;};
         // void ChangeHealth(int amount );
-        void PulseTurn(); // cause all the effects of the afflicated conditions, remove conditions that aren't relevent anymore.
+        void PulseBeforeTurn();
+        void PulseAfterTurn(); // cause all the effects of the afflicated conditions, remove conditions that aren't relevent anymore.
         private:
-        bool m_isPoisioned{false};
-        //int m_HP = 50;
+        void RemoveAllDueConditions(); //remove non relevent conditions 
+        std::vector<pulser_uq_ptr> m_spesific_conditions; //maybe std::varient? i don't want to store pointers!
     };
 }
