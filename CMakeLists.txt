@@ -20,7 +20,7 @@ target_compile_features(mockmon PUBLIC cxx_std_17)
 
 include(CTest)
 enable_testing()
-add_executable(testing mockmon-test.cpp)
+add_executable(testing mockmon/testing/mockmon-test.cpp)
 #test name, test executable, aeguments...
 add_test(TestingMainSucces testing)
 add_test(TestingMainFail testing 1 2 3) 
