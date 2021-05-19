@@ -18,6 +18,40 @@ namespace mockmon::condition
         return std::any_of(std::begin(m_spesific_conditions),std::end(m_spesific_conditions),pred);
     }
 
+    double Condition::GetConditionalBoost(StatsTypes requestStat,bool attacking) const
+    {
+        double boost{1.0};
+        switch (requestStat)
+        {
+        case StatsTypes::Attack:
+        {
+            if (attacking && IsAffiliatedWithCondition(condition::ConditionId::Burn))
+                boost *= 0.5; //inflict half damage when burned
+            break;
+        }
+        case StatsTypes::Defence:
+        {
+            if (!attacking && IsAffiliatedWithCondition(condition::ConditionId::Reflect))
+                boost *= 2.0; //reflect dobules physical defence!
+            break;
+        }
+        case StatsTypes::Special:
+        {
+            if (!attacking && IsAffiliatedWithCondition(condition::ConditionId::LightScreen))
+                boost *= 2.0; //light screens dobules special defence!
+            break;
+        }
+        case StatsTypes::Speed:
+        {
+            if (IsAffiliatedWithCondition(condition::ConditionId::Paralysis))
+                boost *= 0.25; //quarter speed when parayzed
+            break;
+        }
+        default:
+            break;
+        }
+        return boost;
+    }
     void Condition::CauseCondition(pulser_uq_ptr && pulser)
     {
        m_spesific_conditions.push_back(std::move(pulser));

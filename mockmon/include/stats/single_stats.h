@@ -10,33 +10,33 @@
 namespace mockmon::stats
 {
 
-    double GetBoostFromLevel(StatModifiersLevels l);
-    template <typename T>
+    double BoostFromStatModifierLevel(StatModifiersLevels l);
     class BattleSingleStat
     {
     public:
         
-        BattleSingleStat(StatsTypes statTypeIdentifier, T statValue) :StatTypeIdentifier(statTypeIdentifier), m_stat(statValue) {}
-        T GetStat() const { return m_stat * m_currentBoost; };
-        T GetBaseStat() const { m_currentBoost; };
+        BattleSingleStat(StatsTypes statTypeIdentifier, double statValue) :StatTypeIdentifier(statTypeIdentifier), m_stat(statValue) {}
+        double GetStat() const { return m_stat * m_currentBoost; };
+        double GetBaseStat() const {return m_stat; };
+
         double GetBoost() const { return m_currentBoost; };
         void ResetBoost() 
         {
              m_currentBoost = 1.0;
              m_statModifer = StatModifiersLevels::Normal;
         }
-        void ChangeStat(T statValue) { m_stat = statValue; }
+        void ChangeStat(double statValue) { m_stat = statValue; }
         void AddModifier(StatModifiersLevels modifer)
         {
             auto m = static_cast<int>(m_statModifer) + static_cast<int>(modifer);
             m_statModifer = static_cast<StatModifiersLevels>(std::clamp<int>(m, static_cast<int>(StatModifiersLevels::Lowest), static_cast<int>(StatModifiersLevels::Highest)));
-            m_currentBoost = GetBoostFromLevel(m_statModifer);
+            m_currentBoost = BoostFromStatModifierLevel(m_statModifer);
         }
         
         const StatsTypes StatTypeIdentifier;
 
     private:               
-        T m_stat;
+        double m_stat;
         StatModifiersLevels m_statModifer;
         
         double m_currentBoost{1.0};

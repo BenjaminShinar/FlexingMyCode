@@ -1,11 +1,17 @@
 #include "specialized_moves.h"
 #include "moves_stats_targeting.h"
 #include "random_gen.h"
+#include "stats/stats.h"
 #include "mockmon_conditions/poison_conditon_pulse.h"
 #include "mockmon_conditions/sleep_condition_pulse.h"
+#include "mockmon_conditions/burn_condition_pulse.h"
+#include "mockmon_conditions/light_screen_condition_pulse.h"
+#include "mockmon_conditions/reflect_condition_pulse.h"
+
 #include <functional>
 #include <utility>
 #include <math.h>
+#include <algorithm>
 
 
 namespace mockmon::moves
@@ -31,21 +37,42 @@ namespace mockmon::moves
     }
 
 
-    condition::pulser_uq_ptr MakeCondition(condition::ConditionId conditionid,Mockmon & enemy)
+    condition::pulser_uq_ptr MakeCondition(condition::ConditionId conditionid,Mockmon & effectedMockmon)
     {
         using namespace condition;
         switch (conditionid)
         {
         case ConditionId::Poison:
-            return std::make_unique<PoisonCondition>(enemy, 16.0);
+            return std::make_unique<PoisonCondition>(effectedMockmon, 16.0);
             break;
         case ConditionId::Sleep:
-                    return std::make_unique<SleepCondition>(enemy, 3);
+            return std::make_unique<SleepCondition>(effectedMockmon, 3);
+            break;
+        case ConditionId::Burn:
+            return std::make_unique<BurnCondition>(effectedMockmon, 16.0);
+            break;
+        case ConditionId::Paralysis:
 
+            break;
+        case ConditionId::Confusion:
+
+            break;
+        case ConditionId::Freeze:
+
+            break;
+        case ConditionId::Flinch:
+
+            break;
+        case ConditionId::Reflect:
+            return std::make_unique<ReflectCondition>(effectedMockmon);
+            break;
+        case ConditionId::LightScreen:
+            return std::make_unique<LightScreenCondition>(effectedMockmon);
+            break;
         default:
             break;
         }
-        return std::make_unique<PoisonCondition>(enemy, 16.0);
+        return std::make_unique<PoisonCondition>(effectedMockmon, 16.0);
     }
 
     //here are some other attacks, will eventually need refactoring
@@ -136,9 +163,54 @@ namespace mockmon::moves
         //failed to afflict / missed
         MoveOutcome o{AppendAll({attacker.GetName(),"tried to use",Stringify(AttackingMove.Identifier()), "but it failed to inflict condition",Stringify(statusConditionInflicment.AfflicteCondition)})};    
         return o;
-            
+    }
 
-        
+    MoveOutcome AddSelfConditionStatus(Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender, const StatusInflicment statusConditionInflicment)
+    {
+
+        if (attacker.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.AfflicteCondition))
+        {
+            //already afflicted
+            MoveOutcome o{AppendAll({attacker.GetName(), "is already", Stringify(statusConditionInflicment.AfflicteCondition),".",Stringify(AttackingMove.Identifier()), "failed!"})};    
+            return o;
+        }
+        if (random::Randomer::CheckPercentage(statusConditionInflicment.ChanceToAfflictCondtion))
+        {
+            attacker.m_currentCondtion.CauseCondition(MakeCondition(statusConditionInflicment.AfflicteCondition,attacker));
+            if (attacker.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.AfflicteCondition))
+            {
+                //success
+                MoveOutcome o{AppendAll({attacker.GetName(), "used", Stringify(AttackingMove.Identifier()), "!", attacker.GetName(),"is now", Stringify(statusConditionInflicment.AfflicteCondition)})};
+                return o;    
+            }
+        }
+
+        //failed to afflict / missed
+        MoveOutcome o{AppendAll({attacker.GetName(),"tried to use",Stringify(AttackingMove.Identifier()), "but it failed to inflict condition",Stringify(statusConditionInflicment.AfflicteCondition)})};    
+        return o;
+    }
+
+    void ResetAllStatChanges(Mockmon &effectedMockmon)
+    {
+        effectedMockmon.m_currentCondtion.RemoveAllConditions();
+        for (auto & statsPair : effectedMockmon.CurrentBattleStats.m_battleStats)
+        {
+            statsPair.second.ResetBoost();
+        }
+    }
+    
+    MoveOutcome ResetSelfAllConditions(Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender)
+    {
+        ResetAllStatChanges(attacker);
+        MoveOutcome o{AppendAll({attacker.GetName(),"used",Stringify(AttackingMove.Identifier()), "to reset all it's stats!"})};    
+        return o;
+    }
+
+    MoveOutcome ResetOpponenetAllConditions(Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender)
+    {
+        ResetAllStatChanges(defender);
+        MoveOutcome o{AppendAll({attacker.GetName(),"used",Stringify(AttackingMove.Identifier()), "to reset all of",defender.GetName(),"stats!"})};    
+        return o;
     }
 
 #pragma endregion
@@ -192,6 +264,24 @@ namespace mockmon::moves
     ExMove CreateOpponentConditionMove(const StatusInflicment statusConditionInflicment)
     {
         auto bounded = std::bind(&AddConditionStatus, _1, _2, _3, _4,statusConditionInflicment);
+        return bounded;
+    }
+
+    ExMove CreateSelfConditionMove(const StatusInflicment statusConditionInflicment)
+    {
+        auto bounded = std::bind(&AddSelfConditionStatus, _1, _2, _3, _4,statusConditionInflicment);
+        return bounded;
+    }
+
+    ExMove CreateResetSelfConditionMove()
+    {
+        auto bounded = std::bind(&ResetSelfAllConditions, _1, _2, _3, _4);
+        return bounded;
+    }
+
+    ExMove CreateResetOpponentConditionMove()
+    {
+        auto bounded = std::bind(&ResetOpponenetAllConditions, _1, _2, _3, _4);
         return bounded;
     }
 

@@ -121,7 +121,9 @@ namespace mockmon
 
     double GetStatsModifier(const Mockmon & attacker,const StatsTypes attackingStat,const Mockmon & defender,const StatsTypes defendingStat)  
     {
-        return (attacker.CurrentBattleStats.m_battleStats.at(attackingStat).GetStat() / defender.CurrentBattleStats.m_battleStats.at(defendingStat).GetStat()); //attack / defence
+        const auto attackerStat = attacker.CurrentBattleStats.m_battleStats.at(attackingStat).GetStat()* attacker.m_currentCondtion.GetConditionalBoost(attackingStat,true);
+        const auto defenderStat = defender.CurrentBattleStats.m_battleStats.at(defendingStat).GetStat()* defender.m_currentCondtion.GetConditionalBoost(defendingStat,false);
+        return (attackerStat / defenderStat); //attack / defence
     }
 
     bool Battle::IsCriticalHit(Mockmon & attackingMockmon, const moves::MoveId mv)

@@ -28,8 +28,13 @@ namespace mockmon::moves
         // moves that can efflict Status
         //CreateOpponentConditionMove
         MakeDictionaryPair<CompositeMove>(MoveId::PoisonSting,il_exMV{CreateNormalDamagingMove(MovesTargeting::PurePhysical),CreateOpponentConditionMove({types::Types::Poison,condition::ConditionId::Poison,30})}),
+        MakeDictionaryPair<CompositeMove>(MoveId::Ember,il_exMV{CreateNormalDamagingMove(MovesTargeting::PureSpecial),CreateOpponentConditionMove({types::Types::Fire,condition::ConditionId::Burn,10})}),
         MakeDictionaryPair<CompositeMove>(MoveId::PoisonPowder,il_exMV{CreateOpponentConditionMove({types::Types::Poison,condition::ConditionId::Poison,100})}),
         MakeDictionaryPair<CompositeMove>(MoveId::SleepPowder,il_exMV{CreateOpponentConditionMove({types::Types::Grass,condition::ConditionId::Sleep,100})}),
+
+        MakeDictionaryPair<CompositeMove>(MoveId::Reflect,il_exMV{CreateSelfConditionMove({types::Types::Psychic,condition::ConditionId::Reflect,100})}),
+        MakeDictionaryPair<CompositeMove>(MoveId::LightScreen,il_exMV{CreateSelfConditionMove({types::Types::Psychic,condition::ConditionId::LightScreen,100})}),
+        MakeDictionaryPair<CompositeMove>(MoveId::Haze,il_exMV{CreateResetSelfConditionMove(),CreateResetOpponentConditionMove()}),
         // {MoveId::TailWhip,SimpleMove(MoveId::TailWhip,types::Types::Normal,100,5)},
         // {MoveId::QuickAttack,SimpleMove(MoveId::QuickAttack,types::Types::Normal,100,40)},
         // {MoveId::HyperFang,SimpleMove(MoveId::HyperFang,types::Types::Normal,90,80)},

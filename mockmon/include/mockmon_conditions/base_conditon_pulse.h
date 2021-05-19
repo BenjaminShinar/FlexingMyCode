@@ -3,6 +3,7 @@
 #include <numeric>
 namespace mockmon::condition
 {
+ 
     // a functor that does something to the mockmon each turn, like take damage?
     class ConditonPulseEffect
     {
@@ -16,8 +17,8 @@ namespace mockmon::condition
         public:
                 virtual ~ConditonPulseEffect() = default;
 
-        virtual void PulseAfterTurn() = 0; //virtual abstract       
-        virtual void PulseBeforeTurn() = 0; //virtual abstract       
+        virtual void PulseAfterTurn() {}; //virtual function       
+        virtual void PulseBeforeTurn() {}; //virtual function       
         bool CanBeRemoved() const {return m_conditionFinished;} //stuff that removes itself after X turns?
         const ConditionId conditonId;
         

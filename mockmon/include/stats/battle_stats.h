@@ -36,14 +36,14 @@ namespace mockmon::stats
         //     BattleSingleStat<double>(StatsTypes::Accuracy,1.0),
         // };
 
-        std::map<StatsTypes, BattleSingleStat<double>> m_battleStats =
+        std::map<StatsTypes, BattleSingleStat> m_battleStats =
         {
-            {StatsTypes::Attack,              BattleSingleStat<double>(StatsTypes::Attack,1.0)},
-            {StatsTypes::Defence,             BattleSingleStat<double>(StatsTypes::Defence,1.0)},
-            {StatsTypes::Special,             BattleSingleStat<double>(StatsTypes::Special,1.0)},
-            {StatsTypes::Speed,               BattleSingleStat<double>(StatsTypes::Speed,1.0)},
-            {StatsTypes::Evasion,             BattleSingleStat<double>(StatsTypes::Evasion,100.0)},
-            {StatsTypes::Accuracy,            BattleSingleStat<double>(StatsTypes::Accuracy,100.0)},
+            {StatsTypes::Attack,              BattleSingleStat(StatsTypes::Attack,1)},
+            {StatsTypes::Defence,             BattleSingleStat(StatsTypes::Defence,1)},
+            {StatsTypes::Special,             BattleSingleStat(StatsTypes::Special,1)},
+            {StatsTypes::Speed,               BattleSingleStat(StatsTypes::Speed,1)},
+            {StatsTypes::Evasion,             BattleSingleStat(StatsTypes::Evasion,100)},
+            {StatsTypes::Accuracy,            BattleSingleStat(StatsTypes::Accuracy,100)},
         };
         HealthStat Health{1}; //this should be special
     };

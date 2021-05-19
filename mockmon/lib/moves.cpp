@@ -32,11 +32,11 @@ namespace mockmon::moves
     {
         switch (mvId)
         {
-        case moves::MoveId::QuickAttack:       
-        return Priority::PositivePriority; break;
-        case moves::MoveId::Counter:       
-        return Priority::NegativePriority; break;
-        default: return Priority::Normal;break;
+            case moves::MoveId::QuickAttack:       
+            return Priority::PositivePriority; break;
+            case moves::MoveId::Counter:       
+            return Priority::NegativePriority; break;
+            default: return Priority::Normal;break;
         }
     }
 

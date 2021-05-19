@@ -34,8 +34,8 @@ namespace mockmon::condition
         }
         private:
         Mockmon & r_sleeping_mockmon;
-        unsigned int m_wake_up_chance;
         int m_sleep_duration;
+        unsigned int m_wake_up_chance;
 
     };
 }

@@ -3,27 +3,28 @@
 namespace mockmon::stats
 {
 
-    double GetBoostFromLevel(StatModifiersLevels modifierLevel)
-    {
-        switch (modifierLevel)
-        {
-            case StatModifiersLevels::Lowest: return 0.25; break;
-            case StatModifiersLevels::DecresedEvenFurther: return 0.28; break;  //28/100
-            case StatModifiersLevels::DecreasedMuchFurther: return 0.33; break; // 33/100
-            case StatModifiersLevels::DecreasedSeverly: return 0.4; break;  //40/100
-            case StatModifiersLevels::GreatlyDecreased: return 0.5; break;   //50/100
-            case StatModifiersLevels::Decrese: return 0.66; break;          //66/100
-            case StatModifiersLevels::Normal: return 1.0; break;           //100/100
-            case StatModifiersLevels::Increase: return 1.5; break;              //150/100
-            case StatModifiersLevels::GreatlyIncrease: return 2.0; break;      //200/100
-            case StatModifiersLevels::IncreasedDrastically: return 2.5; break;  //250/100
-            case StatModifiersLevels::IncreasedMuchFurther : return 3.0; break;  //300/100
-            case StatModifiersLevels::IncreasedEvenFurther: return 3.5; break;  //350/100
-            case StatModifiersLevels::Highest: return 4.0; break;               //400/100           
-            default: return 1.0;break;
-        }
-    }
+  double BoostFromStatModifierLevel(StatModifiersLevels modifierLevel)
+  {
+      switch (modifierLevel)
+      {
+          case StatModifiersLevels::Lowest: return 0.25; break;
+          case StatModifiersLevels::DecresedEvenFurther: return 0.28; break;  //28/100
+          case StatModifiersLevels::DecreasedMuchFurther: return 0.33; break; // 33/100
+          case StatModifiersLevels::DecreasedSeverly: return 0.4; break;  //40/100
+          case StatModifiersLevels::GreatlyDecreased: return 0.5; break;   //50/100
+          case StatModifiersLevels::Decrese: return 0.66; break;          //66/100
+          case StatModifiersLevels::Normal: return 1.0; break;           //100/100
+          case StatModifiersLevels::Increase: return 1.5; break;              //150/100
+          case StatModifiersLevels::GreatlyIncrease: return 2.0; break;      //200/100
+          case StatModifiersLevels::IncreasedDrastically: return 2.5; break;  //250/100
+          case StatModifiersLevels::IncreasedMuchFurther : return 3.0; break;  //300/100
+          case StatModifiersLevels::IncreasedEvenFurther: return 3.5; break;  //350/100
+          case StatModifiersLevels::Highest: return 4.0; break;               //400/100           
+          default: return 1.0;break;
+      }
+  }
 
+  //this is what happens in after a fight
   void EffortValuesStats::GainEffortValueStats(const SpeciesBaseStats & enemiesBaseStats)
   {  
     Stats.Health = std::min(Stats.Health + enemiesBaseStats.Stats.Health, MaxStatValue);

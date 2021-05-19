@@ -62,6 +62,10 @@ namespace mockmon::moves
     ExMove CreateSelfStatChangingMove(StatsTypes effectedStat, StatModifiersLevels modifer);
     ExMove CreateOpponentStatChangingMove(StatsTypes effectedStat, StatModifiersLevels modifer);
     ExMove CreateOpponentConditionMove(const StatusInflicment statusConditionInflicment);
+    ExMove CreateSelfConditionMove(const StatusInflicment statusConditionInflicment);
+
+    ExMove CreateResetSelfConditionMove();
+    ExMove CreateResetOpponentConditionMove();
 
     ExMove CreateDirectDamagingMoveByPassImmunity(const double setDamage);
     ExMove CreateDirectDamagingMoveTargetStateByPassImmunity(const ExDamageByState & dmgByStateCalc);

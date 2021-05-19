@@ -16,8 +16,9 @@ namespace mockmon
             //playerMonster.TeachMove(moves::MoveId::Guillotine);
             //playerMonster.TeachMove(moves::MoveId::DragonRage);
             //playerMonster.TeachMove(moves::MoveId::Psywave);
-            playerMonster.TeachMove(moves::MoveId::SleepPowder);
-            playerMonster.TeachMove(moves::MoveId::PoisonPowder);
+            playerMonster.TeachMove(moves::MoveId::LightScreen);
+            playerMonster.TeachMove(moves::MoveId::Reflect);
+            playerMonster.TeachMove(moves::MoveId::Haze);
             playerMonster.FullRestore();
             auto currentFloor{0u};
             while(currentFloor < maxFloor && playerMonster.IsAbleToBattle())

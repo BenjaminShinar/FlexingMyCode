@@ -1,5 +1,6 @@
 #pragma once
 #include "identifiers/condition_id.h"
+#include "identifiers/stats_id.h"
 #include "mockmon_conditions/base_conditon_pulse.h"
 #include <string>
 #include <iostream>
@@ -30,6 +31,7 @@ namespace mockmon::condition
     {
         public:
         bool IsAffiliatedWithCondition(ConditionId conditionId) const;
+        double GetConditionalBoost(StatsTypes requestStat,bool attacking) const; //used for burn - attack, parylsis - speed, reflect - physical defence, screen - special at defence, etc...
         void CauseCondition(pulser_uq_ptr && pulser);
         void RemoveCondition(ConditionId conditionId);
         void RemoveAllConditions();

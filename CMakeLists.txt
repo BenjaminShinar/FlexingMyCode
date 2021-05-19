@@ -4,8 +4,7 @@ cmake_minimum_required(VERSION 3.0.0)
 project(Mockmon VERSION 0.1.0)
 
 
-add_compile_options(-Wall -Wextra -Wpedantic)
-add_compile_options(-Wno-unknown-pragmas)
+add_compile_options(-Wall -Wextra -Wpedantic -Wno-unknown-pragmas)
 add_executable(${PROJECT_NAME} mockmon-main.cpp)
 
 find_package(fmt REQUIRED)
