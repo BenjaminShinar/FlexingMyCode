@@ -14,12 +14,13 @@ namespace mockmon::moves
         MakeDictionaryPair<CompositeMove>(MoveId::Struggle, il_exMV{CreateNormalDamagingMove(MovesTargeting::PurePhysical), CreateNormalRecoilDamagingMove(2.0)}),
         MakeDictionaryPair<CompositeMove>(MoveId::SwordsDance, il_exMV{CreateSelfStatChangingMove(StatsTypes::Attack,StatModifiersLevels::GreatlyIncrease)}),
         MakeDictionaryPair<CompositeMove>(MoveId::TailWhip, il_exMV{CreateOpponentStatChangingMove(StatsTypes::Defence,StatModifiersLevels::Decrese)}),
+        MakeDictionaryPair<CompositeMove>(MoveId::StringShot, il_exMV{CreateOpponentStatChangingMove(StatsTypes::Speed,StatModifiersLevels::Decrese)}),
         MakeDictionaryPair<CompositeMove>(MoveId::QuickAttack, il_exMV{CreateNormalDamagingMove(MovesTargeting::PurePhysical)}),
         
         //set damage moves
         MakeDictionaryPair<CompositeMove>(MoveId::SonicBoom, il_exMV{CreateDirectDamagingMoveByPassImmunity(20)}),
         MakeDictionaryPair<CompositeMove>(MoveId::DragonRage, il_exMV{CreateDirectDamagingMoveByPassImmunity(40)}),
-        MakeDictionaryPair<CompositeMove>(MoveId::SuperFang, il_exMV{CreateDirectDamagingMoveTargetStateByPassImmunity([](const Mockmon & m){return std::max(1.0,m.CurrentStats.Health.GetStat()/2.0);})}),
+        MakeDictionaryPair<CompositeMove>(MoveId::SuperFang, il_exMV{CreateDirectDamagingMoveTargetStateByPassImmunity([](const Mockmon & m){return std::max(1.0,m.CurrentBattleStats.Health.GetStat()/2.0);})}),
         MakeDictionaryPair<CompositeMove>(MoveId::SeismicToss, il_exMV{CreateDirectDamagingMoveAttackerStateByPassImmunity([](const Mockmon & m){return std::max(1.0,m.GetCurrentLevel()*1.0);})}),
         MakeDictionaryPair<CompositeMove>(MoveId::NightShade, il_exMV{CreateDirectDamagingMoveAttackerStateByPassImmunity([](const Mockmon & m){return std::max(1.0,m.GetCurrentLevel()*1.0);})}),
         MakeDictionaryPair<CompositeMove>(MoveId::Psywave, il_exMV{CreateDirectDamagingMoveAttackerStateByPassImmunity([](const Mockmon & m){return std::max(1.0,1.0 + random::Randomer::GetRandom(m.GetCurrentLevel()));})}),

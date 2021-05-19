@@ -15,7 +15,7 @@ namespace mockmon
         MakeDictionaryPair<MockmonSpecies>(MockmonSpeciesId::Mew,
         s_t{types::Types::Psychic},
         LevelUpGroup::MediumSlowLevelUp,64,
-        SpeciesStats{100,100,100,100,100},
+        stats::SpeciesBaseStats{100,100,100,100,100},
         mp_i_vec_Mv
         {
             //moves list
@@ -25,7 +25,7 @@ namespace mockmon
         MakeDictionaryPair<MockmonSpecies>(MockmonSpeciesId::Rattata,
         s_t{types::Types::Normal},
         LevelUpGroup::MediumFastLevelUp,57,
-        SpeciesStats{30,56,35,25,72},
+        stats::SpeciesBaseStats{30,56,35,25,72},
         mp_i_vec_Mv{
             //moves list
             {1,{moves::MoveId::Tackle, moves::MoveId::TailWhip}},
@@ -38,7 +38,7 @@ namespace mockmon
         MakeDictionaryPair<MockmonSpecies>(MockmonSpeciesId::Raticate,
         s_t{types::Types::Normal},
         LevelUpGroup::MediumFastLevelUp,116,
-        SpeciesStats{55,81,60,50,97},
+        stats::SpeciesBaseStats{55,81,60,50,97},
         mp_i_vec_Mv{
             //moves list
             {1,{moves::MoveId::Tackle, moves::MoveId::TailWhip}},
@@ -52,11 +52,10 @@ namespace mockmon
         MakeDictionaryPair<MockmonSpecies>(MockmonSpeciesId::Weedle,
         s_t{types::Types::Bug,types::Types::Poison},
         LevelUpGroup::MediumFastLevelUp,52,
-        SpeciesStats{40,35,30,20,50},
+        stats::SpeciesBaseStats{40,35,30,20,50},
         mp_i_vec_Mv{
             //moves list
-             {1,{moves::MoveId::PoisonSting}},
-            //{1,{moves::MoveId::PoisonSting, moves::MoveId::StringShot}},
+            {1,{moves::MoveId::PoisonSting, moves::MoveId::StringShot}},
         }
         ),
     };

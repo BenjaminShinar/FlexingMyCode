@@ -15,7 +15,7 @@ namespace mockmon
     }
     void Battle::DoBattle(Mockmon &playerMockmon, Mockmon &enemyMockmon)
     {
-        std::cout << playerMockmon.GetName() << " starts the battle with " << playerMockmon.CurrentStats.Health.GetStat() << " HP"<<'\n';
+        std::cout << playerMockmon.GetName() << " starts the battle with " << playerMockmon.CurrentBattleStats.Health.GetStat() << " HP"<<'\n';
         Battle battle(playerMockmon, enemyMockmon);
         battle.LoopBattle();
         
@@ -83,8 +83,8 @@ namespace mockmon
             }
         }
         // same priority
-        const auto playerSpeed {r_playerMockmon.CurrentStats.m_battleStats.at(StatsTypes::Speed).GetStat()};
-        const auto enemySpeed {r_enemyMockmon.CurrentStats.m_battleStats.at(StatsTypes::Speed).GetStat()};
+        const auto playerSpeed {r_playerMockmon.CurrentBattleStats.m_battleStats.at(StatsTypes::Speed).GetStat()};
+        const auto enemySpeed {r_enemyMockmon.CurrentBattleStats.m_battleStats.at(StatsTypes::Speed).GetStat()};
         if (playerSpeed > enemySpeed)
         {
             return true;
@@ -121,12 +121,12 @@ namespace mockmon
 
     double GetStatsModifier(const Mockmon & attacker,const StatsTypes attackingStat,const Mockmon & defender,const StatsTypes defendingStat)  
     {
-        return (attacker.CurrentStats.m_battleStats.at(attackingStat).GetStat() / defender.CurrentStats.m_battleStats.at(defendingStat).GetStat()); //attack / defence
+        return (attacker.CurrentBattleStats.m_battleStats.at(attackingStat).GetStat() / defender.CurrentBattleStats.m_battleStats.at(defendingStat).GetStat()); //attack / defence
     }
 
     bool Battle::IsCriticalHit(Mockmon & attackingMockmon, const moves::MoveId mv)
     {
-        auto baseChance =100* attackingMockmon.GetMockmonSpeciesData().MockmonSpeciesStats.Speed * moves::CriticalChanceBoost(mv) / 512.0;
+        auto baseChance =100* attackingMockmon.GetMockmonSpeciesData().MockmonSpeciesStats.Stats.Speed * moves::CriticalChanceBoost(mv) / 512.0;
         return random::Randomer::CheckPercentage(baseChance);
     }
 

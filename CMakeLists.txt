@@ -5,6 +5,7 @@ project(Mockmon VERSION 0.1.0)
 
 
 add_compile_options(-Wall -Wextra -Wpedantic)
+add_compile_options(-Wno-unknown-pragmas)
 add_executable(${PROJECT_NAME} mockmon-main.cpp)
 
 find_package(fmt REQUIRED)

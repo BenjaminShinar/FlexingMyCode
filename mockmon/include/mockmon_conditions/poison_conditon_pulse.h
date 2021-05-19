@@ -26,8 +26,8 @@ namespace mockmon::condition
 
         void PulseAfterTurn() override
         {
-            const auto damage = static_cast<int>(std::max(r_poisoned_mockmon.CurrentStats.Health.GetMaxStat() / m_damagePortion,1.0));
-            r_poisoned_mockmon.CurrentStats.Health.ChangeHealth(-1 * damage);
+            const auto damage = static_cast<int>(std::max(r_poisoned_mockmon.CurrentBattleStats.Health.GetMaxStat() / m_damagePortion,1.0));
+            r_poisoned_mockmon.CurrentBattleStats.Health.ChangeHealth(-1 * damage);
             std::cout << AppendAll({r_poisoned_mockmon.GetName(), "takes",std::to_string(damage),"damage from the poison!"}) <<'\n';
         }
         private:

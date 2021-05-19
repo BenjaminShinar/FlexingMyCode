@@ -8,7 +8,8 @@
 #include <vector>
 
 #include "condition.h"
-#include "stats.h"
+#include "stats/stats.h"
+#include "stats/battle_stats.h"
 #include "mockmon_species.h"
 #include "mockmon_exp.h"
 
@@ -24,7 +25,7 @@ namespace mockmon
         :m_currentSpeciesId(species), m_name(name),m_trainer_ai_id(trainerAi),m_outputEvents(silent)
         {
             LearnLevelUpMoves();
-            CurrentStats.UpdateStats(Stats(GetMockmonSpeciesData().MockmonSpeciesStats,IVs,EVs,CurrentLevel));
+            CurrentBattleStats.UpdateStats(stats::MockmonStats(GetMockmonSpeciesData().MockmonSpeciesStats,IVs,EVs,CurrentLevel));
         }
 
         unsigned int GetCurrentLevel() const;
@@ -34,6 +35,7 @@ namespace mockmon
         void GrantExperiencePoints(long points);
         MockmonExp CheckExperiencePoints() const;
         long ExpFromDefeating()const;
+        void GainEffortValueFromVictory(const Mockmon & defeatedMon);
         void GainExperienceFromVictory(const Mockmon & defeatedMon);
         void LoseSomehow();
         void FullRestore();
@@ -61,12 +63,12 @@ namespace mockmon
 
         public:
         condition::Condition m_currentCondtion{};
-        BattleStats CurrentStats; // this is calculated each level;
+        stats::BattleStats CurrentBattleStats; // this is calculated each level;
 
         protected:
         
         private:
-        MockmonSpeciesId m_currentSpeciesId;
+        MockmonSpeciesId m_currentSpeciesId; //this can change when the mockmon evolves
         
         std::string m_name;
         TrainerAI m_trainer_ai_id;
@@ -75,8 +77,8 @@ namespace mockmon
         long experience_points = 0;
         bool m_ableToBattle = true;
         std::vector<moves::EquipedMove> m_Moveset;
-        const IndividualStats IVs; //this is calculated once when the pokemon is born;
-        Stats EVs; // this is what we gain after each battle;
+        const stats::IndividualStats IVs; //this is calculated once when the pokemon is born;
+        stats::EffortValuesStats EVs; // this is what we gain after each battle;
 
 
 

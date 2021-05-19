@@ -6,7 +6,7 @@
 
 #include "moves.h"
 #include "types.h"
-#include "stats.h"
+#include "stats/stats.h"
 #include "mockmon_exp.h"
 
 #include "interfaces.h"
@@ -24,7 +24,7 @@ namespace mockmon
     {   
         public:
         explicit MockmonSpecies()=delete;
-        explicit MockmonSpecies(MockmonSpeciesId speciesId,const std::set<types::Types> & types,LevelUpGroup speciesLevelUpGroup,int speciesExp, const SpeciesStats & speciesStats,const std::map<int,std::vector<moves::MoveId>> & levelUpMoves):
+        explicit MockmonSpecies(MockmonSpeciesId speciesId,const std::set<types::Types> & types,LevelUpGroup speciesLevelUpGroup,int speciesExp, const stats::SpeciesBaseStats & speciesStats,const std::map<int,std::vector<moves::MoveId>> & levelUpMoves):
         IdentifiybleModule(speciesId),
         SpeciesTypes(types),
         SpeciesLevelUpGroup(speciesLevelUpGroup),
@@ -34,15 +34,19 @@ namespace mockmon
         {
         }
         virtual ~MockmonSpecies()=default; //we might want some inheritance for special mockmon cases, who knows 
+
+       #pragma region functions  
         
         bool IsSpeciesOfType(types::Types type) const;
         types::TypeEffectivenessModifier GetTypeEffetivenessModifier(types::Types attackingMoveType) const;
         
-        const std::set<types::Types> SpeciesTypes;
+        #pragma endregion
+
+        const std::set<types::Types> SpeciesTypes; //what types are the species (at least on, can be more)
         const LevelUpGroup SpeciesLevelUpGroup;
         const int SpeciesExp; // how much exp this mockmon gives
-        const SpeciesStats MockmonSpeciesStats; // this belongs to the pokemon base class, not the indvidual;
-        const std::map<int,std::vector<moves::MoveId>> LevelUpMoves;
+        const stats::SpeciesBaseStats MockmonSpeciesStats; // this belongs to the pokemon base class, not the indvidual;
+        const std::map<int,std::vector<moves::MoveId>> LevelUpMoves; //which moves this species can learn
 
         static const std::map<MockmonSpeciesId,MockmonSpecies> AllMockmons;
     };

@@ -5,13 +5,13 @@ namespace mockmon
 {
     enum class StatsTypes
     {
-        HealthPoints, //special!
         Attack,
         Defence,
         Special,
         Speed,
         Accuracy,
         Evasion,
+        HealthPoints, //special!
     };
     std::string Stringify(const StatsTypes statType);
     std::ostream &operator<<(std::ostream &os, const StatsTypes &e);

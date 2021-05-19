@@ -55,7 +55,7 @@ namespace mockmon::moves
     {
         const auto targetingPair{MoveStatsTargeting::AllStatsTargeting.at(movesTargeting)};
         auto damage = static_cast<int>(Battle::ModifyAttack(AttackingMove, attacker,targetingPair.AttackerStat, defender,targetingPair.DefenderStat));
-        defender.CurrentStats.Health.ChangeHealth(-1 * damage);
+        defender.CurrentBattleStats.Health.ChangeHealth(-1 * damage);
         MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(AttackingMove.Identifier()), "for", std::to_string(damage), " damage!"})};
         return o;
     }
@@ -63,14 +63,14 @@ namespace mockmon::moves
     MoveOutcome RecoilDamageMove(Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender, double divisionFactor)
     {
         auto damage = std::max(1, static_cast<int>(Battle::ModifyAttack(AttackingMove, attacker,StatsTypes::Attack, attacker,StatsTypes::Defence) / divisionFactor));
-        attacker.CurrentStats.Health.ChangeHealth(-1 * damage);
+        attacker.CurrentBattleStats.Health.ChangeHealth(-1 * damage);
         MoveOutcome o{AppendAll({attacker.GetName(), "takes", std::to_string(damage), "recoil damage from", Stringify(AttackingMove.Identifier())})};
         return o;
     }
 
     MoveOutcome ChangeSelfStatMove(Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender, StatsTypes effectedStat, StatModifiersLevels modifer)
     {
-        auto & statRef =  attacker.CurrentStats.m_battleStats.at(effectedStat);
+        auto & statRef =  attacker.CurrentBattleStats.m_battleStats.at(effectedStat);
         const auto previous = statRef.GetStat();
         statRef.AddModifier(modifer);
         MoveOutcome o{AppendAll({attacker.GetName(), "used",Stringify(AttackingMove.Identifier()), "and changed stat from", std::to_string(previous), "to", std::to_string(statRef.GetStat())})};
@@ -79,7 +79,7 @@ namespace mockmon::moves
 
     MoveOutcome ChangeOpponentStatMove(Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender, StatsTypes effectedStat, StatModifiersLevels modifer)
     {
-        auto & statRef =  defender.CurrentStats.m_battleStats.at(effectedStat);
+        auto & statRef =  defender.CurrentBattleStats.m_battleStats.at(effectedStat);
         const auto previous = statRef.GetStat();
         statRef.AddModifier(modifer);
         MoveOutcome o{AppendAll({attacker.GetName(), "used", Stringify(AttackingMove.Identifier()), "and changed", defender.GetName(),"stat from", std::to_string(previous), "to", std::to_string(statRef.GetStat())})};
@@ -88,7 +88,7 @@ namespace mockmon::moves
 
     MoveOutcome DirectDamageByPassResistance(Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender, double damage)
     {
-        defender.CurrentStats.Health.ChangeHealth(-1 * damage);
+        defender.CurrentBattleStats.Health.ChangeHealth(-1 * damage);
         MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(AttackingMove.Identifier()), "for", std::to_string(damage), "damage!"})};
         return o;
     }
@@ -96,7 +96,7 @@ namespace mockmon::moves
     MoveOutcome DirectDamageByTargetCalculation(Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender, const ExDamageByState & dmgByStateCalc)
     {
         const auto damage = std::round(dmgByStateCalc(defender));
-        defender.CurrentStats.Health.ChangeHealth(-1 * damage);
+        defender.CurrentBattleStats.Health.ChangeHealth(-1 * damage);
         MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(AttackingMove.Identifier()), "for", std::to_string(damage), "damage!"})};
         return o;
     }
@@ -104,7 +104,7 @@ namespace mockmon::moves
     MoveOutcome DirectDamageByAttackerCalculation(Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender, const ExDamageByState & dmgByStateCalc)
     {
         const auto damage = std::round(dmgByStateCalc(attacker));
-        defender.CurrentStats.Health.ChangeHealth(-1 * damage);
+        defender.CurrentBattleStats.Health.ChangeHealth(-1 * damage);
         MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(AttackingMove.Identifier()), "for", std::to_string(damage), "damage!"})};
         return o;
     }

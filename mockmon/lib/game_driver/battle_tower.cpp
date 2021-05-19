@@ -42,7 +42,7 @@ namespace mockmon
             const auto RandomizeEnemyType = random::Randomer::GetOneOption({MockmonSpeciesId::Weedle,MockmonSpeciesId::Rattata});
             
             auto enemy = BattleTower::GenerateEnemy(floorLevel,RandomizeEnemyType,"garry");
-            std::cout<< "player mockmon " << playerMonster.GetName() << " will face " << enemy.GetName() << " the level " << enemy.GetCurrentLevel() << " " << enemy.GetMockmonSpeciesData().Identifier() << " with " << enemy.CurrentStats.Health.GetStat() << " HP!"  <<'\n';
+            std::cout<< "player mockmon " << playerMonster.GetName() << " will face " << enemy.GetName() << " the level " << enemy.GetCurrentLevel() << " " << enemy.GetMockmonSpeciesData().Identifier() << " with " << enemy.CurrentBattleStats.Health.GetStat() << " HP!"  <<'\n';
             Battle::DoBattle(playerMonster,enemy);
             return(playerMonster.IsAbleToBattle());
             
@@ -54,7 +54,7 @@ namespace mockmon
             auto needexp = MockmonExp::TotalExperinceForLevel(requestLevel,enemy.GetMockmonSpeciesData().SpeciesLevelUpGroup);
             enemy.GrantExperiencePoints(needexp);
             enemy.FullRestore();
-            std::cout << "enemy mockmon " <<enemy.GetName() << " is " << enemy.CheckExperiencePoints() << " and has "<< enemy.CurrentStats.Health.GetStat() <<" hit points!"<< '\n';
+            std::cout << "enemy mockmon " <<enemy.GetName() << " is " << enemy.CheckExperiencePoints() << " and has "<< enemy.CurrentBattleStats.Health.GetStat() <<" hit points!"<< '\n';
             return enemy;
         }
   

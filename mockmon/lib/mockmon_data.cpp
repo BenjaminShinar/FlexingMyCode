@@ -21,7 +21,7 @@ namespace mockmon
     
     bool Mockmon::IsAbleToBattle() const 
     {
-        return m_ableToBattle && CurrentStats.Health.GetStat() >0;
+        return m_ableToBattle && CurrentBattleStats.Health.GetStat() >0;
     }
 
     double Mockmon::ModifyAttackForCrticalHit()
@@ -54,8 +54,8 @@ namespace mockmon
 
     void Mockmon::FullRestore()
     {
-        CurrentStats.Health.RestStatToMax();
-        for (auto & stat : CurrentStats.m_battleStats)
+        CurrentBattleStats.Health.RestStatToMax();
+        for (auto & stat : CurrentBattleStats.m_battleStats)
         {
             stat.second.ResetBoost();
         }
@@ -124,7 +124,7 @@ namespace mockmon
 
      void Mockmon::UpdateStats()
      {
-         CurrentStats.UpdateStats(Stats(GetMockmonSpeciesData().MockmonSpeciesStats,IVs,EVs,CurrentLevel));
+         CurrentBattleStats.UpdateStats(stats::MockmonStats(GetMockmonSpeciesData().MockmonSpeciesStats,IVs,EVs,CurrentLevel));
      }
 
     void Mockmon::LearnLevelUpMoves(int newLevel)
@@ -175,9 +175,15 @@ namespace mockmon
         return m_name;
     }
     
+    
+    void Mockmon::GainEffortValueFromVictory(const Mockmon & defeatedMon)
+    {
+        EVs.GainEffortValueStats(defeatedMon.GetMockmonSpeciesData().MockmonSpeciesStats);
+    }
 
     void Mockmon::GainExperienceFromVictory(const Mockmon & defeatedMon)
     {
+        GainEffortValueFromVictory(defeatedMon);
 
         //https://bulbapedia.bulbagarden.net/wiki/Experience#Experience_gain_in_battle
         //exp = (a*t*b*e*L*p*f*V) / (7 *s)
@@ -202,7 +208,6 @@ namespace mockmon
         {
             std::cout << AppendAll({GetName(),"gain" ,std::to_string(xp),"xp points!"}) <<'\n';
         }
-        EVs+=defeatedMon.GetMockmonSpeciesData().MockmonSpeciesStats;
         GrantExperiencePoints(xp);
     }
 
