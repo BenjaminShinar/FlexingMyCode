@@ -19,6 +19,7 @@ A small project that I can be motivated to work on. A simple version of a battli
 - [ ] moves that do something and moves that fail
 - [x] opponent can do something against user
 - [x] moves effect mockmon stats rather than directly the outcome
+- [ ] damage ranges
 - [ ] two turn moves
 - [ ] moves that block/protect against other moves
 - [ ] moves that are dependent on status/condition
@@ -58,9 +59,11 @@ A small project that I can be motivated to work on. A simple version of a battli
 - [ ] speed reduction
 - [ ] can be caused by different types of attacks, and mockmon of the same type aren't effected by it.
 
-##### poison / badly poison (toxic)
+##### poison
 - [ ] inflict damage
 - [ ] doesn't effect poison types, and maybe steel types.
+
+###### badly poison (toxic)
 - [ ] badly poison increases the damgage it inflicts each turn.
 - [ ] effects in the outer world
 
@@ -74,7 +77,6 @@ A small project that I can be motivated to work on. A simple version of a battli
 - [ ] chance to hitself with a special attack (no type, no critical hit)
 - [ ] chance to snap out of confusion
 - [ ] how it works with multiturn abilities
-
 
 
 ##### leech seed
@@ -106,10 +108,20 @@ A small project that I can be motivated to work on. A simple version of a battli
 - [ ] dpad, action, cancel, start select
 
 
-
 ## Build system
-use cmake to build
-use external packages from package managments
+- [ ] use cmake to build
+- [x] use external packages from package managments
 
 ## Testing?
 can i use automated testing?
+- [x] add testing package
+- [ ] integrate testing to repository on git
+- [ ] add actual relevent test
+
+## UMLs
+- [ ] create a location for umls on the repository
+- [ ] have a tool that process the uml to image
+- [ ] battle uml - how a battle operates
+- [ ] game driver uml - which modes are availble to use currently
+- [ ] classes uml - mockmon, conditions, etc...
+- [ ] special moves umls - maybe needed
