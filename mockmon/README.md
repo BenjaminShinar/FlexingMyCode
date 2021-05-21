@@ -2,7 +2,9 @@
 
 A small project that I can be motivated to work on. A simple version of a battling game. The user (player) will control mock-monsters (mockmons) and battle the computer in a manner similar to the famoues game. 
 
-## Tasks and Stages
+
+
+## Tasks and Stages - this will eventuall be the Issues tab
 
 - [ ] Basic program structure
 - [x] Player choice modules - allow the user to choose an action
@@ -107,18 +109,21 @@ A small project that I can be motivated to work on. A simple version of a battli
 ### Controller stuff
 - [ ] dpad, action, cancel, start select
 
+## Dev Ops stuff
+stuff that needs to be done, but not concerning the business logic of the mockmon engine.
+how the project is built, maintained, tested and maintened.
 
-## Build system
+### Build system
 - [ ] use cmake to build
 - [x] use external packages from package managments
 
-## Testing?
+### Testing?
 can i use automated testing?
 - [x] add testing package
 - [ ] integrate testing to repository on git
 - [ ] add actual relevent test
 
-## UMLs
+### UMLs
 - [ ] create a location for umls on the repository
 - [ ] have a tool that process the uml to image
 - [ ] battle uml - how a battle operates
