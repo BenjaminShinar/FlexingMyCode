@@ -83,8 +83,7 @@ namespace mockmon
             }
         }
         // same priority
-        const auto playerSpeed {r_playerMockmon.CurrentBattleStats.m_battleStats.at(StatsTypes::Speed).GetStat()};
-        const auto enemySpeed {r_enemyMockmon.CurrentBattleStats.m_battleStats.at(StatsTypes::Speed).GetStat()};
+        const auto [playerSpeed,enemySpeed] = GetStatsModifier(r_playerMockmon,StatsTypes::Speed,r_enemyMockmon,StatsTypes::Speed);
         if (playerSpeed > enemySpeed)
         {
             return true;
@@ -119,12 +118,14 @@ namespace mockmon
         }
     }
 
-    double GetStatsModifier(const Mockmon & attacker,const StatsTypes attackingStat,const Mockmon & defender,const StatsTypes defendingStat)  
+
+    std::tuple<double,double> Battle::GetStatsModifier(const Mockmon & attacker,const StatsTypes attackingStat,const Mockmon & defender,const StatsTypes defendingStat)  
     {
         const auto attackerStat = attacker.CurrentBattleStats.m_battleStats.at(attackingStat).GetStat()* attacker.m_currentCondtion.GetConditionalBoost(attackingStat,true);
         const auto defenderStat = defender.CurrentBattleStats.m_battleStats.at(defendingStat).GetStat()* defender.m_currentCondtion.GetConditionalBoost(defendingStat,false);
-        return (attackerStat / defenderStat); //attack / defence
+        return std::make_tuple(attackerStat, defenderStat); //attack / defence
     }
+
 
     bool Battle::IsCriticalHit(Mockmon & attackingMockmon, const moves::MoveId mv)
     {
@@ -135,8 +136,9 @@ namespace mockmon
     //this is normal attack
     double Battle::ModifyAttack(const moves::SimpleMove & AttackingMove,Mockmon & attacker,const StatsTypes attackingStat, Mockmon & defender,const StatsTypes defendingStat)
     {
-            auto levelModifier = 2+((2*attacker.GetCurrentLevel())/5);
-        auto statsModifier = GetStatsModifier(attacker,attackingStat,defender,defendingStat);
+        auto levelModifier = 2+((2*attacker.GetCurrentLevel())/5);
+        const auto [attackstat,defencestat] = Battle::GetStatsModifier(attacker,attackingStat,defender,defendingStat);
+        const auto statsModifier = attackstat/defencestat;
         
         auto criticalHitModifier = [](Mockmon & attacker,const moves::MoveId mv){
             if (IsCriticalHit(attacker,mv))

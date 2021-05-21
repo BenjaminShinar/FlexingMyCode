@@ -41,11 +41,6 @@ namespace mockmon::moves
     }
 
 
-    bool CheckMoveAccuracy(const SimpleMove & attack)
-    {
-        return (random::Randomer::CheckPercentage(attack.BaseAccuracy));
-    }
-
     unsigned int EquipedMove::RemainningPowerPoints() const
     {
         return m_currentPowerPoints;

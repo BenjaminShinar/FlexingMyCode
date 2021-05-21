@@ -46,7 +46,7 @@ namespace mockmon
         const LevelUpGroup SpeciesLevelUpGroup;
         const int SpeciesExp; // how much exp this mockmon gives
         const stats::SpeciesBaseStats MockmonSpeciesStats; // this belongs to the pokemon base class, not the indvidual;
-        const std::map<int,std::vector<moves::MoveId>> LevelUpMoves; //which moves this species can learn
+        const std::map<int,std::vector<moves::MoveId>> LevelUpMoves; //which moves this species can learn naturally
 
         static const std::map<MockmonSpeciesId,MockmonSpecies> AllMockmons;
     };

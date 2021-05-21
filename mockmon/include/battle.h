@@ -10,6 +10,7 @@
 #include "arena.h"
 #include <string>
 #include <iostream>
+#include <tuple>
 
 namespace mockmon
 {
@@ -28,7 +29,8 @@ namespace mockmon
         static double ModifyAttack(const moves::SimpleMove & AttackingMove, Mockmon & attacker,const StatsTypes attackingStat, Mockmon & defender,const StatsTypes defendingStat);
         static bool IsCriticalHit(Mockmon & attackingMockmon, const moves::MoveId mv);
 
-        
+        static  std::tuple<double,double> GetStatsModifier(const Mockmon & attacker,const StatsTypes attackingStat,const Mockmon & defender,const StatsTypes defendingStat) ;
+
         private:
         void DetermineBattle(controller::controllerEnum action);
         void LoopBattle();

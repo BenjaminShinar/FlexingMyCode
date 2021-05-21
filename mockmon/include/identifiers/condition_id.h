@@ -16,9 +16,9 @@ namespace mockmon::condition
         Reflect, //not actually a condition, but that's how i'm gonna use it.
         LightScreen, //not actually a condition, but that's how i'm gonna use it.
 
-//maybe the defence halfing effect of self destruct and explosion should come here? maybe rage?
-//        Exoloded, //not actually a condition, but that's how i'm gonna use it.
-//
+        //maybe the defence halfing effect of self destruct and explosion should come here? maybe rage?
+        //        Exoloded, //not actually a condition, but that's how i'm gonna use it.
+        //
 
     };
     std::string Stringify(const ConditionId condition);

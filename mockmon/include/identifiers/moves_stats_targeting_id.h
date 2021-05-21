@@ -7,6 +7,7 @@ namespace mockmon::moves
     {
         PurePhysical,
         PureSpecial,
+        AccuracyEvasion,
     };
     std::string Stringify(const MovesTargeting movesTargeting);
     std::ostream &operator<<(std::ostream &os, const MovesTargeting &e);

@@ -9,6 +9,7 @@ namespace mockmon::moves
         //id,{id,AtackingStat,DefendingStat}
         MakeDictionaryPair<MoveStatsTargeting>(MovesTargeting::PurePhysical,StatsTypes::Attack,StatsTypes::Defence),
         MakeDictionaryPair<MoveStatsTargeting>(MovesTargeting::PureSpecial,StatsTypes::Special,StatsTypes::Special),
+        MakeDictionaryPair<MoveStatsTargeting>(MovesTargeting::AccuracyEvasion,StatsTypes::Accuracy,StatsTypes::Evasion),
         // MakeDictionaryPair<SimpleMove>(MoveId::TailWhip,types::Types::Normal,100,5),
         // MakeDictionaryPair<SimpleMove>(MoveId::QuickAttack,types::Types::Normal,100,40),
         // MakeDictionaryPair<SimpleMove>(MoveId::HyperFang,types::Types::Normal,90,80),

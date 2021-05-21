@@ -2,11 +2,7 @@
 #include "moves_stats_targeting.h"
 #include "random_gen.h"
 #include "stats/stats.h"
-#include "mockmon_conditions/poison_conditon_pulse.h"
-#include "mockmon_conditions/sleep_condition_pulse.h"
-#include "mockmon_conditions/burn_condition_pulse.h"
-#include "mockmon_conditions/light_screen_condition_pulse.h"
-#include "mockmon_conditions/reflect_condition_pulse.h"
+#include "mockmon_conditions/all_conditions.h"
 
 #include <functional>
 #include <utility>
@@ -21,8 +17,8 @@ namespace mockmon::moves
     void CompositeMove::Perform(Arena &arena, Mockmon &attacker, Mockmon &defender) const
     {
         const auto simpleAttackingMove = SimpleMove::AllMoves.at(Identifier());
-
-        if (moves::CheckMoveAccuracy(simpleAttackingMove))
+        const auto o = MoveChance(arena,attacker,defender);
+        if (o.m_hit)
         {
             for (auto &mv : MoveComponenets)
             {
@@ -37,6 +33,7 @@ namespace mockmon::moves
     }
 
 
+    //this probably belongs somewhere else
     condition::pulser_uq_ptr MakeCondition(condition::ConditionId conditionid,Mockmon & effectedMockmon)
     {
         using namespace condition;
@@ -72,10 +69,44 @@ namespace mockmon::moves
         default:
             break;
         }
-        return std::make_unique<PoisonCondition>(effectedMockmon, 16.0);
+        std::cerr << __FUNCTION__ << " should never have reached this location!\n";
+        return std::make_unique<EmptyCondition>();
     }
 
     //here are some other attacks, will eventually need refactoring
+
+
+#pragma region move success Chances
+    MoveOutcome RegularAccuracyCheckMove(Arena &arena, Mockmon &attacker, Mockmon &defender,int attackingMoveBaseAccuracy, const MovesTargeting & movesTargeting)
+    {
+        const auto targetingPair{MoveStatsTargeting::AllStatsTargeting.at(movesTargeting)};
+        const auto [attackstat,defencestat] = Battle::GetStatsModifier(attacker,targetingPair.AttackerStat,defender,targetingPair.DefenderStat);
+        const auto modifier = attackstat*defencestat;
+        const auto percentage = std::clamp(static_cast<int>(std::round(attackingMoveBaseAccuracy*modifier)),0,100);
+        if (random::Randomer::CheckPercentage(percentage))
+        {
+            return MoveOutcome{"",true};
+        }
+        else
+        {
+            return MoveOutcome{"",false};
+        }
+    }
+
+    MoveOutcome SetChancesCheckMove(Arena &arena, Mockmon &attacker, Mockmon &defender,int setChances)
+    {
+        if (random::Randomer::CheckPercentage(setChances))
+        {
+            return MoveOutcome{"",true};
+        }
+        else
+        {
+            return MoveOutcome{"",false};
+        }
+    }
+
+#pragma endregion
+
 #pragma region attacks
 
     MoveOutcome RegularMove(Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender,const MovesTargeting & movesTargeting)
@@ -211,6 +242,21 @@ namespace mockmon::moves
         ResetAllStatChanges(defender);
         MoveOutcome o{AppendAll({attacker.GetName(),"used",Stringify(AttackingMove.Identifier()), "to reset all of",defender.GetName(),"stats!"})};    
         return o;
+    }
+
+#pragma endregion
+
+#pragma region expossed Chances
+    ExMoveChanceCheck CreateNormalAccuracyCheck(int moveBaseAccuracy,const MovesTargeting movesTargeting)
+    {
+        auto bounded = std::bind(&RegularAccuracyCheckMove, _1, _2, _3, moveBaseAccuracy, movesTargeting);
+        return bounded;
+    }
+
+    ExMoveChanceCheck CreateSetAccuracyCheck(int setchances)
+    {
+        auto bounded = std::bind(&SetChancesCheckMove, _1, _2, _3, setchances);
+        return bounded;
     }
 
 #pragma endregion

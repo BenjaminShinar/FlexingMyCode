@@ -42,8 +42,8 @@ namespace mockmon::stats
             {StatsTypes::Defence,             BattleSingleStat(StatsTypes::Defence,1)},
             {StatsTypes::Special,             BattleSingleStat(StatsTypes::Special,1)},
             {StatsTypes::Speed,               BattleSingleStat(StatsTypes::Speed,1)},
-            {StatsTypes::Evasion,             BattleSingleStat(StatsTypes::Evasion,100)},
-            {StatsTypes::Accuracy,            BattleSingleStat(StatsTypes::Accuracy,100)},
+            {StatsTypes::Evasion,             BattleSingleStat(StatsTypes::Evasion,1.0)},
+            {StatsTypes::Accuracy,            BattleSingleStat(StatsTypes::Accuracy,1.0)},
         };
         HealthStat Health{1}; //this should be special
     };

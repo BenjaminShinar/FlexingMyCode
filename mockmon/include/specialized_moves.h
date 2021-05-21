@@ -16,6 +16,7 @@ namespace mockmon::moves
     struct MoveOutcome
     {   
         std::string m_moveOutcomeDescrition;
+        bool m_hit{true};
 
     };
 
@@ -28,6 +29,7 @@ namespace mockmon::moves
     
     //this is a move typedef
     using ExMove = std::function<MoveOutcome(Arena & arena, const moves::SimpleMove & AttackingMove,Mockmon & attacker,Mockmon & defender)>;
+    using ExMoveChanceCheck = std::function<MoveOutcome(Arena & arena, Mockmon & attacker,Mockmon & defender)>;
     using ExDamageByState= std::function<double(const Mockmon & mockmonToChoose)>;
 
     //this should replace the BaseMoveclass
@@ -36,9 +38,10 @@ namespace mockmon::moves
     {
         public:
 
-        explicit CompositeMove(moves::MoveId moveId,const std::initializer_list<ExMove> & componenets):
-        DescribleModule(moveId)
-        ,MoveComponenets(componenets)
+        explicit CompositeMove(moves::MoveId moveId,const ExMoveChanceCheck & movechance,const std::initializer_list<ExMove> & componenets):
+        DescribleModule(moveId),
+        MoveChance(movechance),
+        MoveComponenets(componenets)
         {
         }
      
@@ -46,7 +49,7 @@ namespace mockmon::moves
         CompositeMove(CompositeMove && other ) = default;
 
         void Perform(Arena & arena, Mockmon & attacker,Mockmon & defender) const;
-
+        ExMoveChanceCheck MoveChance;
         std::vector<ExMove> MoveComponenets;
         std::string Describe() const override
         {
@@ -56,6 +59,9 @@ namespace mockmon::moves
         static const std::map<moves::MoveId,CompositeMove> AllCompositeMoves;
 
     };
+
+    ExMoveChanceCheck CreateNormalAccuracyCheck(int moveBaseAccuracy,const MovesTargeting movesTargeting);
+    ExMoveChanceCheck CreateSetAccuracyCheck(int setchances);
 
     ExMove CreateNormalDamagingMove(const MovesTargeting movesTargeting);
     ExMove CreateNormalRecoilDamagingMove(const double divFactor);

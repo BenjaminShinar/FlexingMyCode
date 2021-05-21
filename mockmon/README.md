@@ -29,6 +29,7 @@ A small project that I can be motivated to work on. A simple version of a battli
 - [ ] mockmon stats effect the battle outcome
 - [x] critical hits
 - [x] moves can hit or miss
+- [ ] crash damage moves - user takes damage if they fail!
 - [ ] moves can cause status effect
 - [ ] moves are effected by stats (accuracy, power)
 - [ ] status effects (poison, sleep, confision, etc...)
@@ -47,7 +48,7 @@ A small project that I can be motivated to work on. A simple version of a battli
 - [ ] which conditions work with moves special effects (dig, charging/recharging)?
 
 ##### burn
-- [ ] inflict damage
+- [x] inflict damage
 - [ ] doesn't effect fire types
 - [ ] halfs phyiscal moves
 
@@ -62,7 +63,7 @@ A small project that I can be motivated to work on. A simple version of a battli
 - [ ] can be caused by different types of attacks, and mockmon of the same type aren't effected by it.
 
 ##### poison
-- [ ] inflict damage
+- [x] inflict damage
 - [ ] doesn't effect poison types, and maybe steel types.
 
 ###### badly poison (toxic)

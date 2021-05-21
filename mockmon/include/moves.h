@@ -27,12 +27,11 @@ namespace mockmon::moves
 
     struct SimpleMove : public BaseMove
     {
-
-        const unsigned int BaseAccuracy;
+        //do I really need this? can someone else take care of accuracy for me?
         const unsigned int BasePower;
 
         static const std::map<moves::MoveId, SimpleMove> AllMoves;
-        explicit SimpleMove(moves::MoveId moveId, types::Types type, unsigned int accuracy, unsigned int power) : BaseMove(moveId, type), BaseAccuracy(accuracy), BasePower(power)
+        explicit SimpleMove(moves::MoveId moveId, types::Types type, unsigned int power) : BaseMove(moveId, type), BasePower(power)
         {
         }
     };

@@ -8,7 +8,8 @@ namespace mockmon::moves
         {
             case MovesTargeting::PurePhysical: return "pure phyical target";break;
             case MovesTargeting::PureSpecial: return "pure special target";break;
-            
+            case MovesTargeting::AccuracyEvasion: return "accuracy evasion target";break;
+
             default: return "Unknown targeting!"; break;
         }
     }
