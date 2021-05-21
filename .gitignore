@@ -50,5 +50,5 @@ _deps
 [Bb][Uu][Ii][Ll][Dd]/
 
 #Out files
-out/*/*.png
-out/*/*.svg
+out/**/*.png
+out/**/*.svg
