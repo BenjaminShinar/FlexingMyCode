@@ -126,7 +126,10 @@ how the project is built, maintained, tested and maintened.
 can i use automated testing?
 - [x] add testing package
 - [ ] integrate testing to repository on git
-- [ ] add actual relevent test
+- [x] add actual relevent test
+- [ ] learn more about testing and clean the code
+- [ ] expand testing to anything we can test
+
 
 ### UMLs
 - [ ] create a location for umls on the repository
