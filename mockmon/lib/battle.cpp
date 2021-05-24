@@ -4,12 +4,25 @@
 #include "specialized_moves.h"
 #include "moves_stats_targeting.h"
 #include "trainer_ai.h"
-
+#include "damage_calculations.h"
 #include <algorithm>
 #include <numeric>
 
-namespace mockmon
+namespace mockmon::battle
 {
+
+    //do something else
+    bool IsStabModifier(const Mockmon & m ,const moves::SimpleMove & AttackingMove) 
+    {
+        return m.GetMockmonSpeciesData().IsSpeciesOfType(AttackingMove.Type);
+    }
+    
+    types::TypeEffectivenessModifier GetTypeEffectivenessModifer(const Mockmon & m,const moves::SimpleMove & AttackingMove) 
+    {
+        return m.GetMockmonSpeciesData().GetTypeEffetivenessModifier(AttackingMove.Type);
+    }
+
+
     Battle::Battle(Mockmon &playerMockmon, Mockmon &enemyMockmon) : r_playerMockmon(playerMockmon), r_enemyMockmon(enemyMockmon)
     {
     }
@@ -22,23 +35,6 @@ namespace mockmon
         
     }
 
-
-    double Battle::GetTypeEffetiveness(types::TypeEffectivenessModifier modifier)
-    {
-        using types::TypeEffectivenessModifier;        
-        switch (modifier)
-        {
-            case TypeEffectivenessModifier::NotEffective: return 0.0; break;
-            case TypeEffectivenessModifier::VeryNotEffective: return 0.25; break;
-            case TypeEffectivenessModifier::NotVeryEffective: return 0.5; break;
-            case TypeEffectivenessModifier::NormalEffective: return 1.0; break;
-            case TypeEffectivenessModifier::VeryEffective: return 2.0; break;
-            case TypeEffectivenessModifier::SuperEffective: return 4.0; break;
-            default: break;
-        }
-
-        return 1.0;
-    } //how an attack effects this pokemon
 
     void Battle::LoopBattle()
     {
@@ -136,20 +132,20 @@ namespace mockmon
     //this is normal attack
     double Battle::ModifyAttack(const moves::SimpleMove & AttackingMove,Mockmon & attacker,const StatsTypes attackingStat, Mockmon & defender,const StatsTypes defendingStat)
     {
-        auto levelModifier = 2+((2*attacker.GetCurrentLevel())/5);
+        auto levelModifier = GetLevelDamageModifier(attacker);
         const auto [attackstat,defencestat] = Battle::GetStatsModifier(attacker,attackingStat,defender,defendingStat);
         const auto statsModifier = attackstat/defencestat;
         
         auto criticalHitModifier = [](Mockmon & attacker,const moves::MoveId mv){
             if (IsCriticalHit(attacker,mv))
-            return (attacker.ModifyAttackForCrticalHit());
+            return (GetLevelCriticalDamageModifier(attacker));
             else
             return 1.0;
         }(attacker,AttackingMove.Identifier()); 
         
-        auto stabModifer {attacker.GetStabModifier(AttackingMove) ? 1.5 : 1.0}; //stab
-        auto typeMofider {defender.GetTypeEffectivenessModifer(AttackingMove)};  //typeResistancs and weakness
-        auto typeEffectivenessAndStab {stabModifer *  GetTypeEffetiveness(typeMofider)}; //typeResistancs and weakness
+        auto stabModifer {IsStabModifier(attacker,AttackingMove)}; //stab
+        auto typeMofider {GetTypeEffectivenessModifer(defender,AttackingMove)};  //typeResistancs and weakness
+        auto typeEffectivenessAndStab {GetStabDamageModifier(stabModifer) *  GetTypeEffetivenessModifier(typeMofider)}; //typeResistancs and weakness
         auto  extraModifier = 1 * criticalHitModifier * typeEffectivenessAndStab ; // weahter, badge,status,
         return (extraModifier*(2+((levelModifier* AttackingMove.BasePower * statsModifier)/50)));
     }
@@ -160,13 +156,14 @@ namespace mockmon
     {
         if (attacker.IsAbleToBattle() && defender.IsAbleToBattle())
         {
-            auto chosenMove = std::find_if(attacker.m_Moveset.begin(),attacker.m_Moveset.end(),
-                [&](const moves::EquipedMove  & mv ){ return mv.Identifier() == mvid;});
+            auto & mvset = attacker.GetMoveSet();
+            auto chosenMove = std::find_if(std::begin(mvset),std::end(mvset),
+                [&](const moves::EquipedMove  & mv ){ return mv.IsSameAs(mvid);});
             auto usedMove{moves::MoveId::Struggle};
 
             attacker.m_currentCondtion.PulseBeforeTurn(); //assuming pulse before turn can't hurt the mockmon and cause it to faint or be unable to attack. maybe here we also switch moves to sleep/hurtself/        
 
-            if (chosenMove != attacker.m_Moveset.end() && chosenMove->RemainningPowerPoints()>0)
+            if (chosenMove != std::end(mvset) && chosenMove->RemainningPowerPoints()>0)
             {
                 usedMove = chosenMove->UseMove().value_or(moves::MoveId::Struggle);
             }

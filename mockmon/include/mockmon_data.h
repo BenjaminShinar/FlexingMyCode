@@ -24,7 +24,7 @@ namespace mockmon
         explicit Mockmon(MockmonSpeciesId species,const std::string & name,TrainerAI trainerAi = TrainerAI::RandomChoice,bool silent = false)
         :m_currentSpeciesId(species), m_name(name),m_trainer_ai_id(trainerAi),m_outputEvents(silent)
         {
-            LearnLevelUpMoves();
+            LearnLevelUpMoves(1);
             CurrentBattleStats.UpdateStats(stats::MockmonStats(GetMockmonSpeciesData().MockmonSpeciesStats,IVs,EVs,CurrentLevel));
         }
 
@@ -42,19 +42,17 @@ namespace mockmon
         bool IsAbleToBattle() const;
         bool IsWild() const {return false;}
         bool TeachMove(moves::MoveId);
-        const std::vector<moves::EquipedMove> & GetMoveSet() const;
+
+        std::vector<moves::EquipedMove> & GetMoveSet();
+        const std::vector<moves::EquipedMove> & ViewMoveSet() const;
+
         std::string_view GetName() const;
         bool DisplayEvent() const {return  m_outputEvents;}
         TrainerAI GetTrainerAIID() const {return m_trainer_ai_id;}
         //battle relatedStuff probably alot of methods should go somewhere else
-        bool GetStabModifier(const moves::SimpleMove & AttackingMove);
-        types::TypeEffectivenessModifier GetTypeEffectivenessModifer(const moves::SimpleMove & AttackingMove) ;
+
 
         private:
-        
-        double ModifyAttackForCrticalHit();
-        double ModifyAttackForType(const moves::SimpleMove & AttackingMove,const Mockmon & target);
-
         void LearnLevelUpMoves();
         void LearnLevelUpMoves(int level);
         void LevelUp();
@@ -73,7 +71,7 @@ namespace mockmon
         std::string m_name;
         TrainerAI m_trainer_ai_id;
         bool m_outputEvents;
-        long CurrentLevel =1;
+        int CurrentLevel =1;
         long experience_points = 0;
         bool m_ableToBattle = true;
         std::vector<moves::EquipedMove> m_Moveset;

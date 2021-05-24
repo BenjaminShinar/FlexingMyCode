@@ -24,29 +24,6 @@ namespace mockmon
         return m_ableToBattle && CurrentBattleStats.Health.GetStat() >0;
     }
 
-    double Mockmon::ModifyAttackForCrticalHit()
-    {
-                
-        auto damageBoost = (5.0+(CurrentLevel*2.0))/(CurrentLevel + 5.0);
-        if (m_outputEvents)
-        {
-            std::cout << m_name << " scored a critical hit" << " boost factor: " << damageBoost <<'\n';
-        }
-        return damageBoost;
-    }
-
-
-    //do something else
-    bool Mockmon::GetStabModifier(const moves::SimpleMove & AttackingMove) 
-    {
-        return GetMockmonSpeciesData().IsSpeciesOfType(AttackingMove.Type);
-    }
-    
-    types::TypeEffectivenessModifier Mockmon::GetTypeEffectivenessModifer(const moves::SimpleMove & AttackingMove) 
-    {
-        return GetMockmonSpeciesData().GetTypeEffetivenessModifier(AttackingMove.Type);
-    }
-
     void Mockmon::LoseSomehow()
     {
         m_ableToBattle = false;
@@ -80,7 +57,24 @@ namespace mockmon
         return false;
     }
 
-    const std::vector<moves::EquipedMove> & Mockmon::GetMoveSet() const
+/**
+ * @brief 
+ * returns changeble version of the move set, 
+ * use in actual battle
+ * @return std::vector<moves::EquipedMove>& 
+ */
+    std::vector<moves::EquipedMove> & Mockmon::GetMoveSet()
+    {
+        return m_Moveset;
+    }
+
+/**
+ * @brief 
+ * return a none-changble version of the move set, 
+ * use for making decisions
+ * @return const std::vector<moves::EquipedMove>& 
+ */
+    const std::vector<moves::EquipedMove> & Mockmon::ViewMoveSet() const
     {
         return m_Moveset;
     }
@@ -127,6 +121,18 @@ namespace mockmon
          CurrentBattleStats.UpdateStats(stats::MockmonStats(GetMockmonSpeciesData().MockmonSpeciesStats,IVs,EVs,CurrentLevel));
      }
 
+    void TeachMoves(Mockmon & m,const std::vector<moves::MoveId> & mvs)
+    {
+        const auto & mvset = m.ViewMoveSet();
+        for (const auto & mv : mvs)
+        {
+            if (!std::any_of(std::begin(mvset),std::end(mvset),[&](const moves::EquipedMove & knownMove){return knownMove.IsSameAs(mv);}))
+            {                
+                m.TeachMove(mv);           
+            }
+        }
+    }
+
     void Mockmon::LearnLevelUpMoves(int newLevel)
     {
         const auto movesFromLevelUp = GetMockmonSpeciesData().LevelUpMoves;
@@ -135,14 +141,7 @@ namespace mockmon
         {
             if (mvs.first == newLevel)
             {
-                for (const auto & mv : mvs.second)
-                {
-                    auto exists = std::find_if(std::begin(m_Moveset),std::end(m_Moveset),[&](const moves::EquipedMove & knownMove){return knownMove.Identifier() == mv;});
-                    if (exists == std::end(m_Moveset))
-                    {                
-                        TeachMove(mv);           
-                    }
-                }
+                TeachMoves(*this,mvs.second);
             }
         }
     }
@@ -155,14 +154,7 @@ namespace mockmon
         {
             if (mvs.first <= CurrentLevel)
             {
-                for (const auto & mv : mvs.second)
-                {
-                    auto exists = std::find_if(std::begin(m_Moveset),std::end(m_Moveset),[&](const moves::EquipedMove & knownMove){return knownMove.Identifier() == mv;});
-                    if (exists == std::end(m_Moveset))
-                    {                
-                        TeachMove(mv);
-                    }
-                }
+                TeachMoves(*this,mvs.second);
             }
         }
     }

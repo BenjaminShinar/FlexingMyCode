@@ -13,7 +13,6 @@
 namespace mockmon::moves
 {
     using namespace std::placeholders; //import this for _1,_2,
-
     void CompositeMove::Perform(Arena &arena, Mockmon &attacker, Mockmon &defender) const
     {
         const auto simpleAttackingMove = SimpleMove::AllMoves.at(Identifier());
@@ -80,7 +79,7 @@ namespace mockmon::moves
     MoveOutcome RegularAccuracyCheckMove(Arena &arena, Mockmon &attacker, Mockmon &defender,int attackingMoveBaseAccuracy, const MovesTargeting & movesTargeting)
     {
         const auto targetingPair{MoveStatsTargeting::AllStatsTargeting.at(movesTargeting)};
-        const auto [attackstat,defencestat] = Battle::GetStatsModifier(attacker,targetingPair.AttackerStat,defender,targetingPair.DefenderStat);
+        const auto [attackstat,defencestat] = battle::Battle::GetStatsModifier(attacker,targetingPair.AttackerStat,defender,targetingPair.DefenderStat);
         const auto modifier = attackstat*defencestat;
         const auto percentage = std::clamp(static_cast<int>(std::round(attackingMoveBaseAccuracy*modifier)),0,100);
         if (random::Randomer::CheckPercentage(percentage))
@@ -112,7 +111,7 @@ namespace mockmon::moves
     MoveOutcome RegularMove(Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender,const MovesTargeting & movesTargeting)
     {
         const auto targetingPair{MoveStatsTargeting::AllStatsTargeting.at(movesTargeting)};
-        auto damage = static_cast<int>(Battle::ModifyAttack(AttackingMove, attacker,targetingPair.AttackerStat, defender,targetingPair.DefenderStat));
+        auto damage = static_cast<int>(battle::Battle::ModifyAttack(AttackingMove, attacker,targetingPair.AttackerStat, defender,targetingPair.DefenderStat));
         defender.CurrentBattleStats.Health.ChangeHealth(-1 * damage);
         MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(AttackingMove.Identifier()), "for", std::to_string(damage), " damage!"})};
         return o;
@@ -120,7 +119,7 @@ namespace mockmon::moves
 
     MoveOutcome RecoilDamageMove(Arena &arena, const moves::SimpleMove &AttackingMove, Mockmon &attacker, Mockmon &defender, double divisionFactor)
     {
-        auto damage = std::max(1, static_cast<int>(Battle::ModifyAttack(AttackingMove, attacker,StatsTypes::Attack, attacker,StatsTypes::Defence) / divisionFactor));
+        auto damage = std::max(1, static_cast<int>(battle::Battle::ModifyAttack(AttackingMove, attacker,StatsTypes::Attack, attacker,StatsTypes::Defence) / divisionFactor));
         attacker.CurrentBattleStats.Health.ChangeHealth(-1 * damage);
         MoveOutcome o{AppendAll({attacker.GetName(), "takes", std::to_string(damage), "recoil damage from", Stringify(AttackingMove.Identifier())})};
         return o;

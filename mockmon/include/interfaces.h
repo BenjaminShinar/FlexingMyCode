@@ -23,6 +23,7 @@ namespace mockmon
 
         IdentifiybleModule(const IdentifiybleModule &other) : m_identifier(other.m_identifier) {}
         virtual ~IdentifiybleModule() = default;
+        bool IsSameAs(T t) const {return m_identifier == t;}
         const T Identifier() const { return m_identifier; }
 
     private:

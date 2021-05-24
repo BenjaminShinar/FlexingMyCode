@@ -44,7 +44,7 @@ namespace mockmon
             
             auto enemy = BattleTower::GenerateEnemy(floorLevel,RandomizeEnemyType,"garry");
             std::cout<< "player mockmon " << playerMonster.GetName() << " will face " << enemy.GetName() << " the level " << enemy.GetCurrentLevel() << " " << enemy.GetMockmonSpeciesData().Identifier() << " with " << enemy.CurrentBattleStats.Health.GetStat() << " HP!"  <<'\n';
-            Battle::DoBattle(playerMonster,enemy);
+            battle::Battle::DoBattle(playerMonster,enemy);
             return(playerMonster.IsAbleToBattle());
             
         }

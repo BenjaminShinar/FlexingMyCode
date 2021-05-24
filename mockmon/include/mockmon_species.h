@@ -41,7 +41,6 @@ namespace mockmon
         types::TypeEffectivenessModifier GetTypeEffetivenessModifier(types::Types attackingMoveType) const;
         
         #pragma endregion
-
         const std::set<types::Types> SpeciesTypes; //what types are the species (at least on, can be more)
         const LevelUpGroup SpeciesLevelUpGroup;
         const int SpeciesExp; // how much exp this mockmon gives

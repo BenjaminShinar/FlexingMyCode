@@ -11,6 +11,7 @@ A small project that I can be motivated to work on. A simple version of a battli
 - [x] Create the minimal mockmon class (entity)
 - [x] The most simple battle possible - the user has a mockmon and needs to choose the correct option to win
 - [x] Design minimal enntities for moves (attacks) and mockmon stats
+- [ ] Document code using doxygen standatds(/** /*! ///),
 - [ ] ... TBC
 
 ### Mockmon battle mock
@@ -37,10 +38,10 @@ A small project that I can be motivated to work on. A simple version of a battli
 - [ ] ... TBC battles are between trainers
 
 #### conditions
-- [ ] inflict condition
-- [ ] remove condition
+- [x] inflict condition
+- [x] remove condition
 - [ ] conditions can't be inflicted based on typing
-- [ ] conditions go away after x turns...
+- [x] conditions go away after x turns...
 - [ ] conditions go away after haze or some other move
 - [ ] voltaile contions - bind, flinch, recharging?, semi invurnable?
 - [ ] Gen 1 synergy of toxic, burn, leech seed with each other.
@@ -65,10 +66,10 @@ A small project that I can be motivated to work on. A simple version of a battli
 ##### poison
 - [x] inflict damage
 - [ ] doesn't effect poison types, and maybe steel types.
+- [ ] effects in the outer world
 
 ###### badly poison (toxic)
 - [ ] badly poison increases the damgage it inflicts each turn.
-- [ ] effects in the outer world
 
 ##### sleep
 - [ ] won't move
@@ -81,6 +82,9 @@ A small project that I can be motivated to work on. A simple version of a battli
 - [ ] chance to snap out of confusion
 - [ ] how it works with multiturn abilities
 
+##### haze
+- [ ] remove some conditions
+- [ ] resets status modifiers
 
 ##### leech seed
 ##### subsitute

@@ -47,6 +47,16 @@ namespace mockmon::condition
                 boost *= 0.25; //quarter speed when parayzed
             break;
         }
+        case StatsTypes::Accuracy:
+        {
+            //any conditions effecting accuracy?
+            break;
+        }
+        case StatsTypes::Evasion:
+        {
+            //any conditions effecting evasion?
+            break;
+        }
         default:
             break;
         }
@@ -75,20 +85,20 @@ namespace mockmon::condition
     void Condition::RemoveAllDueConditions()
     {
          m_spesific_conditions.erase(
-        std::remove_if(std::begin(m_spesific_conditions),std::end(m_spesific_conditions),[](const pulser_uq_ptr & pulser){return pulser->CanBeRemoved();})
+             std::remove_if(std::begin(m_spesific_conditions),std::end(m_spesific_conditions),std::mem_fn(ConditonPulseEffect::CanBeRemoved))
         , std::end(m_spesific_conditions));
     }
 
     void Condition::PulseBeforeTurn() // cause all the effects of the afflicated conditions, remove conditions that aren't relevent anymore.
     {
-        std::for_each(std::begin(m_spesific_conditions),std::end(m_spesific_conditions),[](pulser_uq_ptr & pulser){pulser->PulseBeforeTurn();});
+        std::for_each(std::begin(m_spesific_conditions),std::end(m_spesific_conditions),std::mem_fn(ConditonPulseEffect::PulseBeforeTurn));
         RemoveAllDueConditions();
 
     }
 
     void Condition::PulseAfterTurn() // cause all the effects of the afflicated conditions, remove conditions that aren't relevent anymore.
     {
-        std::for_each(std::begin(m_spesific_conditions),std::end(m_spesific_conditions),[](pulser_uq_ptr & pulser){pulser->PulseAfterTurn();});
+        std::for_each(std::begin(m_spesific_conditions),std::end(m_spesific_conditions),std::mem_fn(ConditonPulseEffect::PulseAfterTurn));
         RemoveAllDueConditions();
     }
 

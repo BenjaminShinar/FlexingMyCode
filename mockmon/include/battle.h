@@ -12,7 +12,7 @@
 #include <iostream>
 #include <tuple>
 
-namespace mockmon
+namespace mockmon::battle
 {
 
     
@@ -22,10 +22,7 @@ namespace mockmon
         
         public:
         explicit Battle (Mockmon & playerMockmon, Mockmon & enemyMockmon);
-        static void DoBattle(Mockmon & playerMockmon, Mockmon & enemyMockmon);
-        
-        static double GetTypeEffetiveness(types::TypeEffectivenessModifier modifier);
-        
+        static void DoBattle(Mockmon & playerMockmon, Mockmon & enemyMockmon);       
         static double ModifyAttack(const moves::SimpleMove & AttackingMove, Mockmon & attacker,const StatsTypes attackingStat, Mockmon & defender,const StatsTypes defendingStat);
         static bool IsCriticalHit(Mockmon & attackingMockmon, const moves::MoveId mv);
 
