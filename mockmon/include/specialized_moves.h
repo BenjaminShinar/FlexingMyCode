@@ -28,13 +28,13 @@ namespace mockmon::moves
     };
     
     //this is a move typedef
-    using ExMove = std::function<MoveOutcome(Arena & arena, const moves::SimpleMove & AttackingMove,Mockmon & attacker,Mockmon & defender)>;
+    using ExMove = std::function<MoveOutcome(Arena & arena, const moves::MoveId attackingMoveId,Mockmon & attacker,Mockmon & defender)>;
     using ExMoveChanceCheck = std::function<MoveOutcome(Arena & arena, Mockmon & attacker,Mockmon & defender)>;
     using ExDamageByState= std::function<double(const Mockmon & mockmonToChoose)>;
 
     //this should replace the BaseMoveclass
     //we need some outcome?
-    class CompositeMove : public DescribleModule<moves::MoveId>
+    class  CompositeMove : public DescribleModule<moves::MoveId>
     {
         public:
 
@@ -57,11 +57,12 @@ namespace mockmon::moves
         }
 
         static const std::map<moves::MoveId,CompositeMove> AllCompositeMoves;
-
+        static const std::map<moves::MoveId,CompositeMove> AllChargedCompositeMoves; //this is for the 2nd turn of a composite move, or for effects like sleep, hit self, Freeze, parlysis..
     };
 
     ExMoveChanceCheck CreateNormalAccuracyCheck(int moveBaseAccuracy,const MovesTargeting movesTargeting);
     ExMoveChanceCheck CreateSetAccuracyCheck(int setchances);
+    ExMoveChanceCheck CreateByPassAccuracyCheck();
 
     ExMove CreateNormalDamagingMove(const MovesTargeting movesTargeting);
     ExMove CreateNormalRecoilDamagingMove(const double divFactor);

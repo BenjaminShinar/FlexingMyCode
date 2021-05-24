@@ -14,6 +14,9 @@ namespace mockmon::moves
         MakeDictionaryPair<CompositeMove>(MoveId::Struggle,CreateNormalAccuracyCheck(100,MovesTargeting::AccuracyEvasion), il_exMV{CreateNormalDamagingMove(MovesTargeting::PurePhysical), CreateNormalRecoilDamagingMove(2.0)}),  
         MakeDictionaryPair<CompositeMove>(MoveId::QuickAttack,CreateNormalAccuracyCheck(100,MovesTargeting::AccuracyEvasion), il_exMV{CreateNormalDamagingMove(MovesTargeting::PurePhysical)}),
         
+        //a move that can't miss
+        MakeDictionaryPair<CompositeMove>(MoveId::Swift,CreateByPassAccuracyCheck(), il_exMV{CreateNormalDamagingMove(MovesTargeting::PurePhysical)}),
+
         //boosting/hexing moves
         MakeDictionaryPair<CompositeMove>(MoveId::SwordsDance,CreateSetAccuracyCheck(100), il_exMV{CreateSelfStatChangingMove(StatsTypes::Attack,StatModifiersLevels::GreatlyIncrease)}),
         MakeDictionaryPair<CompositeMove>(MoveId::TailWhip,CreateNormalAccuracyCheck(100,MovesTargeting::AccuracyEvasion), il_exMV{CreateOpponentStatChangingMove(StatsTypes::Defence,StatModifiersLevels::Decrese)}),
@@ -37,6 +40,8 @@ namespace mockmon::moves
         MakeDictionaryPair<CompositeMove>(MoveId::Reflect,CreateSetAccuracyCheck(100),il_exMV{CreateSelfConditionMove({types::Types::Psychic,condition::ConditionId::Reflect,100})}),
         MakeDictionaryPair<CompositeMove>(MoveId::LightScreen,CreateSetAccuracyCheck(100),il_exMV{CreateSelfConditionMove({types::Types::Psychic,condition::ConditionId::LightScreen,100})}),
         MakeDictionaryPair<CompositeMove>(MoveId::Haze,CreateSetAccuracyCheck(100),il_exMV{CreateResetSelfConditionMove(),CreateResetOpponentConditionMove()}),
+
+
         // {MoveId::TailWhip,SimpleMove(MoveId::TailWhip,types::Types::Normal,100,5)},
         // {MoveId::QuickAttack,SimpleMove(MoveId::QuickAttack,types::Types::Normal,100,40)},
         // {MoveId::HyperFang,SimpleMove(MoveId::HyperFang,types::Types::Normal,90,80)},
@@ -52,4 +57,10 @@ namespace mockmon::moves
         //{MoveId::Struggle, SimpleMove(MoveId::Struggle,types::Types::Typeless,50,30)},
     };
 
+
+    const std::map<moves::MoveId, CompositeMove> CompositeMove::AllChargedCompositeMoves
+    {
+        MakeDictionaryPair<CompositeMove>(MoveId::SolarBeam,CreateNormalAccuracyCheck(100,MovesTargeting::AccuracyEvasion), il_exMV{CreateNormalDamagingMove(MovesTargeting::PureSpecial)}),
+
+    };
 }

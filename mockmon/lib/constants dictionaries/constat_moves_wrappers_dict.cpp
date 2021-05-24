@@ -25,6 +25,8 @@ namespace mockmon::moves
         MakeDictionaryPair<ConstantMove>(MoveId::SwordsDance,20,32), 
         MakeDictionaryPair<ConstantMove>(MoveId::QuickAttack,30,48), 
 
+        MakeDictionaryPair<ConstantMove>(MoveId::Swift,20,32), 
+
         //set damage moves
         MakeDictionaryPair<ConstantMove>(MoveId::SuperFang,10,16),
         MakeDictionaryPair<ConstantMove>(MoveId::SonicBoom,20,32), 

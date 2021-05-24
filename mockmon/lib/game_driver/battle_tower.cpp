@@ -11,14 +11,14 @@ namespace mockmon
 {
         void BattleTower::StartTower (Mockmon & playerMonster,unsigned int maxFloor)
         {
-            // playerMonster.TeachMove(moves::MoveId::Ember);
-            // playerMonster.TeachMove(moves::MoveId::WaterGun);
+            playerMonster.TeachMove(moves::MoveId::Ember);
+            playerMonster.TeachMove(moves::MoveId::Swift);
             //playerMonster.TeachMove(moves::MoveId::Guillotine);
             //playerMonster.TeachMove(moves::MoveId::DragonRage);
             //playerMonster.TeachMove(moves::MoveId::Psywave);
-            playerMonster.TeachMove(moves::MoveId::LightScreen);
-            playerMonster.TeachMove(moves::MoveId::Reflect);
-            playerMonster.TeachMove(moves::MoveId::Haze);
+            //playerMonster.TeachMove(moves::MoveId::LightScreen);
+            //playerMonster.TeachMove(moves::MoveId::Reflect);
+            //playerMonster.TeachMove(moves::MoveId::Haze);
             playerMonster.FullRestore();
             auto currentFloor{0u};
             while(currentFloor < maxFloor && playerMonster.IsAbleToBattle())

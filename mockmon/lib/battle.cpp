@@ -1,5 +1,4 @@
 #include "battle.h"
-#include "game_driver/controller.h"
 #include "random_gen.h"
 #include "specialized_moves.h"
 #include "moves_stats_targeting.h"
@@ -60,8 +59,7 @@ namespace mockmon::battle
                 AttackWith(playerMV,r_playerMockmon,r_enemyMockmon);
             }
         }
-        auto endAction = r_playerMockmon.IsAbleToBattle()? controller::controllerEnum::ACTION_A : controller::controllerEnum::CANCEL_B;
-        DetermineBattle(endAction);
+        DetermineBattle(r_playerMockmon.IsAbleToBattle());
         const auto winner = r_playerMockmon.IsAbleToBattle() ? r_playerMockmon.GetName() : r_enemyMockmon.GetName();
         std::cout << "Battle ended at round " <<  round << " winner: "<< winner<<'\n';
     }
@@ -92,25 +90,18 @@ namespace mockmon::battle
         return (random::Randomer::CheckPercentage(50));
     }
 
-    void Battle::DetermineBattle(controller::controllerEnum action)
+    void Battle::DetermineBattle(bool b)
     {
 
-        switch (action)
-        {
-        case (controller::controllerEnum::ACTION_A):
+        if (b)
         {
             r_playerMockmon.GainExperienceFromVictory(r_enemyMockmon);
             r_enemyMockmon.LoseSomehow();
-            break;
         }
-        case (controller::controllerEnum::CANCEL_B):
+        else
         {
             r_enemyMockmon.GainExperienceFromVictory(r_playerMockmon);
             r_playerMockmon.LoseSomehow();
-            break;
-        }
-        default:
-            break;
         }
     }
 
@@ -130,8 +121,9 @@ namespace mockmon::battle
     }
 
     //this is normal attack
-    double Battle::ModifyAttack(const moves::SimpleMove & AttackingMove,Mockmon & attacker,const StatsTypes attackingStat, Mockmon & defender,const StatsTypes defendingStat)
+    double Battle::ModifyAttack(const moves::MoveId attackingMoveId,Mockmon & attacker,const StatsTypes attackingStat, Mockmon & defender,const StatsTypes defendingStat)
     {
+        const auto & simpleAttack = moves::SimpleMove::AllMoves.at(attackingMoveId);
         auto levelModifier = GetLevelDamageModifier(attacker);
         const auto [attackstat,defencestat] = Battle::GetStatsModifier(attacker,attackingStat,defender,defendingStat);
         const auto statsModifier = attackstat/defencestat;
@@ -141,13 +133,13 @@ namespace mockmon::battle
             return (GetLevelCriticalDamageModifier(attacker));
             else
             return 1.0;
-        }(attacker,AttackingMove.Identifier()); 
+        }(attacker,simpleAttack.Identifier()); 
         
-        auto stabModifer {IsStabModifier(attacker,AttackingMove)}; //stab
-        auto typeMofider {GetTypeEffectivenessModifer(defender,AttackingMove)};  //typeResistancs and weakness
+        auto stabModifer {IsStabModifier(attacker,simpleAttack)}; //stab
+        auto typeMofider {GetTypeEffectivenessModifer(defender,simpleAttack)};  //typeResistancs and weakness
         auto typeEffectivenessAndStab {GetStabDamageModifier(stabModifer) *  GetTypeEffetivenessModifier(typeMofider)}; //typeResistancs and weakness
         auto  extraModifier = 1 * criticalHitModifier * typeEffectivenessAndStab ; // weahter, badge,status,
-        return (extraModifier*(2+((levelModifier* AttackingMove.BasePower * statsModifier)/50)));
+        return (extraModifier*(2+((levelModifier* simpleAttack.BasePower * statsModifier)/50)));
     }
 
     
@@ -162,12 +154,15 @@ namespace mockmon::battle
             auto usedMove{moves::MoveId::Struggle};
 
             attacker.m_currentCondtion.PulseBeforeTurn(); //assuming pulse before turn can't hurt the mockmon and cause it to faint or be unable to attack. maybe here we also switch moves to sleep/hurtself/        
-
+            //if no charged/interupt move do the regular
             if (chosenMove != std::end(mvset) && chosenMove->RemainningPowerPoints()>0)
             {
                 usedMove = chosenMove->UseMove().value_or(moves::MoveId::Struggle);
             }
             const auto & compositeMove = moves::CompositeMove::AllCompositeMoves.at(usedMove);
+
+            //if there is a charged move,perform that instead
+            //const auto & compositeMove = moves::CompositeMove::AllChargedCompositeMoves.at(usedMove);
             compositeMove.Perform(m_arena,attacker,defender);
 
         }

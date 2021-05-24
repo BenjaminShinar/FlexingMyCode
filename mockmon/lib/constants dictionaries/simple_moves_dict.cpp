@@ -31,6 +31,8 @@ namespace mockmon::moves
         MakeDictionaryPair<SimpleMove>(MoveId::SwordsDance,types::Types::Normal,0), //boosting
         MakeDictionaryPair<SimpleMove>(MoveId::QuickAttack,types::Types::Normal,40), //priority
 
+        // moves that can't miss
+        MakeDictionaryPair<SimpleMove>(MoveId::Swift,types::Types::Normal,60), //can't miss
         //set damage moves
         MakeDictionaryPair<SimpleMove>(MoveId::SonicBoom,types::Types::Normal,0), //set Damage
         MakeDictionaryPair<SimpleMove>(MoveId::SuperFang,types::Types::Normal,0), //set Damage

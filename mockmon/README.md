@@ -23,7 +23,6 @@ A small project that I can be motivated to work on. A simple version of a battli
 - [x] opponent can do something against user
 - [x] moves effect mockmon stats rather than directly the outcome
 - [ ] damage ranges
-- [ ] two turn moves
 - [ ] moves that block/protect against other moves
 - [ ] moves that are dependent on status/condition
 - [ ] unique moves (mimic, metronome, mirror move, counter)
@@ -36,6 +35,18 @@ A small project that I can be motivated to work on. A simple version of a battli
 - [ ] status effects (poison, sleep, confision, etc...)
 - [x] the type system! super, normal and not very effective!
 - [ ] ... TBC battles are between trainers
+
+##### Two turns moves
+- [ ] moves with charging before hitting - dig, fly, razorwind,skull bash,sky attack,solar beam,
+- [ ] moves with invurnability stage - dig, fly
+- [ ] moves with re-charging after hitting - hyperBeam
+- [ ] power points consumption - when damage is done
+- [ ] interacton with status effects - paused? stopped? what if i hit myself in confusion is pparalyzed
+- [ ] weird gen one mechanics
+
+
+##### Multi turns moves
+- [ ] multi turn moves
 
 #### conditions
 - [x] inflict condition

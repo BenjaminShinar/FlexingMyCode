@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "identifiers/controller_id.h"
+
 namespace mockmon::controller
 {
     void TestControllerToString();
