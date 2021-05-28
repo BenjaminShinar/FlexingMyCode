@@ -42,6 +42,10 @@ namespace mockmon::moves
         MakeDictionaryPair<CompositeMove>(MoveId::Haze,CreateSetAccuracyCheck(100),il_exMV{CreateResetSelfConditionMove(),CreateResetOpponentConditionMove()}),
 
 
+        // two turn moves
+        // charge up moves, bypass accuracy check?
+        MakeDictionaryPair<CompositeMove>(MoveId::SolarBeam,CreateByPassAccuracyCheck(),il_exMV{CreateStoredMove(MoveId::SolarBeam)}),
+
         // {MoveId::TailWhip,SimpleMove(MoveId::TailWhip,types::Types::Normal,100,5)},
         // {MoveId::QuickAttack,SimpleMove(MoveId::QuickAttack,types::Types::Normal,100,40)},
         // {MoveId::HyperFang,SimpleMove(MoveId::HyperFang,types::Types::Normal,90,80)},
@@ -62,5 +66,15 @@ namespace mockmon::moves
     {
         MakeDictionaryPair<CompositeMove>(MoveId::SolarBeam,CreateNormalAccuracyCheck(100,MovesTargeting::AccuracyEvasion), il_exMV{CreateNormalDamagingMove(MovesTargeting::PureSpecial)}),
 
+        
+        MakeDictionaryPair<CompositeMove>(MoveId::Recharging,CreateByPassAccuracyCheck(), il_exMV{CreateWastedTurnMove()}),
+
+//effected by conditions
+        MakeDictionaryPair<CompositeMove>(MoveId::WakeUp,CreateByPassAccuracyCheck(), il_exMV{CreateWastedTurnMove()}),
+        MakeDictionaryPair<CompositeMove>(MoveId::KeepSleeping,CreateByPassAccuracyCheck(), il_exMV{CreateWastedTurnMove()}),
+        MakeDictionaryPair<CompositeMove>(MoveId::Flinch,CreateByPassAccuracyCheck(), il_exMV{CreateWastedTurnMove()}),
+        MakeDictionaryPair<CompositeMove>(MoveId::Paralysis,CreateByPassAccuracyCheck(), il_exMV{CreateWastedTurnMove()}),
+        MakeDictionaryPair<CompositeMove>(MoveId::FreezeCantMove,CreateByPassAccuracyCheck(), il_exMV{CreateWastedTurnMove()}),
+        MakeDictionaryPair<CompositeMove>(MoveId::HitSelfInConfusion,CreateByPassAccuracyCheck(), il_exMV{CreateWastedTurnMove()}),
     };
 }

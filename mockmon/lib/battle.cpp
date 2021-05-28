@@ -148,22 +148,38 @@ namespace mockmon::battle
     {
         if (attacker.IsAbleToBattle() && defender.IsAbleToBattle())
         {
-            auto & mvset = attacker.GetMoveSet();
-            auto chosenMove = std::find_if(std::begin(mvset),std::end(mvset),
-                [&](const moves::EquipedMove  & mv ){ return mv.IsSameAs(mvid);});
-            auto usedMove{moves::MoveId::Struggle};
 
             attacker.m_currentCondtion.PulseBeforeTurn(); //assuming pulse before turn can't hurt the mockmon and cause it to faint or be unable to attack. maybe here we also switch moves to sleep/hurtself/        
-            //if no charged/interupt move do the regular
-            if (chosenMove != std::end(mvset) && chosenMove->RemainningPowerPoints()>0)
-            {
-                usedMove = chosenMove->UseMove().value_or(moves::MoveId::Struggle);
-            }
-            const auto & compositeMove = moves::CompositeMove::AllCompositeMoves.at(usedMove);
 
-            //if there is a charged move,perform that instead
-            //const auto & compositeMove = moves::CompositeMove::AllChargedCompositeMoves.at(usedMove);
-            compositeMove.Perform(m_arena,attacker,defender);
+            if (auto cv = attacker.m_currentCondtion.GetChargedMove())
+            {
+                auto chargedMV = cv.value();
+                const auto & compositeChargedMove = moves::CompositeMove::AllChargedCompositeMoves.at(chargedMV);
+                compositeChargedMove.Perform(m_arena,attacker,defender);
+            }
+            else
+            {
+
+            //move this elsewhere, this means that if we choose quick attack and it has zero pp, we still get priority
+            // also, we want no Trainer PP for Gen 1 glitch
+                auto & mvset = attacker.GetMoveSet();
+                auto chosenMove = std::find_if(std::begin(mvset),std::end(mvset),
+                    [&](const moves::EquipedMove  & mv ){ return mv.IsSameAs(mvid);});
+                auto usedMove{moves::MoveId::Struggle};
+
+                //if no charged/interupt move do the regular
+                if (chosenMove != std::end(mvset) && chosenMove->RemainningPowerPoints()>0)
+                {
+                    //maybe not?
+                    // maybe pp should be something that is changed by the move itself?
+                    usedMove = chosenMove->UseMove().value_or(moves::MoveId::Struggle);
+                }
+                const auto & compositeMove = moves::CompositeMove::AllCompositeMoves.at(usedMove);
+
+                //if there is a charged move,perform that instead
+                //const auto & compositeMove = moves::CompositeMove::AllChargedCompositeMoves.at(usedMove);
+                compositeMove.Perform(m_arena,attacker,defender);
+            }
 
         }
         if (attacker.IsAbleToBattle() && defender.IsAbleToBattle())

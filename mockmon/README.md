@@ -138,6 +138,8 @@ can i use automated testing?
 - [x] add testing package
 - [ ] integrate testing to repository on git
 - [x] add actual relevent test
+- [ ] test conditions
+- [x] testing that burn and poison damage the mockmon
 - [ ] learn more about testing and clean the code
 - [ ] expand testing to anything we can test
 

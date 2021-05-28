@@ -173,6 +173,15 @@ namespace mockmon::moves
             case MoveId::WingAttack: return "Wing Attack"; break;
             case MoveId::Withdraw: return "Withdraw"; break;
             case MoveId::Wrap: return "Wrap"; break;
+
+            //charged moves?
+            case MoveId::WakeUp: return "Wake Up"; break;
+            case MoveId::KeepSleeping: return "Keep Sleeping"; break;
+            case MoveId::FreezeCantMove: return "Frozen Solied"; break;
+            case MoveId::ParalysisCantMove: return "Cant Move"; break;
+            case MoveId::Flinch: return "Flicnhed"; break;
+            case MoveId::HitSelfInConfusion: return "Hit Self In Confusion"; break;
+
             default: return "Unknown move!"; break;
         }
     }

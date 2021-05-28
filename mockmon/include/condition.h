@@ -1,11 +1,14 @@
 #pragma once
 #include "identifiers/condition_id.h"
 #include "identifiers/stats_id.h"
+#include "identifiers/moves_id.h"
 #include "mockmon_conditions/base_conditon_pulse.h"
 #include <string>
 #include <iostream>
 #include <memory>
 #include <vector>
+#include <stack>
+#include <optional>
 
 
 namespace mockmon::condition
@@ -37,8 +40,16 @@ namespace mockmon::condition
         void RemoveAllConditions();
         void PulseBeforeTurn();
         void PulseAfterTurn(); // cause all the effects of the afflicated conditions, remove conditions that aren't relevent anymore.
+        std::optional<moves::MoveId> GetChargedMove();
+        void StoreChargedMove(moves::MoveId mvId);
         private:
         void RemoveAllDueConditions(); //remove non relevent conditions 
         std::vector<pulser_uq_ptr> m_spesific_conditions; //maybe std::varient? i don't want to store pointers!
+        
+        /**
+         * @brief store all the charged move for next turns
+         * 
+         */
+        std::stack<moves::MoveId> m_chargedMoves;
     };
 }

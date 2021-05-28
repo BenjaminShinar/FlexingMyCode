@@ -3,6 +3,12 @@
 #include <iostream>
 namespace mockmon::moves
 {
+    /**
+     * @brief 
+     * an identifier for moves, like a key in a table
+     * containts 'normal' moves and also 'beahviors' for sleep, confusion, flinch, etc...
+     * maybe we really need to make each move an object after all instead of having tonds of dictionaries
+     */
     enum class MoveId
     {
         Absorb,
@@ -169,7 +175,21 @@ namespace mockmon::moves
         Whirlwind,
         WingAttack,
         Withdraw,
-        Wrap
+        Wrap,
+
+
+        //moves that can't be naturally chosen
+
+        WakeUp,//none usable moves
+        KeepSleeping,//none usable moves
+        Paralysis,//none usable moves
+        Flinch,//none usable moves
+        Recharging,//none usable moves
+        HitSelfInConfusion,//none usable moves
+        ParalysisCantMove,//none usable moves
+        FreezeCantMove,//none usable moves
+
+
     };
     std::string Stringify(const MoveId moveId);
     std::ostream &operator<<(std::ostream &os, const MoveId &e);

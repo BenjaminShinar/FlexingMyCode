@@ -16,7 +16,7 @@
 
 namespace mockmon
 {
-    class Mockmon
+    class  Mockmon
     {   
         friend class Battle;
         friend class Arena;
@@ -26,6 +26,7 @@ namespace mockmon
         {
             LearnLevelUpMoves(1);
             CurrentBattleStats.UpdateStats(stats::MockmonStats(GetMockmonSpeciesData().MockmonSpeciesStats,IVs,EVs,CurrentLevel));
+            CurrentBattleStats.Health.RestStatToMax();//max health at creation
         }
 
         unsigned int GetCurrentLevel() const;

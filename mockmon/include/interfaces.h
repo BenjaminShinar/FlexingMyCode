@@ -4,6 +4,7 @@
 #include <string_view>
 #include <type_traits>
 #include <initializer_list>
+#include <algorithm>
 #include <utility>
 #include <vector>
 namespace mockmon
@@ -12,6 +13,23 @@ namespace mockmon
     template <typename T>
     using vector_type_T=std::vector<T>;
     
+    /**
+     * @brief 
+     * returns true/false if any element in the container matches the predicate
+     * should eventually be replaced by simpler use?
+     * @tparam T 
+     * @tparam UnaryPredicate 
+     * @param v a vector 
+     * @param p a predicate on T
+     * @return true 
+     * @return false 
+     */
+    template<typename T,class UnaryPredicate>
+    bool VectorContains(const std::vector<T> & v,const UnaryPredicate & p)
+    {
+    return std::any_of(std::begin(v),std::end(v),[&](const T & e){return p(e);});   
+    }
+
     std::string AppendAll(const std::initializer_list<std::string_view> &words);
 
     template <typename T, std::enable_if_t<std::is_enum_v<T>, bool> = true>

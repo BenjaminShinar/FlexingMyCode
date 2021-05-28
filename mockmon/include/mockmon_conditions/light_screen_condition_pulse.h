@@ -1,26 +1,16 @@
 #pragma once
-#include "base_conditon_pulse.h"
-#include "../mockmon_data.h"
-#include "../interfaces.h"
+#include "base_condition_mockmon_effecting.h"
 
 namespace mockmon::condition
 {
 
-   class LightScreenCondition : public ConditonPulseEffect
+   class LightScreenCondition : public MockmonEffectingCondition
     {
         public:
         explicit LightScreenCondition(Mockmon & reflectedMockmon):
-        ConditonPulseEffect{ConditionId::LightScreen},
-        r_screened_mockmon(reflectedMockmon)
+        MockmonEffectingCondition{ConditionId::LightScreen,reflectedMockmon}
         {
         }
-
-        ~LightScreenCondition()
-        {
-            std::cout << r_screened_mockmon.GetName() << " is no longer under " << conditonId <<'\n';
-        }
-        private:
-        Mockmon & r_screened_mockmon;
 
     };
 }

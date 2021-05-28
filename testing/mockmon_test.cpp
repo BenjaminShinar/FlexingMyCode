@@ -3,11 +3,12 @@
 #include <cmath>
 #include <algorithm>
 
-template<typename T,class UnaryPredicate>
-bool VectorContains(const std::vector<T> & v,const UnaryPredicate & p)
+template<typename V,typename T>
+auto MakePredicator(T t)
 {
-    return std::any_of(std::begin(v),std::end(v),[&](const T & e){return p(e);});   
+    return ([t](const V & el){return el.IsSameAs(t);});
 }
+
 //test_casse(name[,tags])
 TEST_CASE( "Base Mockmon Mew State", "[MockmonTest]" ) 
 {
@@ -22,10 +23,12 @@ TEST_CASE( "Base Mockmon Mew State", "[MockmonTest]" )
     }
     SECTION("verify mockmon species")
     {
+        //todo: 
+        // make this thing into a function somehow? give it types to check and deduce the rest from the types list
         const auto species = m.GetMockmonSpeciesData();
         REQUIRE(species.IsSameAs(speciesId));
         REQUIRE(species.IsSpeciesOfType(types::Types::Psychic));
-        REQUIRE(!species.IsSpeciesOfType(types::Types::Fighting));
+        REQUIRE_FALSE(species.IsSpeciesOfType(types::Types::Fighting));
     }
     SECTION("verify mockmon levelup")
     {
@@ -56,20 +59,18 @@ SCENARIO( "Base Mockmon Weedle State", "[MockmonTest]" )
             REQUIRE(species.IsSameAs(speciesId));
             REQUIRE(species.IsSpeciesOfType(types::Types::Bug));
             REQUIRE(species.IsSpeciesOfType(types::Types::Poison));
-            REQUIRE(!species.IsSpeciesOfType(types::Types::Psychic));
+            REQUIRE_FALSE(species.IsSpeciesOfType(types::Types::Psychic));
         }
         WHEN("its level one")
         {
             THEN("it should know two moves")
             {
                 const auto & mvs = m.ViewMoveSet();
-                const auto pred1 =[](const moves::EquipedMove & eq){return eq.IsSameAs(moves::MoveId::PoisonSting);};
-                REQUIRE(VectorContains<moves::EquipedMove>(mvs,pred1));
-                const auto pred2 =[](const moves::EquipedMove & eq){return eq.IsSameAs(moves::MoveId::StringShot);};
-                REQUIRE(VectorContains(mvs,pred2));
+                REQUIRE(VectorContains<moves::EquipedMove>(mvs,MakePredicator<moves::EquipedMove>(moves::MoveId::PoisonSting)));
+                REQUIRE(VectorContains(mvs,MakePredicator<moves::EquipedMove>(moves::MoveId::StringShot)));
             }
         }
-        WHEN("we level it up")
+        AND_WHEN("we level it up")
         {
             const auto levelUpGroup = m.GetMockmonSpeciesData().SpeciesLevelUpGroup;
             auto needexp = MockmonExp::TotalExperinceForLevel(2,levelUpGroup);
@@ -94,34 +95,27 @@ SCENARIO( "Base Mockmon Ratata State", "[MockmonTest]" )
             const auto species = m.GetMockmonSpeciesData();
             REQUIRE(species.IsSameAs(speciesId));
             REQUIRE(species.IsSpeciesOfType(types::Types::Normal));
-            REQUIRE(!species.IsSpeciesOfType(types::Types::Fire));
+            REQUIRE_FALSE(species.IsSpeciesOfType(types::Types::Fire));
         }
-        WHEN("its level one")
+        AND_WHEN("its level one")
         {
             THEN("it should know two moves")
             {
                 const auto & mvs = m.ViewMoveSet();
-                const auto pred1 =[](const moves::EquipedMove & eq){return eq.IsSameAs(moves::MoveId::Tackle);};
-                REQUIRE(VectorContains<moves::EquipedMove>(mvs,pred1));
-                const auto pred2 =[](const moves::EquipedMove & eq){return eq.IsSameAs(moves::MoveId::TailWhip);};
-                REQUIRE(VectorContains(mvs,pred2));
+                REQUIRE(VectorContains<moves::EquipedMove>(mvs,MakePredicator<moves::EquipedMove>(moves::MoveId::Tackle)));
+                REQUIRE(VectorContains<moves::EquipedMove>(mvs,MakePredicator<moves::EquipedMove>(moves::MoveId::TailWhip)));
             }
         }
-        WHEN("we level it up to level 7")
+        AND_WHEN("we level it up to level 7")
         {
             const auto levelUpGroup = m.GetMockmonSpeciesData().SpeciesLevelUpGroup;
             auto needexp = MockmonExp::TotalExperinceForLevel(7,levelUpGroup);
             m.GrantExperiencePoints(needexp);
-            THEN("it should be a higher level")
+            THEN("it should be a higher level and know more moves")
             {
                 REQUIRE( m.GetCurrentLevel()==7);
-            }
-            THEN("it should know more movs")
-            {
                 const auto & mvs = m.ViewMoveSet();
-                const auto pred1 =[](const moves::EquipedMove & eq){return eq.IsSameAs(moves::MoveId::QuickAttack);};
-                REQUIRE(VectorContains<moves::EquipedMove>(mvs,pred1));
-
+                REQUIRE(VectorContains<moves::EquipedMove>(mvs,MakePredicator<moves::EquipedMove>(moves::MoveId::QuickAttack)));
             }
         }
     }

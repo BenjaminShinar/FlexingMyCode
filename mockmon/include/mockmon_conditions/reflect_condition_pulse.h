@@ -1,27 +1,16 @@
 #pragma once
-#include "base_conditon_pulse.h"
-#include "../mockmon_data.h"
-#include "../interfaces.h"
+#include "base_condition_mockmon_effecting.h"
 
 namespace mockmon::condition
 {
 
-   class ReflectCondition : public ConditonPulseEffect
+   class ReflectCondition : public MockmonEffectingCondition
     {
         public:
         explicit ReflectCondition(Mockmon & reflectedMockmon):
-        ConditonPulseEffect{ConditionId::Reflect},
-        r_reflected_mockmon(reflectedMockmon)
+        MockmonEffectingCondition{ConditionId::Reflect,reflectedMockmon}
         {
         }
-
-        ~ReflectCondition()
-        {
-            std::cout << r_reflected_mockmon.GetName() << " is no longer under " << conditonId <<'\n';
-        }
-
-        private:
-        Mockmon & r_reflected_mockmon;
 
     };
 }

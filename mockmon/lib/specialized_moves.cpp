@@ -75,6 +75,7 @@ namespace mockmon::moves
 
 
 #pragma region move success Chances
+   
     MoveOutcome RegularAccuracyCheckMove(Arena &arena, Mockmon &attacker, Mockmon &defender,int attackingMoveBaseAccuracy, const MovesTargeting & movesTargeting)
     {
         const auto targetingPair{MoveStatsTargeting::AllStatsTargeting.at(movesTargeting)};
@@ -112,12 +113,18 @@ namespace mockmon::moves
 
 #pragma region attacks
 
+    MoveOutcome WasteTurnMove(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender)
+    {
+        MoveOutcome o{AppendAll({attacker.GetName(), "is", Stringify(attackingMoveId), "for current turn"})};
+        return o;
+    }
+
     MoveOutcome RegularMove(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender,const MovesTargeting & movesTargeting)
     {
         const auto targetingPair{MoveStatsTargeting::AllStatsTargeting.at(movesTargeting)};
         auto damage = static_cast<int>(battle::Battle::ModifyAttack(attackingMoveId, attacker,targetingPair.AttackerStat, defender,targetingPair.DefenderStat));
         defender.CurrentBattleStats.Health.ChangeHealth(-1 * damage);
-        MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(attackingMoveId), "for", std::to_string(damage), " damage!"})};
+        MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(attackingMoveId), "for", std::to_string(damage), "damage!"})};
         return o;
     }
 
@@ -247,6 +254,14 @@ namespace mockmon::moves
         return o;
     }
 
+    MoveOutcome StoreSelfChargedMove(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender,const moves::MoveId storedMoveId)
+    {
+        attacker.m_currentCondtion.StoreChargedMove(storedMoveId);
+        MoveOutcome o{AppendAll({attacker.GetName(),"used",Stringify(attackingMoveId), "to charge",Stringify(storedMoveId),"for next turn"})};    
+        return o;
+    }
+
+
 #pragma endregion
 
 #pragma region expossed Chances
@@ -340,6 +355,28 @@ namespace mockmon::moves
         return bounded;
     }
 
+/**
+ * @brief Create a Stored Move for a later turn
+ * 
+ * @param storedMove 
+ * @return ExMove 
+ */
+    ExMove CreateStoredMove(const moves::MoveId storedMove)
+    {
+        auto bounded = std::bind(&StoreSelfChargedMove, _1, _2, _3, _4,storedMove);
+        return bounded;
+    }
+
+/**
+ * @brief Create a Wasted Turn Move object
+ * A turn that nothing happens in it!
+ * @return ExMove 
+ */
+    ExMove CreateWastedTurnMove()
+    {
+        auto bounded = std::bind(&WasteTurnMove, _1, _2, _3, _4);
+        return bounded;
+    }
 #pragma endregion
 
 }

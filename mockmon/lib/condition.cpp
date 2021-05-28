@@ -102,4 +102,33 @@ namespace mockmon::condition
         RemoveAllDueConditions();
     }
 
+    /**
+     * @brief Get the Charged Move object
+     * if there is a stored move, take it's identifier.
+     * @return std::optional<moves::MoveId> 
+     */       
+    std::optional<moves::MoveId> Condition::GetChargedMove()
+    {
+        if (m_chargedMoves.empty()) 
+        {
+            return {};
+        }
+        else
+        {
+            auto mv = m_chargedMoves.top();
+            m_chargedMoves.pop();
+            return mv;
+        }
+    }
+
+    /**
+     * @brief 
+     * add the charged move to the stack of next usable moves.
+     * @param mvId 
+     */
+    void Condition::StoreChargedMove(moves::MoveId mvId)
+    {
+        m_chargedMoves.push(mvId);
+    }
+
 }

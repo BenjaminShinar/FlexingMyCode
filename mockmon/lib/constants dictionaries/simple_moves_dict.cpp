@@ -49,6 +49,10 @@ namespace mockmon::moves
         MakeDictionaryPair<SimpleMove>(MoveId::LightScreen,types::Types::Psychic ,0), //status
         MakeDictionaryPair<SimpleMove>(MoveId::Haze,types::Types::Ice ,0), //status
 
+        //charged moves
+        MakeDictionaryPair<SimpleMove>(MoveId::SolarBeam,types::Types::Grass ,100), //damage is still taken from here
 
+        //moves requiring recharge
+        //MakeDictionaryPair<SimpleMove>(MoveId::SolarBeam,types::Types::Grass ,100), //damage is still taken from here
     };
 }

@@ -39,6 +39,10 @@ namespace mockmon::moves
         MakeDictionaryPair<ConstantMove>(MoveId::Reflect,20,32), 
         MakeDictionaryPair<ConstantMove>(MoveId::LightScreen,30,48), 
         MakeDictionaryPair<ConstantMove>(MoveId::Haze,30,48), 
+
+        //charged moves
+        MakeDictionaryPair<ConstantMove>(MoveId::SolarBeam,10 ,16), //status
+
     };
 
 }

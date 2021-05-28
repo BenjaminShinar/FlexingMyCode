@@ -1,6 +1,5 @@
 #pragma once
 #include "base_conditon_pulse.h"
-#include <numeric>
 namespace mockmon::condition
 {
 

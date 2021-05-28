@@ -12,7 +12,11 @@
 #include <map>
 namespace mockmon::moves
 {
-    //some way to describe what happened
+    /**
+     * @brief 
+     * how we expose the outcome of a move
+     * mostly text for now, but we should use the success flat more often
+     */
     struct MoveOutcome
     {   
         std::string m_moveOutcomeDescrition;
@@ -27,13 +31,16 @@ namespace mockmon::moves
         const unsigned int ChanceToAfflictCondtion;
     };
     
-    //this is a move typedef
     using ExMove = std::function<MoveOutcome(Arena & arena, const moves::MoveId attackingMoveId,Mockmon & attacker,Mockmon & defender)>;
     using ExMoveChanceCheck = std::function<MoveOutcome(Arena & arena, Mockmon & attacker,Mockmon & defender)>;
     using ExDamageByState= std::function<double(const Mockmon & mockmonToChoose)>;
 
-    //this should replace the BaseMoveclass
-    //we need some outcome?
+    /**
+     * @brief 
+     * this should replace the BaseMoveclass
+     * we need some outcome?
+     * is it really describle<>?  
+     */
     class  CompositeMove : public DescribleModule<moves::MoveId>
     {
         public:
@@ -60,6 +67,10 @@ namespace mockmon::moves
         static const std::map<moves::MoveId,CompositeMove> AllChargedCompositeMoves; //this is for the 2nd turn of a composite move, or for effects like sleep, hit self, Freeze, parlysis..
     };
 
+
+    condition::pulser_uq_ptr MakeCondition(condition::ConditionId conditionid,Mockmon & effectedMockmon);
+
+
     ExMoveChanceCheck CreateNormalAccuracyCheck(int moveBaseAccuracy,const MovesTargeting movesTargeting);
     ExMoveChanceCheck CreateSetAccuracyCheck(int setchances);
     ExMoveChanceCheck CreateByPassAccuracyCheck();
@@ -78,4 +89,7 @@ namespace mockmon::moves
     ExMove CreateDirectDamagingMoveTargetStateByPassImmunity(const ExDamageByState & dmgByStateCalc);
     ExMove CreateDirectDamagingMoveAttackerStateByPassImmunity(const ExDamageByState & dmgByStateCalc);
 
+    ExMove CreateStoredMove(const moves::MoveId storedMove);
+
+    ExMove CreateWastedTurnMove();
 }

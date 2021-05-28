@@ -11,8 +11,8 @@ namespace mockmon
 {
         void BattleTower::StartTower (Mockmon & playerMonster,unsigned int maxFloor)
         {
-            playerMonster.TeachMove(moves::MoveId::Ember);
-            playerMonster.TeachMove(moves::MoveId::Swift);
+            playerMonster.TeachMove(moves::MoveId::SleepPowder);
+            playerMonster.TeachMove(moves::MoveId::SolarBeam);
             //playerMonster.TeachMove(moves::MoveId::Guillotine);
             //playerMonster.TeachMove(moves::MoveId::DragonRage);
             //playerMonster.TeachMove(moves::MoveId::Psywave);
