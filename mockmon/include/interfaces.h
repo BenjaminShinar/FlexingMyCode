@@ -17,6 +17,7 @@ namespace mockmon
      * @brief 
      * returns true/false if any element in the container matches the predicate
      * should eventually be replaced by simpler use?
+     * how can i use this for any container type
      * @tparam T 
      * @tparam UnaryPredicate 
      * @param v a vector 

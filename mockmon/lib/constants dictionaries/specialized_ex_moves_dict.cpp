@@ -35,13 +35,13 @@ namespace mockmon::moves
 
         // moves that can efflict Status
         //CreateOpponentConditionMove
-        MakeDictionaryPair<CompositeMove>(MoveId::PoisonSting,CreateNormalAccuracyCheck(100,MovesTargeting::AccuracyEvasion),il_exMV{CreateNormalDamagingMove(MovesTargeting::PurePhysical),CreateOpponentConditionMove({types::Types::Poison,condition::PulsingConditionId::Poison,30})}),
-        MakeDictionaryPair<CompositeMove>(MoveId::Ember,CreateNormalAccuracyCheck(100,MovesTargeting::AccuracyEvasion),il_exMV{CreateNormalDamagingMove(MovesTargeting::PureSpecial),CreateOpponentConditionMove({types::Types::Fire,condition::PulsingConditionId::Burn,10})}),
-        MakeDictionaryPair<CompositeMove>(MoveId::PoisonPowder,CreateNormalAccuracyCheck(75,MovesTargeting::AccuracyEvasion),il_exMV{CreateOpponentConditionMove({types::Types::Poison,condition::PulsingConditionId::Poison,100})}),
-        MakeDictionaryPair<CompositeMove>(MoveId::SleepPowder,CreateNormalAccuracyCheck(75,MovesTargeting::AccuracyEvasion),il_exMV{CreateOpponentConditionMove({types::Types::Grass,condition::PulsingConditionId::Sleep,100})}),
+        MakeDictionaryPair<CompositeMove>(MoveId::PoisonSting,CreateNormalAccuracyCheck(100,MovesTargeting::AccuracyEvasion),il_exMV{CreateNormalDamagingMove(MovesTargeting::PurePhysical),CreateOpponentPulsingConditionMove({types::Types::Poison,30,condition::PulsingConditionId::Poison})}),
+        MakeDictionaryPair<CompositeMove>(MoveId::Ember,CreateNormalAccuracyCheck(100,MovesTargeting::AccuracyEvasion),il_exMV{CreateNormalDamagingMove(MovesTargeting::PureSpecial),CreateOpponentPulsingConditionMove({types::Types::Fire,10,condition::PulsingConditionId::Burn})}),
+        MakeDictionaryPair<CompositeMove>(MoveId::PoisonPowder,CreateNormalAccuracyCheck(75,MovesTargeting::AccuracyEvasion),il_exMV{CreateOpponentPulsingConditionMove({types::Types::Poison,100,condition::PulsingConditionId::Poison})}),
+        MakeDictionaryPair<CompositeMove>(MoveId::SleepPowder,CreateNormalAccuracyCheck(75,MovesTargeting::AccuracyEvasion),il_exMV{CreateOpponentPulsingConditionMove({types::Types::Grass,100,condition::PulsingConditionId::Sleep})}),
 
-        MakeDictionaryPair<CompositeMove>(MoveId::Reflect,CreateSetAccuracyCheck(100),il_exMV{CreateSelfConditionMove({types::Types::Psychic,condition::PulsingConditionId::Reflect,100})}),
-        MakeDictionaryPair<CompositeMove>(MoveId::LightScreen,CreateSetAccuracyCheck(100),il_exMV{CreateSelfConditionMove({types::Types::Psychic,condition::PulsingConditionId::LightScreen,100})}),
+        MakeDictionaryPair<CompositeMove>(MoveId::Reflect,CreateSetAccuracyCheck(100),il_exMV{CreateSelfNonPulsingConditionMove({types::Types::Psychic,100,condition::NonPulsingConditionId::Reflect})}),
+        MakeDictionaryPair<CompositeMove>(MoveId::LightScreen,CreateSetAccuracyCheck(100),il_exMV{CreateSelfNonPulsingConditionMove({types::Types::Psychic,100,condition::NonPulsingConditionId::LightScreen})}),
         MakeDictionaryPair<CompositeMove>(MoveId::Haze,CreateSetAccuracyCheck(100),il_exMV{CreateResetSelfConditionMove(),CreateResetOpponentConditionMove()}),
 
 

@@ -1,4 +1,4 @@
-#include "identifiers\condition_id.h"
+#include "identifiers/pulsing_conditions_id.h"
 namespace mockmon::condition
 {
 
@@ -13,8 +13,6 @@ namespace mockmon::condition
              case PulsingConditionId::Freeze: return "Freeze condition";break;
              case PulsingConditionId::Paralysis: return "Paralysis condition";break;
              case PulsingConditionId::Flinch: return "Flinch condition";break;
-             case PulsingConditionId::Reflect: return "Reflect";break;
-             case PulsingConditionId::LightScreen: return "Light Screen";break;
 
             default: return "Unknown condition!"; break;
         }

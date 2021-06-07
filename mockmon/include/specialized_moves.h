@@ -24,11 +24,21 @@ namespace mockmon::moves
 
     };
 
+
     struct StatusInflicment
     {   
         const types::Types moveType;
-        const condition::PulsingConditionId AfflicteCondition;
         const unsigned int ChanceToAfflictCondtion;
+    };
+
+    struct PulsingStatusInflicment : StatusInflicment
+    {   
+        const condition::PulsingConditionId AfflicteCondition;
+    };
+
+    struct NonPulsingStatusInflicment : StatusInflicment
+    {   
+        const condition::NonPulsingConditionId AfflicteCondition;
     };
     
     using ExMove = std::function<MoveOutcome(Arena & arena, const moves::MoveId attackingMoveId,Mockmon & attacker,Mockmon & defender)>;
@@ -79,8 +89,13 @@ namespace mockmon::moves
     ExMove CreateNormalRecoilDamagingMove(const double divFactor);
     ExMove CreateSelfStatChangingMove(StatsTypes effectedStat, StatModifiersLevels modifer);
     ExMove CreateOpponentStatChangingMove(StatsTypes effectedStat, StatModifiersLevels modifer);
-    ExMove CreateOpponentConditionMove(const StatusInflicment statusConditionInflicment);
-    ExMove CreateSelfConditionMove(const StatusInflicment statusConditionInflicment);
+    
+    //pulsing
+    ExMove CreateOpponentPulsingConditionMove(const PulsingStatusInflicment statusConditionInflicment);
+    ExMove CreateSelfPulsingConditionMove(const PulsingStatusInflicment statusConditionInflicment);
+    //none pulsing
+    ExMove CreateOpponentNonPulsingConditionMove(const NonPulsingStatusInflicment statusConditionInflicment);
+    ExMove CreateSelfNonPulsingConditionMove(const NonPulsingStatusInflicment statusConditionInflicment);
 
     ExMove CreateResetSelfConditionMove();
     ExMove CreateResetOpponentConditionMove();

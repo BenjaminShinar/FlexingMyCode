@@ -58,37 +58,39 @@ A small project that I can be motivated to work on. A simple version of a battli
 - [ ] Gen 1 synergy of toxic, burn, leech seed with each other.
 - [ ] which conditions work with each other and which are cancelled?
 - [ ] which conditions work with moves special effects (dig, charging/recharging)?
+- [ ] pulsing conditions - conditions that do something each turn (poison,burn, etc...)
+- [ ] non-pulsing conditions - conditions that just stick to the mockmon with 'active' effects (light screen, reflect, focus energy)
 
-##### burn
+##### burn - pulse
 - [x] inflict damage
 - [ ] doesn't effect fire types
 - [ ] halfs phyiscal moves
 
-##### frozen
+##### frozen - pulse
 - [ ] can't move
 - [ ] doesn't effect ice types
 - [ ] thawed by fire attacks (and other attacks?)
 
-##### paralyzed
+##### paralyzed - pulse
 - [ ] a chance to not move
 - [ ] speed reduction
 - [ ] can be caused by different types of attacks, and mockmon of the same type aren't effected by it.
 
-##### poison
+##### poison - pulse
 - [x] inflict damage
 - [ ] doesn't effect poison types, and maybe steel types.
 - [ ] effects in the outer world
 
-###### badly poison (toxic)
+###### badly poison (toxic)  - pulse
 - [ ] badly poison increases the damgage it inflicts each turn.
 
-##### sleep
+##### sleep - pulse
 - [ ] won't move
-- [ ] chance to wake up
-- [ ] maximum sleeping turns
+- [x] chance to wake up
+- [x] maximum sleeping turns
 - [ ] effected by dream eater
 
-##### confused
+##### confused  - pulse
 - [ ] chance to hitself with a special attack (no type, no critical hit)
 - [ ] chance to snap out of confusion
 - [ ] how it works with multiturn abilities
@@ -99,6 +101,15 @@ A small project that I can be motivated to work on. A simple version of a battli
 
 ##### leech seed
 ##### subsitute
+
+##### reflect, light screen - non-pulse
+- [ ] refelct - change physical defence
+- [ ] light screen - change only special when defending
+
+##### focus energy - non-pulse
+- [ ] effect critical hit rate
+- [ ] gen I issues
+
 
 ### What's a mockmon, actually?
 

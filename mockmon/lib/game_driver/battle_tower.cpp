@@ -18,8 +18,8 @@ namespace mockmon
         void teachStartingMovesMoves(Mockmon & m)
         {
             using moves::MoveId;
-            m.TeachMove(MoveId::SolarBeam);
-            m.TeachMove(MoveId::SkullBash);
+            m.TeachMove(MoveId::Reflect);
+            m.TeachMove(MoveId::LightScreen);
         }
 
         void BattleTower::StartTower (Mockmon & playerMonster,unsigned int maxFloor)

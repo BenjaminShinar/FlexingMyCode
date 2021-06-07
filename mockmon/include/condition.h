@@ -1,5 +1,6 @@
 #pragma once
-#include "identifiers/condition_id.h"
+#include "identifiers/pulsing_conditions_id.h"
+#include "identifiers/non_pulsing_conditions_id.h"
 #include "identifiers/stats_id.h"
 #include "identifiers/moves_id.h"
 #include "mockmon_conditions/base_conditon_pulse.h"
@@ -8,6 +9,7 @@
 #include <memory>
 #include <vector>
 #include <stack>
+#include <set>
 #include <optional>
 
 
@@ -33,10 +35,13 @@ namespace mockmon::condition
     class Condition
     {
         public:
-        bool IsAffiliatedWithCondition(PulsingConditionId conditionId) const;
+        bool IsAffiliatedWithCondition(PulsingConditionId pulsingConditiondId) const;
+        bool IsAffiliatedWithCondition(NonPulsingConditionId nonepulsingConditiondId) const;
+
         double GetConditionalBoost(StatsTypes requestStat,bool attacking) const; //used for burn - attack, parylsis - speed, reflect - physical defence, screen - special at defence, etc...
-        void CauseCondition(pulser_uq_ptr && pulser);
-        void RemoveCondition(PulsingConditionId conditionId);
+        void CausePulsingCondition(pulser_uq_ptr && pulser);
+        void CauseNonPulsingCondition(NonPulsingConditionId nonepulsingConditiondId);
+        void RemovePulsingCondition(PulsingConditionId pulsingConditiondId);
         void RemoveAllConditions();
         void PulseBeforeTurn();
         void PulseAfterTurn(); // cause all the effects of the afflicated conditions, remove conditions that aren't relevent anymore.
@@ -51,5 +56,6 @@ namespace mockmon::condition
          * 
          */
         std::stack<moves::MoveId> m_chargedMoves;
+        std::set<NonPulsingConditionId> m_nonPulseCondtions;
     };
 }

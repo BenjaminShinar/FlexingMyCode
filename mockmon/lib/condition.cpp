@@ -3,7 +3,7 @@
 #include <functional>
 namespace mockmon::condition
 {
-    struct PredicateConditionId
+    struct PredicatePulsingConditionId
     {
         const PulsingConditionId conditionId;
         bool operator()(const pulser_uq_ptr & conditionPulse) const
@@ -12,10 +12,31 @@ namespace mockmon::condition
         }
     };
 
+
+/**
+ * @brief 
+ * think about how to remove this. or push it upward into interfaces...
+ */
+    struct PredicateNonPulsingConditionId
+    {
+        const NonPulsingConditionId nonePulsingConditionId;
+        bool operator()(NonPulsingConditionId target) const
+        {
+            return (target == nonePulsingConditionId);
+        }
+    };
+
     bool Condition::IsAffiliatedWithCondition(PulsingConditionId conditionId) const
     {
-        const PredicateConditionId pred{conditionId};
+        const PredicatePulsingConditionId pred{conditionId};
         return std::any_of(std::begin(m_spesific_conditions),std::end(m_spesific_conditions),pred);
+    }
+
+    bool Condition::IsAffiliatedWithCondition(NonPulsingConditionId nonepulsingConditiondId) const
+    {
+        const PredicateNonPulsingConditionId pred{nonepulsingConditiondId};
+        return std::any_of(std::begin(m_nonPulseCondtions),std::end(m_nonPulseCondtions),pred);
+        return true;
     }
 
     double Condition::GetConditionalBoost(StatsTypes requestStat,bool attacking) const
@@ -31,13 +52,13 @@ namespace mockmon::condition
         }
         case StatsTypes::Defence:
         {
-            if (!attacking && IsAffiliatedWithCondition(condition::PulsingConditionId::Reflect))
+            if (!attacking && IsAffiliatedWithCondition(condition::NonPulsingConditionId::Reflect))
                 boost *= 2.0; //reflect dobules physical defence!
             break;
         }
         case StatsTypes::Special:
         {
-            if (!attacking && IsAffiliatedWithCondition(condition::PulsingConditionId::LightScreen))
+            if (!attacking && IsAffiliatedWithCondition(condition::NonPulsingConditionId::LightScreen))
                 boost *= 2.0; //light screens dobules special defence!
             break;
         }
@@ -62,15 +83,22 @@ namespace mockmon::condition
         }
         return boost;
     }
-    void Condition::CauseCondition(pulser_uq_ptr && pulser)
+
+    void Condition::CausePulsingCondition(pulser_uq_ptr && pulser)
     {
        m_spesific_conditions.push_back(std::move(pulser));
     }
 
-    void Condition::RemoveCondition(PulsingConditionId conditionId)
+    void Condition::CauseNonPulsingCondition(NonPulsingConditionId nonepulsingConditiondId)
+    {
+        m_nonPulseCondtions.emplace(nonepulsingConditiondId);
+    }
+
+
+    void Condition::RemovePulsingCondition(PulsingConditionId pulsingConditiondId)
     {
         //erase remove idiom
-        const PredicateConditionId pred{conditionId};
+        const PredicatePulsingConditionId pred{pulsingConditiondId};
         m_spesific_conditions.erase(
             std::remove_if(std::begin(m_spesific_conditions),std::end(m_spesific_conditions),pred)
             , std::end(m_spesific_conditions));
@@ -80,6 +108,7 @@ namespace mockmon::condition
     {
         //erase all
         m_spesific_conditions.clear();
+        m_nonPulseCondtions.clear();
     }
 
     void Condition::RemoveAllDueConditions()
