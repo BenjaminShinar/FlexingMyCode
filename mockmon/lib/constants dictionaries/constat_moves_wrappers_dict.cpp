@@ -11,6 +11,7 @@ namespace mockmon::moves
         MakeDictionaryPair<ConstantMove>(MoveId::TailWhip,30,48),
         MakeDictionaryPair<ConstantMove>(MoveId::QuickAttack,30,48),
         MakeDictionaryPair<ConstantMove>(MoveId::HyperFang,15,24),
+        
         MakeDictionaryPair<ConstantMove>(MoveId::FocusEnergy,30,48),
         
         MakeDictionaryPair<ConstantMove>(MoveId::WaterGun,25,40),

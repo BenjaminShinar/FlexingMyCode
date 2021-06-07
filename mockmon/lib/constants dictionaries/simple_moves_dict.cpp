@@ -18,7 +18,6 @@ namespace mockmon::moves
         MakeDictionaryPair<SimpleMove>(MoveId::TailWhip,types::Types::Normal,5),
         MakeDictionaryPair<SimpleMove>(MoveId::QuickAttack,types::Types::Normal,40),
         MakeDictionaryPair<SimpleMove>(MoveId::HyperFang,types::Types::Normal,80),
-        //MakeDictionaryPair<SimpleMove>(MoveId::FocusEnergy,types::Types::Normal,5),
         //MakeDictionaryPair<SimpleMove>(MoveId::Guillotine ,types::Types::Normal,200),
         MakeDictionaryPair<SimpleMove>(MoveId::WaterGun,types::Types::Water,40),
         
@@ -54,6 +53,8 @@ namespace mockmon::moves
 
         MakeDictionaryPair<SimpleMove>(MoveId::Reflect,types::Types::Psychic ,0), //status
         MakeDictionaryPair<SimpleMove>(MoveId::LightScreen,types::Types::Psychic ,0), //status
+        MakeDictionaryPair<SimpleMove>(MoveId::FocusEnergy,types::Types::Normal,0), //status
+
         MakeDictionaryPair<SimpleMove>(MoveId::Haze,types::Types::Ice ,0), //status
 
         //charged moves

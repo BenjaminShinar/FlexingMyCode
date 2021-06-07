@@ -12,6 +12,7 @@ namespace mockmon
         Accuracy,
         Evasion,
         HealthPoints, //special!
+        CriticalHitChance, //special
     };
     std::string Stringify(const StatsTypes statType);
     std::ostream &operator<<(std::ostream &os, const StatsTypes &e);

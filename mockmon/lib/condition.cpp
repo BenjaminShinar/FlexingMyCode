@@ -76,6 +76,13 @@ namespace mockmon::condition
         case StatsTypes::Evasion:
         {
             //any conditions effecting evasion?
+            // minimized is normal boosting.
+            break;
+        }
+        case StatsTypes::CriticalHitChance:
+        {
+            if (IsAffiliatedWithCondition(condition::NonPulsingConditionId::FocusEnergy))
+                boost *= 0.25; //chance critical hit chance. GEN I glitch
             break;
         }
         default:

@@ -26,7 +26,9 @@ namespace mockmon
         {
             LearnLevelUpMoves(1);
             CurrentBattleStats.UpdateStats(stats::MockmonStats(GetMockmonSpeciesData().MockmonSpeciesStats,IVs,EVs,CurrentLevel));
+            CurrentBattleStats.m_battleStats.at(StatsTypes::CriticalHitChance).ChangeStat(GetMockmonSpeciesData().MockmonSpeciesStats.Stats.Speed); //critical hit chance for species
             CurrentBattleStats.Health.RestStatToMax();//max health at creation
+            
         }
 
         unsigned int GetCurrentLevel() const;

@@ -105,11 +105,16 @@ namespace mockmon::battle
         }
     }
 
+    double GetSingleStatsModifier(const Mockmon & mockmon,const StatsTypes statType,bool isAttacking)
+    {
+        const auto stat = mockmon.CurrentBattleStats.m_battleStats.at(statType).GetStat()* mockmon.m_currentCondtion.GetConditionalBoost(statType,isAttacking);
+        return stat;
+    }
 
     std::tuple<double,double> Battle::GetStatsModifier(const Mockmon & attacker,const StatsTypes attackingStat,const Mockmon & defender,const StatsTypes defendingStat)  
     {
-        const auto attackerStat = attacker.CurrentBattleStats.m_battleStats.at(attackingStat).GetStat()* attacker.m_currentCondtion.GetConditionalBoost(attackingStat,true);
-        const auto defenderStat = defender.CurrentBattleStats.m_battleStats.at(defendingStat).GetStat()* defender.m_currentCondtion.GetConditionalBoost(defendingStat,false);
+        const auto attackerStat = GetSingleStatsModifier(attacker,attackingStat,true);
+        const auto defenderStat = GetSingleStatsModifier(defender,defendingStat,false);
         return std::make_tuple(attackerStat, defenderStat); //attack / defence
     }
 
@@ -126,9 +131,8 @@ namespace mockmon::battle
     bool Battle::IsCriticalHit(Mockmon & attackingMockmon, const moves::MoveId mv)
     {
         const auto movesCriticalChanceFactor =moves::CriticalChanceBoost(mv);
-        const auto mockmonSpeciesSpeed =attackingMockmon.GetMockmonSpeciesData().MockmonSpeciesStats.Stats.Speed;
-        
-        auto baseChance =(100 * mockmonSpeciesSpeed * movesCriticalChanceFactor) / 512.0;
+        const auto criticalHitChance = GetSingleStatsModifier(attackingMockmon,StatsTypes::CriticalHitChance,true);
+        auto baseChance =(100 * criticalHitChance * movesCriticalChanceFactor) / 512.0;
         return random::Randomer::CheckPercentage(baseChance);
     }
 

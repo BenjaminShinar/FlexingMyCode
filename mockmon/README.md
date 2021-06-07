@@ -39,7 +39,7 @@ I want to replicate the bugs. over the years, the player community discovered ma
 - [ ] ... TBC battles are between trainers
 
 ##### Two turns moves
-- [ ] moves with charging before hitting - dig, fly, razorwind,skull bash,sky attack,solar beam,
+- [x] moves with charging before hitting - dig, fly, skull bash,sky attack,solar beam,
 - [ ] moves with invurnability stage - dig, fly
 - [ ] moves with re-charging after hitting - hyperBeam
 - [ ] power points consumption - when damage is done
@@ -62,6 +62,10 @@ I want to replicate the bugs. over the years, the player community discovered ma
 - [ ] which conditions work with moves special effects (dig, charging/recharging)?
 - [ ] pulsing conditions - conditions that do something each turn (poison,burn, etc...)
 - [ ] non-pulsing conditions - conditions that just stick to the mockmon with 'active' effects (light screen, reflect, focus energy)
+
+##### flinch - pulse
+- [ ] mockmon won't move
+- [ ] only relevent when going 2nd
 
 ##### burn - pulse
 - [x] inflict damage

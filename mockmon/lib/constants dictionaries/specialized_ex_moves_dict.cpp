@@ -34,9 +34,7 @@ namespace mockmon::moves
         MakeDictionaryPair<CompositeMove>(MoveId::StringShot,CreateNormalAccuracyCheck(95,MovesTargeting::AccuracyEvasion), il_exMV{CreateOpponentStatChangingMove(StatsTypes::Speed,StatModifiersLevels::Decrese)}),
 
 
-       // MakeDictionaryPair<CompositeMove>(MoveId::FocusEnergy,CreateByPassAccuracyCheck(), il_exMV{CreateSelfConditionMove({types::Types::Normal,condition::PulsingConditionId::Reflect,100})},
-
-        //set damage moves
+       //set damage moves
         MakeDictionaryPair<CompositeMove>(MoveId::SonicBoom, CreateNormalAccuracyCheck(90,MovesTargeting::AccuracyEvasion),il_exMV{CreateDirectDamagingMoveByPassImmunity(20)}),
         MakeDictionaryPair<CompositeMove>(MoveId::DragonRage,CreateNormalAccuracyCheck(100,MovesTargeting::AccuracyEvasion), il_exMV{CreateDirectDamagingMoveByPassImmunity(40)}),
         MakeDictionaryPair<CompositeMove>(MoveId::SuperFang,CreateNormalAccuracyCheck(90,MovesTargeting::AccuracyEvasion), il_exMV{CreateDirectDamagingMoveTargetStateByPassImmunity([](const Mockmon & m){return std::max(1.0,m.CurrentBattleStats.Health.GetStat()/2.0);})}),
@@ -56,6 +54,8 @@ namespace mockmon::moves
 
         MakeDictionaryPair<CompositeMove>(MoveId::Reflect,CreateSetAccuracyCheck(100),il_exMV{CreateSelfNonPulsingConditionMove({types::Types::Psychic,100,condition::NonPulsingConditionId::Reflect})}),
         MakeDictionaryPair<CompositeMove>(MoveId::LightScreen,CreateSetAccuracyCheck(100),il_exMV{CreateSelfNonPulsingConditionMove({types::Types::Psychic,100,condition::NonPulsingConditionId::LightScreen})}),
+        MakeDictionaryPair<CompositeMove>(MoveId::FocusEnergy,CreateSetAccuracyCheck(100),il_exMV{CreateSelfNonPulsingConditionMove({types::Types::Normal,100,condition::NonPulsingConditionId::FocusEnergy})}),
+        
         MakeDictionaryPair<CompositeMove>(MoveId::Haze,CreateSetAccuracyCheck(100),il_exMV{CreateResetSelfConditionMove(),CreateResetOpponentConditionMove()}),
 
 
