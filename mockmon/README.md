@@ -2,6 +2,8 @@
 
 A small project that I can be motivated to work on. A simple version of a battling game. The user (player) will control mock-monsters (mockmons) and battle the computer in a manner similar to the famoues game. 
 
+## Points of intrest
+I want to replicate the bugs. over the years, the player community discovered many bugs and glitches in the game, and i wish to see how these might have come into existence. so in some cases I will delibratly have behavior which seems non-sensical. I believe these this bugs were not put in the game intenionally, but were products of software design which was streched beyond what it was intended for, either by the constraints of the availble programming languages or by last minute changes that had to be implemented. therefore, i will try to design this program in a way that those bugs appear organically.
 
 
 ## Tasks and Stages - this will eventuall be the Issues tab
@@ -64,7 +66,8 @@ A small project that I can be motivated to work on. A simple version of a battli
 ##### burn - pulse
 - [x] inflict damage
 - [ ] doesn't effect fire types
-- [ ] halfs phyiscal moves
+- [x] halfs phyiscal moves attacks
+- [ ] more gen I shannignas
 
 ##### frozen - pulse
 - [ ] can't move
@@ -75,6 +78,7 @@ A small project that I can be motivated to work on. A simple version of a battli
 - [ ] a chance to not move
 - [ ] speed reduction
 - [ ] can be caused by different types of attacks, and mockmon of the same type aren't effected by it.
+- [ ] more gen I shannignas
 
 ##### poison - pulse
 - [x] inflict damage
@@ -103,8 +107,8 @@ A small project that I can be motivated to work on. A simple version of a battli
 ##### subsitute
 
 ##### reflect, light screen - non-pulse
-- [ ] refelct - change physical defence
-- [ ] light screen - change only special when defending
+- [x] refelct - change physical defence
+- [x] light screen - change only special when defending
 
 ##### focus energy - non-pulse
 - [ ] effect critical hit rate
@@ -149,11 +153,16 @@ can i use automated testing?
 - [x] add testing package
 - [ ] integrate testing to repository on git
 - [x] add actual relevent test
-- [ ] test conditions
-- [x] testing that burn and poison damage the mockmon
 - [ ] learn more about testing and clean the code
 - [ ] expand testing to anything we can test
 - [ ] can tests timeout? how? (if a battle never ends)
+
+#### test conditions
+- [x] testing that burn and poison damage the mockmon
+- [x] testing that burn halfs attack
+- [ ] testing that parlysis halfs speed (can we combine them?)
+- [x] testing that light screen and reflect change defences
+- [ ] test that haze removes all sorts of stuff and does it job and it's bugs
 
 
 ### UMLs

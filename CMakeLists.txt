@@ -19,7 +19,7 @@ target_compile_features(mockmon PUBLIC cxx_std_17)
 
 #testing
 enable_testing()
-add_subdirectory(testing)
+add_subdirectory(mockmon_testing)
 
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
