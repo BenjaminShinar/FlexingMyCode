@@ -14,6 +14,17 @@ namespace mockmon::moves
         MakeDictionaryPair<CompositeMove>(MoveId::Struggle,CreateNormalAccuracyCheck(100,MovesTargeting::AccuracyEvasion), il_exMV{CreateNormalDamagingMove(MovesTargeting::PurePhysical), CreateNormalRecoilDamagingMove(2.0)}),  
         MakeDictionaryPair<CompositeMove>(MoveId::QuickAttack,CreateNormalAccuracyCheck(100,MovesTargeting::AccuracyEvasion), il_exMV{CreateNormalDamagingMove(MovesTargeting::PurePhysical)}),
         
+        //high critical hit rate moves
+        MakeDictionaryPair<CompositeMove>(MoveId::Slash,CreateNormalAccuracyCheck(100,MovesTargeting::AccuracyEvasion), il_exMV{CreateNormalDamagingMove(MovesTargeting::PurePhysical)}),
+        MakeDictionaryPair<CompositeMove>(MoveId::Crabhammer,CreateNormalAccuracyCheck(90,MovesTargeting::AccuracyEvasion), il_exMV{CreateNormalDamagingMove(MovesTargeting::PureSpecial)}),
+        MakeDictionaryPair<CompositeMove>(MoveId::KarateChop,CreateNormalAccuracyCheck(100,MovesTargeting::AccuracyEvasion), il_exMV{CreateNormalDamagingMove(MovesTargeting::PurePhysical)}),
+        MakeDictionaryPair<CompositeMove>(MoveId::RazorLeaf,CreateNormalAccuracyCheck(95,MovesTargeting::AccuracyEvasion), il_exMV{CreateNormalDamagingMove(MovesTargeting::PureSpecial)}),
+          /*
+        case MoveId::Slash:
+        case MoveId::Crabhammer:
+        case MoveId::KarateChop:
+        case MoveId::RazorLeaf:
+        */
         //a move that can't miss
         MakeDictionaryPair<CompositeMove>(MoveId::Swift,CreateByPassAccuracyCheck(), il_exMV{CreateNormalDamagingMove(MovesTargeting::PurePhysical)}),
 
@@ -33,12 +44,15 @@ namespace mockmon::moves
         MakeDictionaryPair<CompositeMove>(MoveId::NightShade,CreateNormalAccuracyCheck(100,MovesTargeting::AccuracyEvasion), il_exMV{CreateDirectDamagingMoveAttackerStateByPassImmunity([](const Mockmon & m){return std::max(1.0,m.GetCurrentLevel()*1.0);})}),
         MakeDictionaryPair<CompositeMove>(MoveId::Psywave,CreateNormalAccuracyCheck(80,MovesTargeting::AccuracyEvasion), il_exMV{CreateDirectDamagingMoveAttackerStateByPassImmunity([](const Mockmon & m){return std::max(1.0,1.0 + random::Randomer::GetRandom(m.GetCurrentLevel()));})}),
 
-        // moves that can efflict Status
+        // moves that can efflict Status in addition to damage
         //CreateOpponentConditionMove
         MakeDictionaryPair<CompositeMove>(MoveId::PoisonSting,CreateNormalAccuracyCheck(100,MovesTargeting::AccuracyEvasion),il_exMV{CreateNormalDamagingMove(MovesTargeting::PurePhysical),CreateOpponentPulsingConditionMove({types::Types::Poison,30,condition::PulsingConditionId::Poison})}),
         MakeDictionaryPair<CompositeMove>(MoveId::Ember,CreateNormalAccuracyCheck(100,MovesTargeting::AccuracyEvasion),il_exMV{CreateNormalDamagingMove(MovesTargeting::PureSpecial),CreateOpponentPulsingConditionMove({types::Types::Fire,10,condition::PulsingConditionId::Burn})}),
+        
+        // moves that only efflict conditions
         MakeDictionaryPair<CompositeMove>(MoveId::PoisonPowder,CreateNormalAccuracyCheck(75,MovesTargeting::AccuracyEvasion),il_exMV{CreateOpponentPulsingConditionMove({types::Types::Poison,100,condition::PulsingConditionId::Poison})}),
         MakeDictionaryPair<CompositeMove>(MoveId::SleepPowder,CreateNormalAccuracyCheck(75,MovesTargeting::AccuracyEvasion),il_exMV{CreateOpponentPulsingConditionMove({types::Types::Grass,100,condition::PulsingConditionId::Sleep})}),
+        MakeDictionaryPair<CompositeMove>(MoveId::StunSpore,CreateNormalAccuracyCheck(75,MovesTargeting::AccuracyEvasion),il_exMV{CreateOpponentPulsingConditionMove({types::Types::Grass,100,condition::PulsingConditionId::Paralysis})}),
 
         MakeDictionaryPair<CompositeMove>(MoveId::Reflect,CreateSetAccuracyCheck(100),il_exMV{CreateSelfNonPulsingConditionMove({types::Types::Psychic,100,condition::NonPulsingConditionId::Reflect})}),
         MakeDictionaryPair<CompositeMove>(MoveId::LightScreen,CreateSetAccuracyCheck(100),il_exMV{CreateSelfNonPulsingConditionMove({types::Types::Psychic,100,condition::NonPulsingConditionId::LightScreen})}),
@@ -88,7 +102,7 @@ namespace mockmon::moves
         MakeDictionaryPair<CompositeMove>(MoveId::WakeUp,CreateByPassAccuracyCheck(), il_exMV{CreateWastedTurnMove()}),
         MakeDictionaryPair<CompositeMove>(MoveId::KeepSleeping,CreateByPassAccuracyCheck(), il_exMV{CreateWastedTurnMove()}),
         MakeDictionaryPair<CompositeMove>(MoveId::Flinch,CreateByPassAccuracyCheck(), il_exMV{CreateWastedTurnMove()}),
-        MakeDictionaryPair<CompositeMove>(MoveId::Paralysis,CreateByPassAccuracyCheck(), il_exMV{CreateWastedTurnMove()}),
+        MakeDictionaryPair<CompositeMove>(MoveId::ParalysisCantMove,CreateByPassAccuracyCheck(), il_exMV{CreateWastedTurnMove()}),
         MakeDictionaryPair<CompositeMove>(MoveId::FreezeCantMove,CreateByPassAccuracyCheck(), il_exMV{CreateWastedTurnMove()}),
         MakeDictionaryPair<CompositeMove>(MoveId::HitSelfInConfusion,CreateByPassAccuracyCheck(), il_exMV{CreateWastedTurnMove()}),
     };

@@ -18,7 +18,7 @@ namespace mockmon
         void teachStartingMovesMoves(Mockmon & m)
         {
             using moves::MoveId;
-            m.TeachMove(MoveId::Reflect);
+            m.TeachMove(MoveId::StunSpore);
             m.TeachMove(MoveId::LightScreen);
         }
 

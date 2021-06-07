@@ -182,7 +182,6 @@ namespace mockmon::moves
 
         WakeUp,//none usable moves
         KeepSleeping,//none usable moves
-        Paralysis,//none usable moves
         Flinch,//none usable moves
         Recharging,//none usable moves
         HitSelfInConfusion,//none usable moves

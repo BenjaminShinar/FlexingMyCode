@@ -13,17 +13,22 @@ namespace mockmon::moves
 
     const std::map<MoveId,SimpleMove> SimpleMove::AllMoves
     {
-        //id,{id,type,accuracy,power}
+        //id,{id,type,power}
         MakeDictionaryPair<SimpleMove>(MoveId::Tackle,types::Types::Normal,35),
         MakeDictionaryPair<SimpleMove>(MoveId::TailWhip,types::Types::Normal,5),
         MakeDictionaryPair<SimpleMove>(MoveId::QuickAttack,types::Types::Normal,40),
         MakeDictionaryPair<SimpleMove>(MoveId::HyperFang,types::Types::Normal,80),
-        MakeDictionaryPair<SimpleMove>(MoveId::FocusEnergy,types::Types::Normal,5),
-        
+        //MakeDictionaryPair<SimpleMove>(MoveId::FocusEnergy,types::Types::Normal,5),
+        //MakeDictionaryPair<SimpleMove>(MoveId::Guillotine ,types::Types::Normal,200),
         MakeDictionaryPair<SimpleMove>(MoveId::WaterGun,types::Types::Water,40),
-        MakeDictionaryPair<SimpleMove>(MoveId::Guillotine ,types::Types::Normal,200),
-        MakeDictionaryPair<SimpleMove>(MoveId::Slash ,types::Types::Normal,70),
         
+
+        MakeDictionaryPair<SimpleMove>(MoveId::Slash ,types::Types::Normal,70), //high critical hit rate
+        MakeDictionaryPair<SimpleMove>(MoveId::Crabhammer ,types::Types::Water,90), //high critical hit rate
+        MakeDictionaryPair<SimpleMove>(MoveId::KarateChop ,types::Types::Normal,50), //high critical hit rate
+        MakeDictionaryPair<SimpleMove>(MoveId::RazorLeaf ,types::Types::Grass,55), //high critical hit rate
+        
+
         MakeDictionaryPair<SimpleMove>(MoveId::StringShot,types::Types::Bug,0), //negative boosting
 
         MakeDictionaryPair<SimpleMove>(MoveId::Ember,types::Types::Fire,40),
@@ -45,6 +50,8 @@ namespace mockmon::moves
         MakeDictionaryPair<SimpleMove>(MoveId::PoisonSting,types::Types::Poison ,15), //status
         MakeDictionaryPair<SimpleMove>(MoveId::PoisonPowder,types::Types::Poison ,0), //status
         MakeDictionaryPair<SimpleMove>(MoveId::SleepPowder,types::Types::Grass ,0), //status
+        MakeDictionaryPair<SimpleMove>(MoveId::StunSpore,types::Types::Grass ,0), //status
+
         MakeDictionaryPair<SimpleMove>(MoveId::Reflect,types::Types::Psychic ,0), //status
         MakeDictionaryPair<SimpleMove>(MoveId::LightScreen,types::Types::Psychic ,0), //status
         MakeDictionaryPair<SimpleMove>(MoveId::Haze,types::Types::Ice ,0), //status

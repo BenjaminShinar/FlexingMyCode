@@ -75,8 +75,8 @@ I want to replicate the bugs. over the years, the player community discovered ma
 - [ ] thawed by fire attacks (and other attacks?)
 
 ##### paralyzed - pulse
-- [ ] a chance to not move
-- [ ] speed reduction
+- [x] a chance to not move
+- [x] speed reduction
 - [ ] can be caused by different types of attacks, and mockmon of the same type aren't effected by it.
 - [ ] more gen I shannignas
 
@@ -89,7 +89,7 @@ I want to replicate the bugs. over the years, the player community discovered ma
 - [ ] badly poison increases the damgage it inflicts each turn.
 
 ##### sleep - pulse
-- [ ] won't move
+- [x] won't move
 - [x] chance to wake up
 - [x] maximum sleeping turns
 - [ ] effected by dream eater

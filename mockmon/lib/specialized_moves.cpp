@@ -47,6 +47,7 @@ namespace mockmon::moves
             return std::make_unique<BurnCondition>(effectedMockmon, 16.0);
             break;
         case PulsingConditionId::Paralysis:
+            return std::make_unique<ParalysisCondition>(effectedMockmon);
 
             break;
         case PulsingConditionId::Confusion:
