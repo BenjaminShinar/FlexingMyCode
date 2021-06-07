@@ -142,11 +142,12 @@ can i use automated testing?
 - [x] testing that burn and poison damage the mockmon
 - [ ] learn more about testing and clean the code
 - [ ] expand testing to anything we can test
+- [ ] can tests timeout? how? (if a battle never ends)
 
 
 ### UMLs
-- [ ] create a location for umls on the repository
-- [ ] have a tool that process the uml to image
+- [x] create a location for umls on the repository
+- [x] have a tool that process the uml to image
 - [ ] battle uml - how a battle operates
 - [ ] game driver uml - which modes are availble to use currently
 - [ ] classes uml - mockmon, conditions, etc...

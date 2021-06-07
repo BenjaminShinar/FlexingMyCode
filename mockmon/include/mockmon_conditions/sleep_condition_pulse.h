@@ -9,7 +9,7 @@ namespace mockmon::condition
     {
         public:
         explicit SleepCondition(Mockmon & sleepingmockmon,int sleepMaxDuration):
-        MockmonEffectingCondition{ConditionId::Sleep,sleepingmockmon}
+        MockmonEffectingCondition{PulsingConditionId::Sleep,sleepingmockmon}
         ,m_sleep_duration(sleepMaxDuration),m_wake_up_chance(20)
         {
         }

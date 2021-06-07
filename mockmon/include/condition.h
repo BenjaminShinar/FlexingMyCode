@@ -33,10 +33,10 @@ namespace mockmon::condition
     class Condition
     {
         public:
-        bool IsAffiliatedWithCondition(ConditionId conditionId) const;
+        bool IsAffiliatedWithCondition(PulsingConditionId conditionId) const;
         double GetConditionalBoost(StatsTypes requestStat,bool attacking) const; //used for burn - attack, parylsis - speed, reflect - physical defence, screen - special at defence, etc...
         void CauseCondition(pulser_uq_ptr && pulser);
-        void RemoveCondition(ConditionId conditionId);
+        void RemoveCondition(PulsingConditionId conditionId);
         void RemoveAllConditions();
         void PulseBeforeTurn();
         void PulseAfterTurn(); // cause all the effects of the afflicated conditions, remove conditions that aren't relevent anymore.

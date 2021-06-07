@@ -13,13 +13,16 @@ namespace mockmon::moves
     {
         return SimpleMove::AllMoves.at(mvId).Type;
     }
+    
     double CriticalChanceBoost(moves::MoveId mvId)
     {
         switch (mvId)
         {
         //high critical Rate
-        case MoveId::Slash :
-
+        case MoveId::Slash:
+        case MoveId::Crabhammer:
+        case MoveId::KarateChop:
+        case MoveId::RazorLeaf:
         return 8.0; break;
         
         default:

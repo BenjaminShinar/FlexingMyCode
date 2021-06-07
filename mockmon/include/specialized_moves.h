@@ -27,7 +27,7 @@ namespace mockmon::moves
     struct StatusInflicment
     {   
         const types::Types moveType;
-        const condition::ConditionId AfflicteCondition;
+        const condition::PulsingConditionId AfflicteCondition;
         const unsigned int ChanceToAfflictCondtion;
     };
     
@@ -68,7 +68,7 @@ namespace mockmon::moves
     };
 
 
-    condition::pulser_uq_ptr MakeCondition(condition::ConditionId conditionid,Mockmon & effectedMockmon);
+    condition::pulser_uq_ptr MakeCondition(condition::PulsingConditionId conditionid,Mockmon & effectedMockmon);
 
 
     ExMoveChanceCheck CreateNormalAccuracyCheck(int moveBaseAccuracy,const MovesTargeting movesTargeting);

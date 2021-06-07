@@ -41,7 +41,13 @@ namespace mockmon::moves
         MakeDictionaryPair<ConstantMove>(MoveId::Haze,30,48), 
 
         //charged moves
-        MakeDictionaryPair<ConstantMove>(MoveId::SolarBeam,10 ,16), //status
+        MakeDictionaryPair<ConstantMove>(MoveId::SolarBeam,10 ,16), //charge
+        MakeDictionaryPair<ConstantMove>(MoveId::SkullBash,10 ,16), //charge
+        MakeDictionaryPair<ConstantMove>(MoveId::SkyAttack,5 ,8), //charge
+
+        //semi-invulnerable,
+        MakeDictionaryPair<ConstantMove>(MoveId::Dig,10 ,16), //charge, semi-invulnerable,
+        MakeDictionaryPair<ConstantMove>(MoveId::Fly,15 ,24), //charge, semi-invulnerable,
 
     };
 

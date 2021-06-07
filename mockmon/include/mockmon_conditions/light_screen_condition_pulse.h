@@ -8,7 +8,7 @@ namespace mockmon::condition
     {
         public:
         explicit LightScreenCondition(Mockmon & reflectedMockmon):
-        MockmonEffectingCondition{ConditionId::LightScreen,reflectedMockmon}
+        MockmonEffectingCondition{PulsingConditionId::LightScreen,reflectedMockmon}
         {
         }
 

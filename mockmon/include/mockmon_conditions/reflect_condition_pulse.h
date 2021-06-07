@@ -8,7 +8,7 @@ namespace mockmon::condition
     {
         public:
         explicit ReflectCondition(Mockmon & reflectedMockmon):
-        MockmonEffectingCondition{ConditionId::Reflect,reflectedMockmon}
+        MockmonEffectingCondition{PulsingConditionId::Reflect,reflectedMockmon}
         {
         }
 

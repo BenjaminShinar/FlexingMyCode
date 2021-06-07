@@ -5,14 +5,14 @@ namespace mockmon::condition
 {
     struct PredicateConditionId
     {
-        const ConditionId conditionId;
+        const PulsingConditionId conditionId;
         bool operator()(const pulser_uq_ptr & conditionPulse) const
         {
             return (conditionPulse->conditonId == conditionId);
         }
     };
 
-    bool Condition::IsAffiliatedWithCondition(ConditionId conditionId) const
+    bool Condition::IsAffiliatedWithCondition(PulsingConditionId conditionId) const
     {
         const PredicateConditionId pred{conditionId};
         return std::any_of(std::begin(m_spesific_conditions),std::end(m_spesific_conditions),pred);
@@ -25,25 +25,25 @@ namespace mockmon::condition
         {
         case StatsTypes::Attack:
         {
-            if (attacking && IsAffiliatedWithCondition(condition::ConditionId::Burn))
+            if (attacking && IsAffiliatedWithCondition(condition::PulsingConditionId::Burn))
                 boost *= 0.5; //inflict half damage when burned
             break;
         }
         case StatsTypes::Defence:
         {
-            if (!attacking && IsAffiliatedWithCondition(condition::ConditionId::Reflect))
+            if (!attacking && IsAffiliatedWithCondition(condition::PulsingConditionId::Reflect))
                 boost *= 2.0; //reflect dobules physical defence!
             break;
         }
         case StatsTypes::Special:
         {
-            if (!attacking && IsAffiliatedWithCondition(condition::ConditionId::LightScreen))
+            if (!attacking && IsAffiliatedWithCondition(condition::PulsingConditionId::LightScreen))
                 boost *= 2.0; //light screens dobules special defence!
             break;
         }
         case StatsTypes::Speed:
         {
-            if (IsAffiliatedWithCondition(condition::ConditionId::Paralysis))
+            if (IsAffiliatedWithCondition(condition::PulsingConditionId::Paralysis))
                 boost *= 0.25; //quarter speed when parayzed
             break;
         }
@@ -67,7 +67,7 @@ namespace mockmon::condition
        m_spesific_conditions.push_back(std::move(pulser));
     }
 
-    void Condition::RemoveCondition(ConditionId conditionId)
+    void Condition::RemoveCondition(PulsingConditionId conditionId)
     {
         //erase remove idiom
         const PredicateConditionId pred{conditionId};

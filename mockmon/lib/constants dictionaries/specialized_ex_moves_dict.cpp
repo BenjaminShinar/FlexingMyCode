@@ -22,6 +22,9 @@ namespace mockmon::moves
         MakeDictionaryPair<CompositeMove>(MoveId::TailWhip,CreateNormalAccuracyCheck(100,MovesTargeting::AccuracyEvasion), il_exMV{CreateOpponentStatChangingMove(StatsTypes::Defence,StatModifiersLevels::Decrese)}),
         MakeDictionaryPair<CompositeMove>(MoveId::StringShot,CreateNormalAccuracyCheck(95,MovesTargeting::AccuracyEvasion), il_exMV{CreateOpponentStatChangingMove(StatsTypes::Speed,StatModifiersLevels::Decrese)}),
 
+
+       // MakeDictionaryPair<CompositeMove>(MoveId::FocusEnergy,CreateByPassAccuracyCheck(), il_exMV{CreateSelfConditionMove({types::Types::Normal,condition::PulsingConditionId::Reflect,100})},
+
         //set damage moves
         MakeDictionaryPair<CompositeMove>(MoveId::SonicBoom, CreateNormalAccuracyCheck(90,MovesTargeting::AccuracyEvasion),il_exMV{CreateDirectDamagingMoveByPassImmunity(20)}),
         MakeDictionaryPair<CompositeMove>(MoveId::DragonRage,CreateNormalAccuracyCheck(100,MovesTargeting::AccuracyEvasion), il_exMV{CreateDirectDamagingMoveByPassImmunity(40)}),
@@ -32,19 +35,25 @@ namespace mockmon::moves
 
         // moves that can efflict Status
         //CreateOpponentConditionMove
-        MakeDictionaryPair<CompositeMove>(MoveId::PoisonSting,CreateNormalAccuracyCheck(100,MovesTargeting::AccuracyEvasion),il_exMV{CreateNormalDamagingMove(MovesTargeting::PurePhysical),CreateOpponentConditionMove({types::Types::Poison,condition::ConditionId::Poison,30})}),
-        MakeDictionaryPair<CompositeMove>(MoveId::Ember,CreateNormalAccuracyCheck(100,MovesTargeting::AccuracyEvasion),il_exMV{CreateNormalDamagingMove(MovesTargeting::PureSpecial),CreateOpponentConditionMove({types::Types::Fire,condition::ConditionId::Burn,10})}),
-        MakeDictionaryPair<CompositeMove>(MoveId::PoisonPowder,CreateNormalAccuracyCheck(75,MovesTargeting::AccuracyEvasion),il_exMV{CreateOpponentConditionMove({types::Types::Poison,condition::ConditionId::Poison,100})}),
-        MakeDictionaryPair<CompositeMove>(MoveId::SleepPowder,CreateNormalAccuracyCheck(75,MovesTargeting::AccuracyEvasion),il_exMV{CreateOpponentConditionMove({types::Types::Grass,condition::ConditionId::Sleep,100})}),
+        MakeDictionaryPair<CompositeMove>(MoveId::PoisonSting,CreateNormalAccuracyCheck(100,MovesTargeting::AccuracyEvasion),il_exMV{CreateNormalDamagingMove(MovesTargeting::PurePhysical),CreateOpponentConditionMove({types::Types::Poison,condition::PulsingConditionId::Poison,30})}),
+        MakeDictionaryPair<CompositeMove>(MoveId::Ember,CreateNormalAccuracyCheck(100,MovesTargeting::AccuracyEvasion),il_exMV{CreateNormalDamagingMove(MovesTargeting::PureSpecial),CreateOpponentConditionMove({types::Types::Fire,condition::PulsingConditionId::Burn,10})}),
+        MakeDictionaryPair<CompositeMove>(MoveId::PoisonPowder,CreateNormalAccuracyCheck(75,MovesTargeting::AccuracyEvasion),il_exMV{CreateOpponentConditionMove({types::Types::Poison,condition::PulsingConditionId::Poison,100})}),
+        MakeDictionaryPair<CompositeMove>(MoveId::SleepPowder,CreateNormalAccuracyCheck(75,MovesTargeting::AccuracyEvasion),il_exMV{CreateOpponentConditionMove({types::Types::Grass,condition::PulsingConditionId::Sleep,100})}),
 
-        MakeDictionaryPair<CompositeMove>(MoveId::Reflect,CreateSetAccuracyCheck(100),il_exMV{CreateSelfConditionMove({types::Types::Psychic,condition::ConditionId::Reflect,100})}),
-        MakeDictionaryPair<CompositeMove>(MoveId::LightScreen,CreateSetAccuracyCheck(100),il_exMV{CreateSelfConditionMove({types::Types::Psychic,condition::ConditionId::LightScreen,100})}),
+        MakeDictionaryPair<CompositeMove>(MoveId::Reflect,CreateSetAccuracyCheck(100),il_exMV{CreateSelfConditionMove({types::Types::Psychic,condition::PulsingConditionId::Reflect,100})}),
+        MakeDictionaryPair<CompositeMove>(MoveId::LightScreen,CreateSetAccuracyCheck(100),il_exMV{CreateSelfConditionMove({types::Types::Psychic,condition::PulsingConditionId::LightScreen,100})}),
         MakeDictionaryPair<CompositeMove>(MoveId::Haze,CreateSetAccuracyCheck(100),il_exMV{CreateResetSelfConditionMove(),CreateResetOpponentConditionMove()}),
 
 
         // two turn moves
         // charge up moves, bypass accuracy check?
         MakeDictionaryPair<CompositeMove>(MoveId::SolarBeam,CreateByPassAccuracyCheck(),il_exMV{CreateStoredMove(MoveId::SolarBeam)}),
+        MakeDictionaryPair<CompositeMove>(MoveId::SkullBash,CreateByPassAccuracyCheck(),il_exMV{CreateStoredMove(MoveId::SkullBash)}),
+        MakeDictionaryPair<CompositeMove>(MoveId::SkyAttack,CreateByPassAccuracyCheck(),il_exMV{CreateStoredMove(MoveId::SkyAttack)}),
+
+        // semi invurnable
+        MakeDictionaryPair<CompositeMove>(MoveId::Dig,CreateByPassAccuracyCheck(),il_exMV{CreateStoredMove(MoveId::Dig)}),
+        MakeDictionaryPair<CompositeMove>(MoveId::Fly,CreateByPassAccuracyCheck(),il_exMV{CreateStoredMove(MoveId::Fly)}),
 
         // {MoveId::TailWhip,SimpleMove(MoveId::TailWhip,types::Types::Normal,100,5)},
         // {MoveId::QuickAttack,SimpleMove(MoveId::QuickAttack,types::Types::Normal,100,40)},
@@ -65,8 +74,14 @@ namespace mockmon::moves
     const std::map<moves::MoveId, CompositeMove> CompositeMove::AllChargedCompositeMoves
     {
         MakeDictionaryPair<CompositeMove>(MoveId::SolarBeam,CreateNormalAccuracyCheck(100,MovesTargeting::AccuracyEvasion), il_exMV{CreateNormalDamagingMove(MovesTargeting::PureSpecial)}),
+        MakeDictionaryPair<CompositeMove>(MoveId::SkullBash,CreateNormalAccuracyCheck(100,MovesTargeting::AccuracyEvasion), il_exMV{CreateNormalDamagingMove(MovesTargeting::PurePhysical)}),
+        MakeDictionaryPair<CompositeMove>(MoveId::SkyAttack,CreateNormalAccuracyCheck(90,MovesTargeting::AccuracyEvasion), il_exMV{CreateNormalDamagingMove(MovesTargeting::PurePhysical)}),
 
         
+        //semi invunable
+        MakeDictionaryPair<CompositeMove>(MoveId::Dig,CreateNormalAccuracyCheck(100,MovesTargeting::AccuracyEvasion), il_exMV{CreateNormalDamagingMove(MovesTargeting::PurePhysical)}),
+        MakeDictionaryPair<CompositeMove>(MoveId::Fly,CreateNormalAccuracyCheck(95,MovesTargeting::AccuracyEvasion), il_exMV{CreateNormalDamagingMove(MovesTargeting::PurePhysical)}),
+
         MakeDictionaryPair<CompositeMove>(MoveId::Recharging,CreateByPassAccuracyCheck(), il_exMV{CreateWastedTurnMove()}),
 
 //effected by conditions

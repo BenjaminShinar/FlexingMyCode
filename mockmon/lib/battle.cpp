@@ -114,9 +114,21 @@ namespace mockmon::battle
     }
 
 
+    /**
+     * @brief 
+     * determine if an attack scored a critical hit
+     * effected by: base speed,moves with high critical chance, focus energy
+     * @param attackingMockmon 
+     * @param mv 
+     * @return true 
+     * @return false 
+     */
     bool Battle::IsCriticalHit(Mockmon & attackingMockmon, const moves::MoveId mv)
     {
-        auto baseChance =100* attackingMockmon.GetMockmonSpeciesData().MockmonSpeciesStats.Stats.Speed * moves::CriticalChanceBoost(mv) / 512.0;
+        const auto movesCriticalChanceFactor =moves::CriticalChanceBoost(mv);
+        const auto mockmonSpeciesSpeed =attackingMockmon.GetMockmonSpeciesData().MockmonSpeciesStats.Stats.Speed;
+        
+        auto baseChance =(100 * mockmonSpeciesSpeed * movesCriticalChanceFactor) / 512.0;
         return random::Randomer::CheckPercentage(baseChance);
     }
 

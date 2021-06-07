@@ -50,7 +50,15 @@ namespace mockmon::moves
         MakeDictionaryPair<SimpleMove>(MoveId::Haze,types::Types::Ice ,0), //status
 
         //charged moves
-        MakeDictionaryPair<SimpleMove>(MoveId::SolarBeam,types::Types::Grass ,100), //damage is still taken from here
+        MakeDictionaryPair<SimpleMove>(MoveId::SolarBeam,types::Types::Grass ,120), //damage is still taken from here
+        MakeDictionaryPair<SimpleMove>(MoveId::SkullBash,types::Types::Normal ,100), //damage is still taken from here
+        MakeDictionaryPair<SimpleMove>(MoveId::SkyAttack,types::Types::Flying ,140), //damage is still taken from here
+
+
+        
+        //semi-invulnerable,
+        MakeDictionaryPair<SimpleMove>(MoveId::Dig,types::Types::Ground ,100), //damage is still taken from here
+        MakeDictionaryPair<SimpleMove>(MoveId::Fly,types::Types::Flying ,70), //damage is still taken from here
 
         //moves requiring recharge
         //MakeDictionaryPair<SimpleMove>(MoveId::SolarBeam,types::Types::Grass ,100), //damage is still taken from here

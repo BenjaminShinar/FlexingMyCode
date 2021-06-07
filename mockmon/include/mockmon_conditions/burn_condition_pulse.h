@@ -8,7 +8,7 @@ namespace mockmon::condition
     {
         public:
         explicit BurnCondition(Mockmon & burnedMockmon,double damagePortion):
-        MockmonEffectingCondition{ConditionId::Burn,burnedMockmon},
+        MockmonEffectingCondition{PulsingConditionId::Burn,burnedMockmon},
         m_damagePortion(damagePortion)
         {
             //add attack drop

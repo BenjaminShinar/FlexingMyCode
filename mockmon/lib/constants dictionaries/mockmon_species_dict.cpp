@@ -30,9 +30,9 @@ namespace mockmon
             //moves list
             {1,{moves::MoveId::Tackle, moves::MoveId::TailWhip}},
             {7,{moves::MoveId::QuickAttack}},
-            // {14,{moves::MoveId::HyperFang}},
-            // {23,{moves::MoveId::FocusEnergy}},
-            // {34,{moves::MoveId::SuperFang}},
+            {14,{moves::MoveId::HyperFang}},
+         //   {23,{moves::MoveId::FocusEnergy}},
+            {34,{moves::MoveId::SuperFang}},
         }
         ),
         MakeDictionaryPair<MockmonSpecies>(MockmonSpeciesId::Raticate,
@@ -44,7 +44,7 @@ namespace mockmon
             {1,{moves::MoveId::Tackle, moves::MoveId::TailWhip}},
             {7,{moves::MoveId::QuickAttack}},
             {14,{moves::MoveId::HyperFang}},
-            {27,{moves::MoveId::FocusEnergy}},
+       //     {27,{moves::MoveId::FocusEnergy}},
             {41,{moves::MoveId::SuperFang}},
         }
         ),

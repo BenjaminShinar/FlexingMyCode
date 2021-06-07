@@ -13,7 +13,7 @@ namespace mockmon::condition
     class MockmonEffectingCondition : public ConditonPulseEffect
     {
         protected:
-        explicit MockmonEffectingCondition(ConditionId effectingCondition,Mockmon & effectedMockmon):
+        explicit MockmonEffectingCondition(PulsingConditionId effectingCondition,Mockmon & effectedMockmon):
         ConditonPulseEffect{effectingCondition},
         r_effected_mockmon(effectedMockmon)
         {

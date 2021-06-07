@@ -7,7 +7,7 @@ namespace mockmon::condition
     {
         public:
         explicit EmptyCondition():
-        ConditonPulseEffect(ConditionId::Flinch)
+        ConditonPulseEffect(PulsingConditionId::Flinch)
         {
         }
 

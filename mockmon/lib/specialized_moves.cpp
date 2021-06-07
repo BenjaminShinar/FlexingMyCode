@@ -32,36 +32,36 @@ namespace mockmon::moves
 
 
     //this probably belongs somewhere else
-    condition::pulser_uq_ptr MakeCondition(condition::ConditionId conditionid,Mockmon & effectedMockmon)
+    condition::pulser_uq_ptr MakeCondition(condition::PulsingConditionId conditionid,Mockmon & effectedMockmon)
     {
         using namespace condition;
         switch (conditionid)
         {
-        case ConditionId::Poison:
+        case PulsingConditionId::Poison:
             return std::make_unique<PoisonCondition>(effectedMockmon, 16.0);
             break;
-        case ConditionId::Sleep:
+        case PulsingConditionId::Sleep:
             return std::make_unique<SleepCondition>(effectedMockmon, 3);
             break;
-        case ConditionId::Burn:
+        case PulsingConditionId::Burn:
             return std::make_unique<BurnCondition>(effectedMockmon, 16.0);
             break;
-        case ConditionId::Paralysis:
+        case PulsingConditionId::Paralysis:
 
             break;
-        case ConditionId::Confusion:
+        case PulsingConditionId::Confusion:
 
             break;
-        case ConditionId::Freeze:
+        case PulsingConditionId::Freeze:
 
             break;
-        case ConditionId::Flinch:
+        case PulsingConditionId::Flinch:
 
             break;
-        case ConditionId::Reflect:
+        case PulsingConditionId::Reflect:
             return std::make_unique<ReflectCondition>(effectedMockmon);
             break;
-        case ConditionId::LightScreen:
+        case PulsingConditionId::LightScreen:
             return std::make_unique<LightScreenCondition>(effectedMockmon);
             break;
         default:

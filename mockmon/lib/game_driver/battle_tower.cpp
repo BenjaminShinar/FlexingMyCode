@@ -9,16 +9,23 @@
 
 namespace mockmon
 {
+
+        /**
+         * @brief 
+         * teach whatever moves i want to verify that work, this is a 'debug' function, not to be used in 'real game' situations...
+         * @param playerMonster 
+         */
+        void teachStartingMovesMoves(Mockmon & m)
+        {
+            using moves::MoveId;
+            m.TeachMove(MoveId::SolarBeam);
+            m.TeachMove(MoveId::SkullBash);
+        }
+
         void BattleTower::StartTower (Mockmon & playerMonster,unsigned int maxFloor)
         {
-            playerMonster.TeachMove(moves::MoveId::SleepPowder);
-            playerMonster.TeachMove(moves::MoveId::SolarBeam);
-            //playerMonster.TeachMove(moves::MoveId::Guillotine);
-            //playerMonster.TeachMove(moves::MoveId::DragonRage);
-            //playerMonster.TeachMove(moves::MoveId::Psywave);
-            //playerMonster.TeachMove(moves::MoveId::LightScreen);
-            //playerMonster.TeachMove(moves::MoveId::Reflect);
-            //playerMonster.TeachMove(moves::MoveId::Haze);
+            teachStartingMovesMoves(playerMonster);
+
             playerMonster.FullRestore();
             auto currentFloor{0u};
             while(currentFloor < maxFloor && playerMonster.IsAbleToBattle())

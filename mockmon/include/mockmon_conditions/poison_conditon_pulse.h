@@ -8,7 +8,7 @@ namespace mockmon::condition
     {
         public:
         explicit PoisonCondition(Mockmon & poisonedMockmon,double damagePortion):
-        MockmonEffectingCondition{ConditionId::Poison,poisonedMockmon},
+        MockmonEffectingCondition{PulsingConditionId::Poison,poisonedMockmon},
         m_damagePortion(damagePortion)
         {
         }
