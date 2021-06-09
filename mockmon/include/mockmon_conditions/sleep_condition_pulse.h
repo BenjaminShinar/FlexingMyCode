@@ -36,7 +36,7 @@ namespace mockmon::condition
         private:
 
         int m_sleep_duration;
-        unsigned int m_wake_up_chance;
+        const unsigned int m_wake_up_chance;
 
     };
 }

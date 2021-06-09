@@ -23,10 +23,7 @@ namespace mockmon::moves
         MakeDictionaryPair<ConstantMove>(MoveId::KarateChop ,25,40),
         MakeDictionaryPair<ConstantMove>(MoveId::RazorLeaf ,25,40),
 
-        MakeDictionaryPair<ConstantMove>(MoveId::PoisonSting ,35,56),
-        MakeDictionaryPair<ConstantMove>(MoveId::PoisonPowder ,35,56),
-        MakeDictionaryPair<ConstantMove>(MoveId::SleepPowder ,15,24),
-        MakeDictionaryPair<ConstantMove>(MoveId::StunSpore ,30,48),
+
         MakeDictionaryPair<ConstantMove>(MoveId::StringShot ,40,64),
         MakeDictionaryPair<ConstantMove>(MoveId::Ember ,25,40),
         MakeDictionaryPair<ConstantMove>(MoveId::Struggle,500,1000), //probably not needed!
@@ -34,6 +31,12 @@ namespace mockmon::moves
         MakeDictionaryPair<ConstantMove>(MoveId::QuickAttack,30,48), 
 
         MakeDictionaryPair<ConstantMove>(MoveId::Swift,20,32), 
+
+
+        //freezing moves
+        MakeDictionaryPair<ConstantMove>(MoveId::IcePunch,15,24),
+        MakeDictionaryPair<ConstantMove>(MoveId::IceBeam,10,16),
+        MakeDictionaryPair<ConstantMove>(MoveId::Blizzard,5,8),
 
         //set damage moves
         MakeDictionaryPair<ConstantMove>(MoveId::SuperFang,10,16),
@@ -44,6 +47,13 @@ namespace mockmon::moves
         MakeDictionaryPair<ConstantMove>(MoveId::Psywave,15,24), 
 
         //status condition moves
+        MakeDictionaryPair<ConstantMove>(MoveId::PoisonSting ,35,56),
+        MakeDictionaryPair<ConstantMove>(MoveId::PoisonPowder ,35,56),
+        MakeDictionaryPair<ConstantMove>(MoveId::SleepPowder ,15,24),
+        MakeDictionaryPair<ConstantMove>(MoveId::StunSpore ,30,48),
+        MakeDictionaryPair<ConstantMove>(MoveId::ConfuseRay,10,16), 
+
+
         MakeDictionaryPair<ConstantMove>(MoveId::Reflect,20,32), 
         MakeDictionaryPair<ConstantMove>(MoveId::LightScreen,30,48), 
         MakeDictionaryPair<ConstantMove>(MoveId::Haze,30,48), 

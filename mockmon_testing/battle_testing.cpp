@@ -118,7 +118,7 @@ SCENARIO( "pulsing conditions change stats", "[MockmonTest][condition]" )
     }
 }
 
-SCENARIO( "pulsing conditions go away on thier own after some turns", "[MockmonTest][condition]" ) 
+SCENARIO( "pulsing conditions must go away on thier own a max amount of turn", "[MockmonTest][condition]" ) 
 {
     using namespace::mockmon;
     using std::make_tuple;
@@ -157,7 +157,7 @@ SCENARIO( "pulsing conditions go away on thier own in a random matter", "[Mockmo
     using namespace::mockmon;
     using std::make_tuple;
     const auto speciesId = MockmonSpeciesId::Mew;
-    const auto loops{100000}; //how many times each
+    const auto loops{50000}; //how many times each
     const auto [testedCondition,maxTurns,expectedRecovery,expectedMargin] = GENERATE(
         make_tuple(condition::PulsingConditionId::Sleep,1,0.2,0.1),
         make_tuple(condition::PulsingConditionId::Sleep,2,0.4,0.1),

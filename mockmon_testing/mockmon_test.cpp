@@ -9,6 +9,22 @@ auto MakePredicator(T t)
     return ([t](const V & el){return el.IsSameAs(t);});
 }
 
+/**
+ * @brief 
+ * check that it has all moves
+ * @param m 
+ * @param ids 
+ * @return auto 
+ */
+auto RequireMoves(const mockmon::Mockmon & m, std::initializer_list<mockmon::moves::MoveId> ids)
+{    
+    using namespace::mockmon;
+    const auto & mvs = m.ViewMoveSet();
+    for (auto id : ids)
+    {
+        REQUIRE(VectorContains<moves::EquipedMove>(mvs,MakePredicator<moves::EquipedMove>(id)));
+    }
+}
 //test_casse(name[,tags])
 TEST_CASE( "Base Mockmon Mew State", "[MockmonTest]" ) 
 {
@@ -46,7 +62,7 @@ TEST_CASE( "Base Mockmon Mew State", "[MockmonTest]" )
     }
 }
 
-SCENARIO( "Base Mockmon Weedle State", "[MockmonTest]" ) 
+SCENARIO( "Base Mockmon Weedle State", "[MockmonTest][levelUpMoves]" ) 
 {
     using namespace::mockmon;
     const auto speciesId = MockmonSpeciesId::Weedle;
@@ -65,9 +81,7 @@ SCENARIO( "Base Mockmon Weedle State", "[MockmonTest]" )
         {
             THEN("it should know two moves")
             {
-                const auto & mvs = m.ViewMoveSet();
-                REQUIRE(VectorContains<moves::EquipedMove>(mvs,MakePredicator<moves::EquipedMove>(moves::MoveId::PoisonSting)));
-                REQUIRE(VectorContains(mvs,MakePredicator<moves::EquipedMove>(moves::MoveId::StringShot)));
+                RequireMoves(m,{moves::MoveId::PoisonSting,moves::MoveId::StringShot});
             }
         }
         AND_WHEN("we level it up")
@@ -83,7 +97,7 @@ SCENARIO( "Base Mockmon Weedle State", "[MockmonTest]" )
     }
 }
 
-SCENARIO( "Base Mockmon Ratata State", "[MockmonTest]" ) 
+SCENARIO( "Base Mockmon Ratata State", "[MockmonTest][levelUpMoves]" ) 
 {
     using namespace::mockmon;
     const auto speciesId = MockmonSpeciesId::Rattata;
@@ -101,9 +115,7 @@ SCENARIO( "Base Mockmon Ratata State", "[MockmonTest]" )
         {
             THEN("it should know two moves")
             {
-                const auto & mvs = m.ViewMoveSet();
-                REQUIRE(VectorContains<moves::EquipedMove>(mvs,MakePredicator<moves::EquipedMove>(moves::MoveId::Tackle)));
-                REQUIRE(VectorContains<moves::EquipedMove>(mvs,MakePredicator<moves::EquipedMove>(moves::MoveId::TailWhip)));
+                RequireMoves(m,{moves::MoveId::Tackle,moves::MoveId::TailWhip});
             }
         }
         AND_WHEN("we level it up to level 7")
@@ -114,8 +126,7 @@ SCENARIO( "Base Mockmon Ratata State", "[MockmonTest]" )
             THEN("it should be a higher level and know more moves")
             {
                 REQUIRE( m.GetCurrentLevel()==7);
-                const auto & mvs = m.ViewMoveSet();
-                REQUIRE(VectorContains<moves::EquipedMove>(mvs,MakePredicator<moves::EquipedMove>(moves::MoveId::QuickAttack)));
+                RequireMoves(m,{moves::MoveId::QuickAttack});
             }
         }
     }

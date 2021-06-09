@@ -40,12 +40,22 @@ namespace mockmon::moves
         // moves that can efflict Status in addition to damage
         //CreateOpponentConditionMove
         MakeDictionaryPair<CompositeMove>(MoveId::PoisonSting,CreateNormalAccuracyCheck(100,MovesTargeting::AccuracyEvasion),il_exMV{CreateNormalDamagingMove(MovesTargeting::PurePhysical),CreateOpponentPulsingConditionMove({types::Types::Poison,30,condition::PulsingConditionId::Poison})}),
-        MakeDictionaryPair<CompositeMove>(MoveId::Ember,CreateNormalAccuracyCheck(100,MovesTargeting::AccuracyEvasion),il_exMV{CreateNormalDamagingMove(MovesTargeting::PureSpecial),CreateOpponentPulsingConditionMove({types::Types::Fire,10,condition::PulsingConditionId::Burn})}),
+        MakeDictionaryPair<CompositeMove>(MoveId::Ember,CreateNormalAccuracyCheck(100,MovesTargeting::AccuracyEvasion),il_exMV{CreateNormalDamagingMove(MovesTargeting::PureSpecial),CreateOpponentPulsingConditionMove({types::Types::Fire,10,condition::PulsingConditionId::Burn}),CreateRemoveOpponentPulsingConditionMove({types::Types::Fire,100,condition::PulsingConditionId::Freeze})}),
         
+        //freezing moves
+        MakeDictionaryPair<CompositeMove>(MoveId::IcePunch,CreateNormalAccuracyCheck(100,MovesTargeting::AccuracyEvasion),il_exMV{CreateNormalDamagingMove(MovesTargeting::PureSpecial),CreateOpponentPulsingConditionMove({types::Types::Ice,10,condition::PulsingConditionId::Freeze})}),
+        MakeDictionaryPair<CompositeMove>(MoveId::IceBeam,CreateNormalAccuracyCheck(100,MovesTargeting::AccuracyEvasion),il_exMV{CreateNormalDamagingMove(MovesTargeting::PureSpecial),CreateOpponentPulsingConditionMove({types::Types::Ice,10,condition::PulsingConditionId::Freeze})}),
+        MakeDictionaryPair<CompositeMove>(MoveId::Blizzard,CreateNormalAccuracyCheck(90,MovesTargeting::AccuracyEvasion),il_exMV{CreateNormalDamagingMove(MovesTargeting::PureSpecial),CreateOpponentPulsingConditionMove({types::Types::Ice,10,condition::PulsingConditionId::Freeze})}),
+
+        //flinching moves
+        MakeDictionaryPair<CompositeMove>(MoveId::HyperFang,CreateNormalAccuracyCheck(90,MovesTargeting::AccuracyEvasion), il_exMV{CreateNormalDamagingMove(MovesTargeting::PurePhysical),CreateOpponentPulsingConditionMove({types::Types::Typeless,10,condition::PulsingConditionId::Flinch}) }),  
+
         // moves that only efflict conditions
         MakeDictionaryPair<CompositeMove>(MoveId::PoisonPowder,CreateNormalAccuracyCheck(75,MovesTargeting::AccuracyEvasion),il_exMV{CreateOpponentPulsingConditionMove({types::Types::Poison,100,condition::PulsingConditionId::Poison})}),
         MakeDictionaryPair<CompositeMove>(MoveId::SleepPowder,CreateNormalAccuracyCheck(75,MovesTargeting::AccuracyEvasion),il_exMV{CreateOpponentPulsingConditionMove({types::Types::Grass,100,condition::PulsingConditionId::Sleep})}),
         MakeDictionaryPair<CompositeMove>(MoveId::StunSpore,CreateNormalAccuracyCheck(75,MovesTargeting::AccuracyEvasion),il_exMV{CreateOpponentPulsingConditionMove({types::Types::Grass,100,condition::PulsingConditionId::Paralysis})}),
+        MakeDictionaryPair<CompositeMove>(MoveId::ConfuseRay,CreateNormalAccuracyCheck(75,MovesTargeting::AccuracyEvasion),il_exMV{CreateOpponentPulsingConditionMove({types::Types::Ghost,100,condition::PulsingConditionId::Confusion})}),
+
 
         MakeDictionaryPair<CompositeMove>(MoveId::Reflect,CreateByPassAccuracyCheck(),il_exMV{CreateSelfNonPulsingConditionMove({types::Types::Psychic,100,condition::NonPulsingConditionId::Reflect})}),
         MakeDictionaryPair<CompositeMove>(MoveId::LightScreen,CreateByPassAccuracyCheck(),il_exMV{CreateSelfNonPulsingConditionMove({types::Types::Psychic,100,condition::NonPulsingConditionId::LightScreen})}),
@@ -63,20 +73,6 @@ namespace mockmon::moves
         // semi invurnable
         MakeDictionaryPair<CompositeMove>(MoveId::Dig,CreateByPassAccuracyCheck(),il_exMV{CreateStoredMove(MoveId::Dig)}),
         MakeDictionaryPair<CompositeMove>(MoveId::Fly,CreateByPassAccuracyCheck(),il_exMV{CreateStoredMove(MoveId::Fly)}),
-
-        // {MoveId::TailWhip,SimpleMove(MoveId::TailWhip,types::Types::Normal,100,5)},
-        // {MoveId::QuickAttack,SimpleMove(MoveId::QuickAttack,types::Types::Normal,100,40)},
-        // {MoveId::HyperFang,SimpleMove(MoveId::HyperFang,types::Types::Normal,90,80)},
-        // {MoveId::FocusEnergy,SimpleMove(MoveId::FocusEnergy,types::Types::Normal,100,5)},
-        // {MoveId::SuperFang,SimpleMove(MoveId::SuperFang,types::Types::Normal,90,5)},
-        // {MoveId::WaterGun, SimpleMove(MoveId::WaterGun,types::Types::Water,100,40)},
-        // {MoveId::Guillotine ,SimpleMove(MoveId::Guillotine ,types::Types::Normal,30,200)},
-        // {MoveId::Slash ,SimpleMove(MoveId::Slash ,types::Types::Normal,100,70)},
-        // {MoveId::PoisonSting ,SimpleMove(MoveId::PoisonSting,types::Types::Poison ,100,15)}, //status
-        // {MoveId::StringShot ,SimpleMove(MoveId::StringShot,types::Types::Bug,95,10)}, //status
-        // {MoveId::Ember ,SimpleMove(MoveId::Ember,types::Types::Fire,100,40)},
-
-        //{MoveId::Struggle, SimpleMove(MoveId::Struggle,types::Types::Typeless,50,30)},
     };
 
 
@@ -93,7 +89,7 @@ namespace mockmon::moves
 
         MakeDictionaryPair<CompositeMove>(MoveId::Recharging,CreateByPassAccuracyCheck(), il_exMV{CreateWastedTurnMove()}),
 
-//effected by conditions
+        //effected by conditions
         MakeDictionaryPair<CompositeMove>(MoveId::WakeUp,CreateByPassAccuracyCheck(), il_exMV{CreateWastedTurnMove()}),
         MakeDictionaryPair<CompositeMove>(MoveId::KeepSleeping,CreateByPassAccuracyCheck(), il_exMV{CreateWastedTurnMove()}),
         MakeDictionaryPair<CompositeMove>(MoveId::Flinch,CreateByPassAccuracyCheck(), il_exMV{CreateWastedTurnMove()}),

@@ -35,6 +35,10 @@ namespace mockmon::moves
         MakeDictionaryPair<SimpleMove>(MoveId::SwordsDance,types::Types::Normal,0), //boosting
         MakeDictionaryPair<SimpleMove>(MoveId::QuickAttack,types::Types::Normal,40), //priority
 
+        //freezing moves
+        MakeDictionaryPair<SimpleMove>(MoveId::IcePunch,types::Types::Ice,75),
+        MakeDictionaryPair<SimpleMove>(MoveId::IceBeam,types::Types::Ice,95),
+        MakeDictionaryPair<SimpleMove>(MoveId::Blizzard,types::Types::Ice,120),
         // moves that can't miss
         MakeDictionaryPair<SimpleMove>(MoveId::Swift,types::Types::Normal,60), //can't miss
         //set damage moves
@@ -50,6 +54,8 @@ namespace mockmon::moves
         MakeDictionaryPair<SimpleMove>(MoveId::PoisonPowder,types::Types::Poison ,0), //status
         MakeDictionaryPair<SimpleMove>(MoveId::SleepPowder,types::Types::Grass ,0), //status
         MakeDictionaryPair<SimpleMove>(MoveId::StunSpore,types::Types::Grass ,0), //status
+
+        MakeDictionaryPair<SimpleMove>(MoveId::ConfuseRay,types::Types::Ghost ,0), //status
 
         MakeDictionaryPair<SimpleMove>(MoveId::Reflect,types::Types::Psychic ,0), //status
         MakeDictionaryPair<SimpleMove>(MoveId::LightScreen,types::Types::Psychic ,0), //status
@@ -71,7 +77,7 @@ namespace mockmon::moves
         //moves requiring recharge
         //MakeDictionaryPair<SimpleMove>(MoveId::SolarBeam,types::Types::Grass ,100), //damage is still taken from here
 
-        //confusion
+        //hit self in confusion
         MakeDictionaryPair<SimpleMove>(MoveId::HitSelfInConfusion,types::Types::Typeless ,40), //damage is still taken from here
         
     };

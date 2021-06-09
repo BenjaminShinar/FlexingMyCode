@@ -19,8 +19,11 @@ namespace mockmon
         {
             using moves::MoveId;
             m.TeachMove(MoveId::StunSpore);
-            m.TeachMove(MoveId::LightScreen);
+            m.TeachMove(MoveId::HyperFang);
+            m.TeachMove(MoveId::Ember);
+
         }
+
 
         void BattleTower::StartTower (Mockmon & playerMonster,unsigned int maxFloor)
         {

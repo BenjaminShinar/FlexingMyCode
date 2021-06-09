@@ -101,6 +101,10 @@ namespace mockmon::moves
     ExMove CreateOpponentNonPulsingConditionMove(const NonPulsingStatusInflicment statusConditionInflicment);
     ExMove CreateSelfNonPulsingConditionMove(const NonPulsingStatusInflicment statusConditionInflicment);
 
+    //remove one spesific pulsing condition - freeze by burn
+    ExMove CreateRemoveOpponentPulsingConditionMove(const PulsingStatusInflicment statusConditionInflicment);
+    ExMove CreateRemoveSelfPulsingConditionMove(const PulsingStatusInflicment statusConditionInflicment);
+
     ExMove CreateResetSelfConditionMove();
     ExMove CreateResetOpponentConditionMove();
 

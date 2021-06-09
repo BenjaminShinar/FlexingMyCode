@@ -64,8 +64,8 @@ I want to replicate the bugs. over the years, the player community discovered ma
 - [ ] non-pulsing conditions - conditions that just stick to the mockmon with 'active' effects (light screen, reflect, focus energy)
 
 ##### flinch - pulse
-- [ ] mockmon won't move
-- [ ] only relevent when going 2nd
+- [x] mockmon won't move
+- [ ] only relevent when going first, think about this
 
 ##### burn - pulse
 - [x] inflict damage
@@ -74,9 +74,11 @@ I want to replicate the bugs. over the years, the player community discovered ma
 - [ ] more gen I shannignas
 
 ##### frozen - pulse
-- [ ] can't move
+- [x] can't move
 - [ ] doesn't effect ice types
-- [ ] thawed by fire attacks (and other attacks?)
+- [x] thawed by fire attacks (and other attacks?)
+- [ ] Gen I Power points glitch
+- [ ] thawing with a stored move?
 
 ##### paralyzed - pulse
 - [x] a chance to not move
@@ -100,14 +102,18 @@ I want to replicate the bugs. over the years, the player community discovered ma
 - [ ] when caused by sleep, always 2 turns of sleep
 
 ##### confused  - pulse
-- [ ] chance to hitself with a special attack (no type, no critical hit)
-- [ ] chance to snap out of confusion
+- [x] chance to hitself 
+- [ ] hit self with has no stab and no critical hit, and no random damage ranges
+- [x] chance to snap out of confusion
 - [ ] how it works with multiturn abilities
 - [ ] Gen I glitch where defence is effected by the enemy having reflect (mentioned in the wiki under confusion, not under general glitchs)
 
 ##### haze
-- [ ] remove some conditions
-- [ ] resets status modifiers
+- [x] remove conditions
+- [ ] some conditions shouldnt be removed: non volatile (sleep, burn, poison, paralyze)
+- [x] resets status modifiers
+- [ ] reset badge boost
+- [ ] Gen I issues
 
 ##### leech seed
 ##### subsitute

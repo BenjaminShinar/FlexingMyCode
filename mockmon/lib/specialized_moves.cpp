@@ -70,14 +70,16 @@ namespace mockmon::moves
 
             break;
         case PulsingConditionId::Freeze:
-
+            return std::make_unique<FreezeCondition>(effectedMockmon);
             break;
         case PulsingConditionId::Flinch:
+            return std::make_unique<FlinchCondition>(effectedMockmon);
             break;
         default:
             break;
         }
         std::cerr << __FUNCTION__ << " should never have reached this location!\n";
+        exit(1);
         return std::make_unique<EmptyCondition>();
     }
 
@@ -283,6 +285,55 @@ namespace mockmon::moves
         return o;
     }
 
+    MoveOutcome RemoveOpponentPulsingConditionStatus(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const PulsingStatusInflicment statusConditionInflicment)
+    {
+
+        if (!defender.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.AfflicteCondition))
+        {
+            //not afflicted
+            MoveOutcome o{AppendAll({defender.GetName(), "is not", Stringify(statusConditionInflicment.AfflicteCondition),".",Stringify(attackingMoveId), "failed!"})};    
+            return o;
+        }
+        if (random::Randomer::CheckPercentage(statusConditionInflicment.ChanceToAfflictCondtion))
+        {
+            defender.m_currentCondtion.RemovePulsingCondition(statusConditionInflicment.AfflicteCondition);
+            if (!defender.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.AfflicteCondition))
+            {
+                //success
+                MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(attackingMoveId), "!", defender.GetName(),"is no longer", Stringify(statusConditionInflicment.AfflicteCondition)})};
+                return o;    
+            }
+        }
+
+        //failed to afflict / missed
+        MoveOutcome o{AppendAll({attacker.GetName(),"tried to use",Stringify(attackingMoveId), "but it failed to remove condition",Stringify(statusConditionInflicment.AfflicteCondition)})};    
+        return o;
+    }
+
+    MoveOutcome RemoveSelfPulsingConditionStatus(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const PulsingStatusInflicment statusConditionInflicment)
+    {
+        if (!attacker.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.AfflicteCondition))
+        {
+            //not afflicted
+            MoveOutcome o{AppendAll({attacker.GetName(), "is not", Stringify(statusConditionInflicment.AfflicteCondition),".",Stringify(attackingMoveId), "failed!"})};    
+            return o;
+        }
+        if (random::Randomer::CheckPercentage(statusConditionInflicment.ChanceToAfflictCondtion))
+        {
+            attacker.m_currentCondtion.RemovePulsingCondition(statusConditionInflicment.AfflicteCondition);
+            if (!attacker.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.AfflicteCondition))
+            {
+                //success
+                MoveOutcome o{AppendAll({attacker.GetName(), "used", Stringify(attackingMoveId), "!", attacker.GetName(),"is no longer", Stringify(statusConditionInflicment.AfflicteCondition)})};
+                return o;    
+            }
+        }
+
+        //failed to afflict / missed
+        MoveOutcome o{AppendAll({attacker.GetName(),"tried to use",Stringify(attackingMoveId), "but it failed to remove condition",Stringify(statusConditionInflicment.AfflicteCondition)})};    
+        return o;
+    }
+
     MoveOutcome AddOpponentNonePulsingConditionStatus(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const NonPulsingStatusInflicment statusConditionInflicment)
     {
         if (defender.GetMockmonSpeciesData().IsSpeciesOfType(statusConditionInflicment.moveType))
@@ -470,6 +521,18 @@ namespace mockmon::moves
     ExMove CreateSelfNonPulsingConditionMove(const NonPulsingStatusInflicment statusConditionInflicment)
     {
         auto bounded = std::bind(&AddSelfNonePulsingConditionStatus, _1, _2, _3, _4,statusConditionInflicment);
+        return bounded;
+    }
+
+    ExMove CreateRemoveOpponentPulsingConditionMove(const PulsingStatusInflicment statusConditionInflicment)
+    {
+        auto bounded = std::bind(&RemoveOpponentPulsingConditionStatus, _1, _2, _3, _4,statusConditionInflicment);
+        return bounded;
+    }
+
+    ExMove CreateRemoveSelfPulsingConditionMove(const PulsingStatusInflicment statusConditionInflicment)
+    {
+        auto bounded = std::bind(&RemoveSelfPulsingConditionStatus, _1, _2, _3, _4,statusConditionInflicment);
         return bounded;
     }
 

@@ -23,7 +23,7 @@ namespace mockmon::condition
         }
         private:
 
-        unsigned int m_full_paralysis_chance;
+        const unsigned int m_full_paralysis_chance;
 
     };
 }
