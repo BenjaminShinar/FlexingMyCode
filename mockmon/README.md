@@ -97,11 +97,13 @@ I want to replicate the bugs. over the years, the player community discovered ma
 - [x] chance to wake up
 - [x] maximum sleeping turns
 - [ ] effected by dream eater
+- [ ] when caused by sleep, always 2 turns of sleep
 
 ##### confused  - pulse
 - [ ] chance to hitself with a special attack (no type, no critical hit)
 - [ ] chance to snap out of confusion
 - [ ] how it works with multiturn abilities
+- [ ] Gen I glitch where defence is effected by the enemy having reflect (mentioned in the wiki under confusion, not under general glitchs)
 
 ##### haze
 - [ ] remove some conditions
@@ -115,8 +117,8 @@ I want to replicate the bugs. over the years, the player community discovered ma
 - [x] light screen - change only special when defending
 
 ##### focus energy - non-pulse
-- [ ] effect critical hit rate
-- [ ] gen I issues
+- [x] effect critical hit rate
+- [x] gen I issues
 
 
 ### What's a mockmon, actually?
@@ -159,7 +161,7 @@ can i use automated testing?
 - [x] add actual relevent test
 - [ ] learn more about testing and clean the code
 - [ ] expand testing to anything we can test
-- [ ] can tests timeout? how? (if a battle never ends)
+- [x] can tests timeout? how? (if a battle never ends)
 
 #### test conditions
 - [x] testing that burn and poison damage the mockmon

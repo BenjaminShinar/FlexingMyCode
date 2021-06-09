@@ -86,7 +86,11 @@ namespace mockmon::moves
     ExMoveChanceCheck CreateByPassAccuracyCheck();
 
     ExMove CreateNormalDamagingMove(const MovesTargeting movesTargeting);
+    ExMove CreateNormalSelfDamagingMove(const MovesTargeting movesTargeting);
+
     ExMove CreateNormalRecoilDamagingMove(const double divFactor);
+
+
     ExMove CreateSelfStatChangingMove(StatsTypes effectedStat, StatModifiersLevels modifer);
     ExMove CreateOpponentStatChangingMove(StatsTypes effectedStat, StatModifiersLevels modifer);
     

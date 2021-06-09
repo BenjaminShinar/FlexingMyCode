@@ -13,6 +13,7 @@ namespace mockmon::condition
              case PulsingConditionId::Freeze: return "Freeze condition";break;
              case PulsingConditionId::Paralysis: return "Paralysis condition";break;
              case PulsingConditionId::Flinch: return "Flinch condition";break;
+             case PulsingConditionId::Confusion: return "Confused condition";break;
 
             default: return "Unknown condition!"; break;
         }

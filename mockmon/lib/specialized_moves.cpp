@@ -13,6 +13,14 @@
 namespace mockmon::moves
 {
     using namespace std::placeholders; //import this for _1,_2,
+
+    /**
+     * @brief 
+     * perform all the parts of the move
+     * @param arena 
+     * @param attacker 
+     * @param defender 
+     */
     void CompositeMove::Perform(Arena &arena, Mockmon &attacker, Mockmon &defender) const
     {
         const auto o = MoveChance(arena,attacker,defender);
@@ -31,7 +39,14 @@ namespace mockmon::moves
     }
 
 
-    //this probably belongs somewhere else
+    /**
+     * @brief 
+     * create a condition on a different mockmon
+     * this probably belongs somewhere else 
+     * @param conditionid 
+     * @param effectedMockmon 
+     * @return condition::pulser_uq_ptr 
+     */
     condition::pulser_uq_ptr MakeCondition(condition::PulsingConditionId conditionid,Mockmon & effectedMockmon)
     {
         using namespace condition;
@@ -41,7 +56,7 @@ namespace mockmon::moves
             return std::make_unique<PoisonCondition>(effectedMockmon, 16.0);
             break;
         case PulsingConditionId::Sleep:
-            return std::make_unique<SleepCondition>(effectedMockmon, 3);
+            return std::make_unique<SleepCondition>(effectedMockmon, random::Randomer::GetRandom(7)+1);
             break;
         case PulsingConditionId::Burn:
             return std::make_unique<BurnCondition>(effectedMockmon, 16.0);
@@ -51,6 +66,7 @@ namespace mockmon::moves
 
             break;
         case PulsingConditionId::Confusion:
+            return std::make_unique<ConfusionCondition>(effectedMockmon,random::Randomer::GetRandom(4)+2);
 
             break;
         case PulsingConditionId::Freeze:
@@ -65,11 +81,18 @@ namespace mockmon::moves
         return std::make_unique<EmptyCondition>();
     }
 
-    //here are some other attacks, will eventually need refactoring
-
-
 #pragma region move success Chances
    
+   /**
+    * @brief 
+    * determine if an attack hits the opponent. uses noraml accuracy check
+    * @param arena 
+    * @param attacker attacking mon
+    * @param defender defending mon
+    * @param attackingMoveBaseAccuracy accuracy from 0 to 100
+    * @param movesTargeting which stats are used to calculate modifiers to the chance
+    * @return MoveOutcome 
+    */
     MoveOutcome RegularAccuracyCheckMove(Arena &arena, Mockmon &attacker, Mockmon &defender,int attackingMoveBaseAccuracy, const MovesTargeting & movesTargeting)
     {
         const auto targetingPair{MoveStatsTargeting::AllStatsTargeting.at(movesTargeting)};
@@ -85,7 +108,17 @@ namespace mockmon::moves
             return MoveOutcome{"",false};
         }
     }
-
+    /**
+     * @brief Set the Chances Check Move object
+     * set chance for moves to succeed or fail.
+     * mostly for self boosting moves?
+     * im not sure its relevnet
+     * @param arena 
+     * @param attacker 
+     * @param defender 
+     * @param setChances 
+     * @return MoveOutcome 
+     */
     MoveOutcome SetChancesCheckMove(Arena &arena, Mockmon &attacker, Mockmon &defender,int setChances)
     {
         if (random::Randomer::CheckPercentage(setChances))
@@ -97,7 +130,16 @@ namespace mockmon::moves
             return MoveOutcome{"",false};
         }
     }
-
+    /**
+     * @brief 
+     * moves that cant miss
+     * mostly used for self boosting moves
+     * or swift
+     * @param arena 
+     * @param attacker 
+     * @param defender 
+     * @return MoveOutcome 
+     */
     MoveOutcome BypassAccuracyCheckMove(Arena &arena, Mockmon &attacker, Mockmon &defender)
     {
         return MoveOutcome{"",true};
@@ -122,6 +164,15 @@ namespace mockmon::moves
         return o;
     }
 
+    MoveOutcome RegularSelfMove(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender,const MovesTargeting & movesTargeting)
+    {
+        const auto targetingPair{MoveStatsTargeting::AllStatsTargeting.at(movesTargeting)};
+        auto damage = static_cast<int>(battle::Battle::ModifyAttack(attackingMoveId, attacker,targetingPair.AttackerStat, attacker,targetingPair.DefenderStat));
+        attacker.CurrentBattleStats.Health.ChangeHealth(-1 * damage);
+        MoveOutcome o{AppendAll({attacker.GetName(), "hit itself with", Stringify(attackingMoveId), "for", std::to_string(damage), "damage!"})};
+        return o;
+    }
+
     MoveOutcome RecoilDamageMove(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, double divisionFactor)
     {
         auto damage = std::max(1, static_cast<int>(battle::Battle::ModifyAttack(attackingMoveId, attacker,StatsTypes::Attack, attacker,StatsTypes::Defence) / divisionFactor));
@@ -130,6 +181,8 @@ namespace mockmon::moves
         return o;
     }
 
+
+#pragma region stats boosting and hexing
     MoveOutcome ChangeSelfStatMove(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, StatsTypes effectedStat, StatModifiersLevels modifer)
     {
         auto & statRef =  attacker.CurrentBattleStats.m_battleStats.at(effectedStat);
@@ -147,6 +200,9 @@ namespace mockmon::moves
         MoveOutcome o{AppendAll({attacker.GetName(), "used", Stringify(attackingMoveId), "and changed", defender.GetName(),"stat from", std::to_string(previous), "to", std::to_string(statRef.GetStat())})};
         return o;
     }
+
+
+#pragma endregion
 
     MoveOutcome DirectDamageByPassResistance(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, double damage)
     {
@@ -171,6 +227,7 @@ namespace mockmon::moves
         return o;
     }
 
+#pragma region conditions
     //TODO: find a way to remove this whole mess 
     MoveOutcome AddOpponentPulsingConditionStatus(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const PulsingStatusInflicment statusConditionInflicment)
     {
@@ -226,7 +283,6 @@ namespace mockmon::moves
         return o;
     }
 
-
     MoveOutcome AddOpponentNonePulsingConditionStatus(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const NonPulsingStatusInflicment statusConditionInflicment)
     {
         if (defender.GetMockmonSpeciesData().IsSpeciesOfType(statusConditionInflicment.moveType))
@@ -281,7 +337,12 @@ namespace mockmon::moves
         return o;
     }
 
-    void ResetAllStatChanges(Mockmon &effectedMockmon)
+#pragma endregion
+  
+
+#pragma region reset stats and condition
+
+    void ResetAllStatsAndConditionsChanges(Mockmon &effectedMockmon)
     {
         effectedMockmon.m_currentCondtion.RemoveAllConditions();
         for (auto & statsPair : effectedMockmon.CurrentBattleStats.m_battleStats)
@@ -289,21 +350,23 @@ namespace mockmon::moves
             statsPair.second.ResetBoost();
         }
     }
-    
+
     MoveOutcome ResetSelfAllConditions(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender)
     {
-        ResetAllStatChanges(attacker);
+        ResetAllStatsAndConditionsChanges(attacker);
         MoveOutcome o{AppendAll({attacker.GetName(),"used",Stringify(attackingMoveId), "to reset all it's stats!"})};    
         return o;
     }
 
     MoveOutcome ResetOpponenetAllConditions(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender)
     {
-        ResetAllStatChanges(defender);
+        ResetAllStatsAndConditionsChanges(defender);
         MoveOutcome o{AppendAll({attacker.GetName(),"used",Stringify(attackingMoveId), "to reset all of",defender.GetName(),"stats!"})};    
         return o;
     }
 
+#pragma endregion
+   
     MoveOutcome StoreSelfChargedMove(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender,const moves::MoveId storedMoveId)
     {
         attacker.m_currentCondtion.StoreChargedMove(storedMoveId);
@@ -377,6 +440,11 @@ namespace mockmon::moves
     ExMove CreateNormalDamagingMove(const MovesTargeting movesTargeting)
     {
         auto bounded = std::bind(&RegularMove, _1, _2, _3, _4,movesTargeting);
+        return bounded;
+    }
+    ExMove CreateNormalSelfDamagingMove(const MovesTargeting movesTargeting)
+    {
+        auto bounded = std::bind(&RegularSelfMove, _1, _2, _3, _4,movesTargeting);
         return bounded;
     }
 

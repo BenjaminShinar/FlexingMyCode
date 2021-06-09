@@ -13,9 +13,15 @@ namespace mockmon::random
         {
             return distribution(generator);
         }
-        static unsigned int GetRandom(unsigned int mod)
+        /**
+         * @brief Get the Random object
+         * get randon number between [0,limit). l
+         * @param limit exclusive, can't be drawn.
+         * @return unsigned int 
+         */
+        static unsigned int GetRandom(unsigned int limit)
         {
-            return GetRandom() % mod;
+            return GetRandom() % (limit);
         }
         
         static bool CheckPercentage(int chance)

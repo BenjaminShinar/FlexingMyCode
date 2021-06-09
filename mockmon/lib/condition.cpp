@@ -39,6 +39,14 @@ namespace mockmon::condition
         return true;
     }
 
+/**
+ * @brief 
+ * get boosting modifiers that depend on condition-status, not the regular boosting modifers
+ * used for burn - attack, parylsis - speed, reflect - physical defence, screen - special at defence, etc...
+ * @param requestStat which stat is in question
+ * @param attacking some modiferes are only relevent when attacking / defending
+ * @return double - the modifier for this stat
+ */
     double Condition::GetConditionalBoost(StatsTypes requestStat,bool attacking) const
     {
         double boost{1.0};
@@ -81,8 +89,8 @@ namespace mockmon::condition
         }
         case StatsTypes::CriticalHitChance:
         {
-            if (IsAffiliatedWithCondition(condition::NonPulsingConditionId::FocusEnergy))
-                boost *= 0.25; //chance critical hit chance. GEN I glitch
+            if (attacking && IsAffiliatedWithCondition(condition::NonPulsingConditionId::FocusEnergy))
+                boost *= 0.25; //chance critical hit chance. GEN I glitch. originally should be *4
             break;
         }
         default:

@@ -70,5 +70,9 @@ namespace mockmon::moves
 
         //moves requiring recharge
         //MakeDictionaryPair<SimpleMove>(MoveId::SolarBeam,types::Types::Grass ,100), //damage is still taken from here
+
+        //confusion
+        MakeDictionaryPair<SimpleMove>(MoveId::HitSelfInConfusion,types::Types::Typeless ,40), //damage is still taken from here
+        
     };
 }

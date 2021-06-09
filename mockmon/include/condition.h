@@ -38,7 +38,7 @@ namespace mockmon::condition
         bool IsAffiliatedWithCondition(PulsingConditionId pulsingConditiondId) const;
         bool IsAffiliatedWithCondition(NonPulsingConditionId nonepulsingConditiondId) const;
 
-        double GetConditionalBoost(StatsTypes requestStat,bool attacking) const; //used for burn - attack, parylsis - speed, reflect - physical defence, screen - special at defence, etc...
+        double GetConditionalBoost(StatsTypes requestStat,bool attacking) const;
         void CausePulsingCondition(pulser_uq_ptr && pulser);
         void CauseNonPulsingCondition(NonPulsingConditionId nonepulsingConditiondId);
         void RemovePulsingCondition(PulsingConditionId pulsingConditiondId);
@@ -49,13 +49,8 @@ namespace mockmon::condition
         void StoreChargedMove(moves::MoveId mvId);
         private:
         void RemoveAllDueConditions(); //remove non relevent conditions 
-        std::vector<pulser_uq_ptr> m_spesific_conditions; //maybe std::varient? i don't want to store pointers!
-        
-        /**
-         * @brief store all the charged move for next turns
-         * 
-         */
+        std::vector<pulser_uq_ptr> m_spesific_conditions; //maybe std::varient? std::set? i don't want to store pointers! how to polymorphism better?
+        std::set<NonPulsingConditionId> m_nonPulseCondtions; 
         std::stack<moves::MoveId> m_chargedMoves;
-        std::set<NonPulsingConditionId> m_nonPulseCondtions;
     };
 }

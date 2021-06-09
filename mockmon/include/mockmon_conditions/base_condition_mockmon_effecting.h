@@ -21,7 +21,7 @@ namespace mockmon::condition
 
         ~MockmonEffectingCondition()
         {
-            
+            if (r_effected_mockmon.DisplayEvent())
             std::cout << AppendAll({r_effected_mockmon.GetName(), "is no longer" , Stringify(conditonId)}) <<'\n';
         }
         
