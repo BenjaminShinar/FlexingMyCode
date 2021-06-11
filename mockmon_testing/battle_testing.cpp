@@ -1,9 +1,12 @@
 #include <catch2/catch.hpp>
-#include "../mockmon/include/mockmon_data.h"
+#include "mockmon_test_utils.h"
 #include "../mockmon/include/battle.h"
 #include "../mockmon/include/specialized_moves.h"
+#include "../mockmon/include/moves_stats_targeting.h"
+
 #include <cmath>
 #include <algorithm>
+#include <set>
 
 
 SCENARIO( "Battle test", "[MockmonTest]" ) 
@@ -26,20 +29,66 @@ SCENARIO( "Battle test", "[MockmonTest]" )
     }
 }
 
+SCENARIO( "damage ranges test", "[MockmonTest][!mayfail]" ) 
+{
+    using namespace::mockmon;
+    using std::make_tuple;
+    const auto speciesId = MockmonSpeciesId::Mew;
+
+    const auto [usedMove, movesTargeting, requiredLevel, expectedValuesCount, minDamage, maxDamage] = GENERATE(
+        make_tuple(moves::MoveId::Slash, moves::MovesTargeting::PurePhysical, 100, 16u, 98, 116),
+        make_tuple(moves::MoveId::KarateChop, moves::MovesTargeting::PurePhysical, 100, 8u, 37, 44),
+        make_tuple(moves::MoveId::RazorLeaf, moves::MovesTargeting::PureSpecial, 100, 16u, 78, 92),
+        make_tuple(moves::MoveId::Crabhammer, moves::MovesTargeting::PureSpecial, 100, 16u, 126, 149));
+
+    const auto attempts = 100000;
+
+    GIVEN("two mews mockmon engaging in a battle")
+    {
+        Mockmon ma(speciesId,"mew A");
+        Mockmon mb(speciesId,"mew B");
+        MockmonTestUtils::BringMockmonToLevel(ma,requiredLevel);
+        MockmonTestUtils::BringMockmonToLevel(mb,requiredLevel);
+
+
+        WHEN(std::string("we calculate damage 10000 times for ")+Stringify(usedMove))
+        {
+            std::set<int> damageRanges;
+            const auto targetingPair{moves::MoveStatsTargeting::AllStatsTargeting.at(movesTargeting)};
+            for (auto i =0;i<attempts; ++i)
+            {
+                auto damage = static_cast<int>(battle::Battle::ModifyAttack(usedMove, ma,targetingPair.AttackerStat, mb,targetingPair.DefenderStat));
+
+                damageRanges.insert(damage);
+            }
+            THEN("there must be the correct amounts possible damage values")
+            {
+                const auto mnmx = std::minmax_element(std::begin(damageRanges),std::end(damageRanges));
+                CHECK(damageRanges.size() == expectedValuesCount);
+                //TODO: fix damage ranges?
+                CHECK(*mnmx.first == minDamage); 
+                CHECK(*mnmx.second == maxDamage);
+            }
+        }
+
+    }
+}
+
 SCENARIO( "damaging conditions", "[MockmonTest][condition]" ) 
 {
     using namespace::mockmon;
     using std::make_pair;
     const auto speciesId = MockmonSpeciesId::Mew;
-    const auto testedCondition =GENERATE(condition::PulsingConditionId::Burn,condition::PulsingConditionId::Poison);
-     const auto [expectedLevel,turnToLast]  = GENERATE(make_pair(1u,12),make_pair(3u,14),make_pair(90u,16));
+    const auto testedCondition = GENERATE(condition::PulsingConditionId::Burn, condition::PulsingConditionId::Poison);
+    const auto [expectedLevel, turnToLast] = GENERATE(
+        make_pair(1u, 12),
+        make_pair(3u, 14),
+        make_pair(90u, 16));
     GIVEN("A Normal Healthy mockmon")
     {
         
         Mockmon ma(speciesId,AppendAll({Stringify(speciesId),"level",std::to_string(expectedLevel)}));
-        const auto levelUpGroup = ma.GetMockmonSpeciesData().SpeciesLevelUpGroup;
-        ma.GrantExperiencePoints(MockmonExp::TotalExperinceForLevel(expectedLevel,levelUpGroup));
-        ma.FullRestore();
+        MockmonTestUtils::BringMockmonToLevel(ma,expectedLevel);
         THEN("it must be healthy")
         {
             REQUIRE(ma.IsAbleToBattle());
@@ -118,13 +167,14 @@ SCENARIO( "pulsing conditions change stats", "[MockmonTest][condition]" )
     }
 }
 
-SCENARIO( "pulsing conditions must go away on thier own a max amount of turn", "[MockmonTest][condition]" ) 
+SCENARIO( "pulsing conditions must go away on thier own a max amount of turn", "[MockmonTest][condition]" )
 {
-    using namespace::mockmon;
+    using namespace ::mockmon;
     using std::make_tuple;
     const auto speciesId = MockmonSpeciesId::Mew;
-    const auto [testedCondition,maxTurns] = GENERATE(make_tuple(condition::PulsingConditionId::Sleep,10),
-                    make_tuple(condition::PulsingConditionId::Confusion,10));
+    const auto [testedCondition, maxTurns] = GENERATE(
+        make_tuple(condition::PulsingConditionId::Sleep, 10),
+        make_tuple(condition::PulsingConditionId::Confusion, 10));
     GIVEN("A Normal Healthy mockmon")
     {
         Mockmon ma(speciesId,AppendAll({Stringify(speciesId),"condition",Stringify(testedCondition)}));
@@ -158,16 +208,15 @@ SCENARIO( "pulsing conditions go away on thier own in a random matter", "[Mockmo
     using std::make_tuple;
     const auto speciesId = MockmonSpeciesId::Mew;
     const auto loops{50000}; //how many times each
-    const auto [testedCondition,maxTurns,expectedRecovery,expectedMargin] = GENERATE(
-        make_tuple(condition::PulsingConditionId::Sleep,1,0.2,0.1),
-        make_tuple(condition::PulsingConditionId::Sleep,2,0.4,0.1),
-        make_tuple(condition::PulsingConditionId::Sleep,3,0.6,0.1),
-        make_tuple(condition::PulsingConditionId::Sleep,4,0.8,0.1),
-        make_tuple(condition::PulsingConditionId::Sleep,5,0.9,0.05),
-        make_tuple(condition::PulsingConditionId::Sleep,6,0.95,0.025),
-        make_tuple(condition::PulsingConditionId::Sleep,7,0.975,0.01),
-        make_tuple(condition::PulsingConditionId::Sleep,8,1.0,0.001)
-        );
+    const auto [testedCondition, maxTurns, expectedRecovery, expectedMargin] = GENERATE(
+        make_tuple(condition::PulsingConditionId::Sleep, 1, 0.2, 0.1),
+        make_tuple(condition::PulsingConditionId::Sleep, 2, 0.4, 0.1),
+        make_tuple(condition::PulsingConditionId::Sleep, 3, 0.6, 0.1),
+        make_tuple(condition::PulsingConditionId::Sleep, 4, 0.8, 0.1),
+        make_tuple(condition::PulsingConditionId::Sleep, 5, 0.9, 0.05),
+        make_tuple(condition::PulsingConditionId::Sleep, 6, 0.95, 0.05),
+        make_tuple(condition::PulsingConditionId::Sleep, 7, 0.975, 0.025),
+        make_tuple(condition::PulsingConditionId::Sleep, 8, 1.0, 0.01));
     GIVEN("A Normal Healthy mockmon")
     {
         Mockmon ma(speciesId,AppendAll({Stringify(speciesId),"condition",Stringify(testedCondition)}));

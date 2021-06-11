@@ -36,4 +36,10 @@ namespace mockmon::battle
      */
     double GetTypeEffetivenessModifier(types::TypeEffectivenessModifier modifier);
 
+    /**
+     * @brief Get the Damage Ranges object
+     * a random modifer
+     * @return double 
+     */
+    double GetDamageRanges();
 }

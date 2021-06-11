@@ -1,13 +1,7 @@
 #include <catch2/catch.hpp>
-#include "../mockmon/include/mockmon_data.h"
+#include "mockmon_test_utils.h"
 #include <cmath>
 #include <algorithm>
-
-template<typename V,typename T>
-auto MakePredicator(T t)
-{
-    return ([t](const V & el){return el.IsSameAs(t);});
-}
 
 /**
  * @brief 
@@ -22,7 +16,7 @@ auto RequireMoves(const mockmon::Mockmon & m, std::initializer_list<mockmon::mov
     const auto & mvs = m.ViewMoveSet();
     for (auto id : ids)
     {
-        REQUIRE(VectorContains<moves::EquipedMove>(mvs,MakePredicator<moves::EquipedMove>(id)));
+        REQUIRE(VectorContains<moves::EquipedMove>(mvs,MockmonTestUtils::MakePredicator<moves::EquipedMove>(id)));
     }
 }
 //test_casse(name[,tags])
@@ -51,10 +45,9 @@ TEST_CASE( "Base Mockmon Mew State", "[MockmonTest]" )
         const auto levelUpGroup = m.GetMockmonSpeciesData().SpeciesLevelUpGroup;
         
         REQUIRE( m.GetCurrentLevel()==1);
-        auto needexp = MockmonExp::TotalExperinceForLevel(2,levelUpGroup);
-        m.GrantExperiencePoints(needexp);
+        MockmonTestUtils::BringMockmonToLevel(m,2);
         REQUIRE( m.GetCurrentLevel()==2);
-        needexp = MockmonExp::TotalExperinceForLevel(3,levelUpGroup)-m.CheckExperiencePoints().CurrentExperience;
+        const auto needexp = MockmonExp::TotalExperinceForLevel(3,levelUpGroup)-m.CheckExperiencePoints().CurrentExperience;
         m.GrantExperiencePoints(needexp-5);
         REQUIRE( m.GetCurrentLevel()==2);
         m.GrantExperiencePoints(5);
@@ -86,9 +79,7 @@ SCENARIO( "Base Mockmon Weedle State", "[MockmonTest][levelUpMoves]" )
         }
         AND_WHEN("we level it up")
         {
-            const auto levelUpGroup = m.GetMockmonSpeciesData().SpeciesLevelUpGroup;
-            auto needexp = MockmonExp::TotalExperinceForLevel(2,levelUpGroup);
-            m.GrantExperiencePoints(needexp);
+            MockmonTestUtils::BringMockmonToLevel(m,2);
             THEN("it should be a higher level")
             {
                 REQUIRE( m.GetCurrentLevel()==2);
@@ -120,9 +111,7 @@ SCENARIO( "Base Mockmon Ratata State", "[MockmonTest][levelUpMoves]" )
         }
         AND_WHEN("we level it up to level 7")
         {
-            const auto levelUpGroup = m.GetMockmonSpeciesData().SpeciesLevelUpGroup;
-            auto needexp = MockmonExp::TotalExperinceForLevel(7,levelUpGroup);
-            m.GrantExperiencePoints(needexp);
+            MockmonTestUtils::BringMockmonToLevel(m,7);
             THEN("it should be a higher level and know more moves")
             {
                 REQUIRE( m.GetCurrentLevel()==7);

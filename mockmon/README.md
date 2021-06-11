@@ -24,7 +24,8 @@ I want to replicate the bugs. over the years, the player community discovered ma
 - [ ] moves that do something and moves that fail
 - [x] opponent can do something against user
 - [x] moves effect mockmon stats rather than directly the outcome
-- [ ] damage ranges
+- [x] damage ranges [0.85-1.0]
+- [ ] fix damage ranges so test won't fail?
 - [ ] moves that block/protect against other moves
 - [ ] moves that are dependent on status/condition
 - [ ] unique moves (mimic, metronome, mirror move, counter)
@@ -51,6 +52,7 @@ I want to replicate the bugs. over the years, the player community discovered ma
 - [ ] multi turn moves
 
 #### conditions
+figure out the voltaile/non volatile split
 - [x] inflict condition
 - [x] remove condition
 - [ ] conditions can't be inflicted based on typing
@@ -110,7 +112,7 @@ I want to replicate the bugs. over the years, the player community discovered ma
 
 ##### haze
 - [x] remove conditions
-- [ ] some conditions shouldnt be removed: non volatile (sleep, burn, poison, paralyze)
+- [ ] some conditions shouldnt be removed: non volatile (sleep, burn, poison, paralyze,freeze)
 - [x] resets status modifiers
 - [ ] reset badge boost
 - [ ] Gen I issues
@@ -168,6 +170,7 @@ can i use automated testing?
 - [ ] learn more about testing and clean the code
 - [ ] expand testing to anything we can test
 - [x] can tests timeout? how? (if a battle never ends)
+- [ ] test damage ranges - somehow account for the possibility of critical hits.
 
 #### test conditions
 - [x] testing that burn and poison damage the mockmon

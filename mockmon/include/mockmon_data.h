@@ -33,7 +33,6 @@ namespace mockmon
 
         unsigned int GetCurrentLevel() const;
         const MockmonSpecies & GetMockmonSpeciesData() const;
-        int ModifyAttack(const moves::SimpleMove & AttackingMove,const Mockmon & target);
         void ChangeName(const std::string & newName); //needs to be somewhere else.
         void GrantExperiencePoints(long points);
         MockmonExp CheckExperiencePoints() const;

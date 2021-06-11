@@ -19,7 +19,7 @@ namespace mockmon
         {
             using moves::MoveId;
             m.TeachMove(MoveId::StunSpore);
-            m.TeachMove(MoveId::HyperFang);
+            m.TeachMove(MoveId::KarateChop);
             m.TeachMove(MoveId::Ember);
 
         }
@@ -50,7 +50,7 @@ namespace mockmon
         }
         bool BattleTower::TowerFloor (Mockmon & playerMonster,unsigned int floorLevel)
         {
-            const auto RandomizeEnemyType = random::Randomer::GetOneOption({MockmonSpeciesId::Weedle,MockmonSpeciesId::Rattata});
+            const auto RandomizeEnemyType = random::Randomer::GetOneOption({MockmonSpeciesId::Mew,MockmonSpeciesId::Weedle,MockmonSpeciesId::Rattata});
             
             auto enemy = BattleTower::GenerateEnemy(floorLevel,RandomizeEnemyType,"garry");
             std::cout<< "player mockmon " << playerMonster.GetName() << " will face " << enemy.GetName() << " the level " << enemy.GetCurrentLevel() << " " << enemy.GetMockmonSpeciesData().Identifier() << " with " << enemy.CurrentBattleStats.Health.GetStat() << " HP!"  <<'\n';

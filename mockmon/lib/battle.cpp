@@ -9,6 +9,9 @@
 
 namespace mockmon::battle
 {
+    Battle::Battle(Mockmon &playerMockmon, Mockmon &enemyMockmon) : r_playerMockmon(playerMockmon), r_enemyMockmon(enemyMockmon)
+    {
+    }
 
     //do something else
     bool IsStabModifier(const Mockmon & m ,const moves::SimpleMove & AttackingMove) 
@@ -22,9 +25,8 @@ namespace mockmon::battle
     }
 
 
-    Battle::Battle(Mockmon &playerMockmon, Mockmon &enemyMockmon) : r_playerMockmon(playerMockmon), r_enemyMockmon(enemyMockmon)
-    {
-    }
+
+
     void Battle::DoBattle(Mockmon &playerMockmon, Mockmon &enemyMockmon)
     {
         std::cout << playerMockmon.GetName() << " starts the battle with " << playerMockmon.CurrentBattleStats.Health.GetStat() << " HP"<<'\n';
@@ -136,7 +138,16 @@ namespace mockmon::battle
         return random::Randomer::CheckPercentage(baseChance);
     }
 
-    //this is normal attack
+    /**
+     * @brief 
+     * normal attacking move
+     * @param attackingMoveId 
+     * @param attacker 
+     * @param attackingStat 
+     * @param defender 
+     * @param defendingStat 
+     * @return double damage dealt
+     */
     double Battle::ModifyAttack(const moves::MoveId attackingMoveId,Mockmon & attacker,const StatsTypes attackingStat, Mockmon & defender,const StatsTypes defendingStat)
     {
         const auto & simpleAttack = moves::SimpleMove::AllMoves.at(attackingMoveId);
@@ -154,8 +165,9 @@ namespace mockmon::battle
         auto stabModifer {IsStabModifier(attacker,simpleAttack)}; //stab
         auto typeMofider {GetTypeEffectivenessModifer(defender,simpleAttack)};  //typeResistancs and weakness
         auto typeEffectivenessAndStab {GetStabDamageModifier(stabModifer) *  GetTypeEffetivenessModifier(typeMofider)}; //typeResistancs and weakness
-        auto  extraModifier = 1 * criticalHitModifier * typeEffectivenessAndStab ; // weahter, badge,status,
-        return (extraModifier*(2+((levelModifier* simpleAttack.BasePower * statsModifier)/50)));
+        auto extraModifier = 1 * criticalHitModifier * typeEffectivenessAndStab ; // weahter, badge,status,
+        auto randomModifer = GetDamageRanges();
+        return (randomModifer*(extraModifier*(2+((levelModifier* simpleAttack.BasePower * statsModifier)/50))));
     }
 
     

@@ -2,6 +2,8 @@ find_package(Catch2 REQUIRED)
 
 include(CTest)
 include(Catch)
+include_directories(include)
+
 add_library(catch_main STATIC catch_main.cpp)
 
 target_link_libraries(catch_main PUBLIC Catch2::Catch2)

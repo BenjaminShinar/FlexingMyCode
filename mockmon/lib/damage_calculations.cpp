@@ -1,11 +1,18 @@
 
 #include "damage_calculations.h"
+#include "random_gen.h"
 
 #include <algorithm>
 #include <numeric>
 
 namespace mockmon::battle
 {
+    double GetDamageRanges()
+    {
+        const auto r = random::Randomer::GetRandom(16);
+        return ((100.0-r)/100.0);
+    }
+
     double GetLevelDamageModifier(const Mockmon & m)
     {
         return 2+((2*m.GetCurrentLevel())/5);
