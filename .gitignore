@@ -33,6 +33,7 @@
 
 # vscode settings
 .vscode/*.*
+workspace.code-workspace
 
 #CMAKES
 CMakeLists.txt.user
