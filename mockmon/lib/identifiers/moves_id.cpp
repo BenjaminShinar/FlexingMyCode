@@ -181,6 +181,7 @@ namespace mockmon::moves
             case MoveId::ParalysisCantMove: return "Fully Paralyzed"; break;
             case MoveId::Flinch: return "Flinched"; break;
             case MoveId::HitSelfInConfusion: return "Hit Self In Confusion"; break;
+            case MoveId::Recharging: return "Recharge Turn"; break;
 
             default: return "Unknown move!"; break;
         }

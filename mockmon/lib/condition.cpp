@@ -8,7 +8,7 @@ namespace mockmon::condition
         const PulsingConditionId conditionId;
         bool operator()(const pulser_uq_ptr & conditionPulse) const
         {
-            return (conditionPulse->conditonId == conditionId);
+            return (conditionPulse->IsSameAs(conditionId));
         }
     };
 

@@ -74,7 +74,92 @@ SCENARIO( "damage ranges test", "[MockmonTest][!mayfail]" )
     }
 }
 
-SCENARIO( "damaging conditions", "[MockmonTest][condition]" ) 
+/**
+ * @brief 
+ * verify that conditions can't be afflicted against certien types
+ * can't burn file
+ * cant freeze ice
+ * electric shock cant electric
+ * electric shock cant paralyze ground
+ * lick cant paralyze ghost
+ * normal body slam cant paralyze normal mockmons
+ * cant poison poision types
+ * cant poison steel types with poison attacks, but can with bug?
+ * cant leechseeed grass mockmon
+ * we need an attacking mockmon with the correct attack
+ * it needs to attack a mockmon that can either be effected or cant be
+ * we verify afterwards the effect is in place
+ * move(which causes status) x target  = status?
+ * it might be best if the defending mockmon is at a high level so it won't faint
+ * 
+ */
+SCENARIO( "Conditions Immunities", "[MockmonTest][Condition]" ) 
+{
+    using namespace::mockmon;
+    using std::make_tuple;
+    const auto speciesId = MockmonSpeciesId::Mew;
+    const auto expectedEnemyLevel{50};
+
+    const auto [testedCondition, statusMove,targetedSpeices, shouldBeEffected,nAttempts] = GENERATE(
+        make_tuple(condition::PulsingConditionId::Paralysis,moves::MoveId::ThunderWave,MockmonSpeciesId::Weedle,true,5),
+        
+        make_tuple(condition::PulsingConditionId::Paralysis,moves::MoveId::ThunderWave,MockmonSpeciesId::Pikachu,false,5),
+        //make_tuple(condition::PulsingConditionId::Paralysis,moves::MoveId::ThunderWave,MockmonSpeciesId::Geodude,false,5),
+
+        make_tuple(condition::PulsingConditionId::Paralysis,moves::MoveId::BodySlam,MockmonSpeciesId::Geodude,true,500),
+        make_tuple(condition::PulsingConditionId::Paralysis,moves::MoveId::BodySlam,MockmonSpeciesId::Rattata,false,500),       
+        /*
+        make_tuple(condition::PulsingConditionId::Paralysis,moves::MoveId::Lick,MockmonSpeciesId::Mew,true,500),
+        make_tuple(condition::PulsingConditionId::Paralysis,moves::MoveId::Lick,MockmonSpeciesId::Gastly,false,500)
+        */
+        make_tuple(condition::PulsingConditionId::Burn,moves::MoveId::Ember,MockmonSpeciesId::Rattata,true,500),
+        make_tuple(condition::PulsingConditionId::Burn,moves::MoveId::Ember,MockmonSpeciesId::Vulpix,false,500),
+        make_tuple(condition::PulsingConditionId::Poison,moves::MoveId::PoisonPowder,MockmonSpeciesId::Mew,true,5),
+        make_tuple(condition::PulsingConditionId::Poison,moves::MoveId::PoisonPowder,MockmonSpeciesId::Weedle,false,5)
+    );
+
+    GIVEN(AppendAll({"an enemy mockmon of type",Stringify(targetedSpeices)}))
+    {
+        Arena a{true};
+        Mockmon ma(speciesId,"attacking Mew");
+        ma.TeachMove(statusMove);
+        Mockmon mb(targetedSpeices,AppendAll({Stringify(targetedSpeices),"level",std::to_string(expectedEnemyLevel)}));
+        MockmonTestUtils::BringMockmonToLevel(mb,expectedEnemyLevel);
+        
+        auto & mvset=ma.GetMoveSet();
+        const auto pred {MockmonTestUtils::MakePredicator<moves::EquipedMove,moves::MoveId>(statusMove)};
+        auto match =std::find_if(std::begin(mvset),std::end(mvset),pred);
+        WHEN(AppendAll({"it's attacked by",Stringify(statusMove),"to inflict",Stringify(testedCondition)}))
+        {   
+            bool currentlyEffected{false}; //enemy was not effected
+
+            for (auto i= 0; i<nAttempts && !currentlyEffected;++i)
+            {   
+                battle::Battle::AttackWith(a,statusMove,ma,mb);
+
+                currentlyEffected |= mb.m_currentCondtion.IsAffiliatedWithCondition(testedCondition);
+                ma.FullRestore();
+                mb.FullRestore();
+                match->RefillPowerPoints();
+            }
+            std::string shouldStr;
+            if (shouldBeEffected)
+            {
+                shouldStr= "it should be effected";
+            }
+            else
+            {
+                shouldStr= "it should not be effected";
+            }
+            THEN(shouldStr)
+            {
+              REQUIRE(currentlyEffected == shouldBeEffected);
+            }
+        }
+    }
+}
+
+SCENARIO( "damaging conditions", "[MockmonTest][Condition]" ) 
 {
     using namespace::mockmon;
     using std::make_pair;
@@ -133,13 +218,15 @@ SCENARIO( "damaging conditions", "[MockmonTest][condition]" )
     }
 }
 
-SCENARIO( "pulsing conditions change stats", "[MockmonTest][condition]" ) 
+SCENARIO( "pulsing conditions change stats", "[MockmonTest][Condition]" ) 
 {
     using namespace::mockmon;
     using std::make_tuple;
     const auto speciesId = MockmonSpeciesId::Mew;
-    const auto [testedCondition,effectedStat,factor] = GENERATE(make_tuple(condition::PulsingConditionId::Burn,StatsTypes::Attack,0.5),
-                    make_tuple(condition::PulsingConditionId::Paralysis,StatsTypes::Speed,0.25));
+    const auto [testedCondition,effectedStat,factor] = GENERATE(
+        make_tuple(condition::PulsingConditionId::Burn,StatsTypes::Attack,0.5),
+        make_tuple(condition::PulsingConditionId::Paralysis,StatsTypes::Speed,0.25)
+        );
     GIVEN("A Normal Healthy mockmon")
     {
         Mockmon ma(speciesId,AppendAll({Stringify(speciesId),"condition",Stringify(testedCondition)}));
@@ -202,7 +289,7 @@ SCENARIO( "pulsing conditions must go away on thier own a max amount of turn", "
     }
 }
 
-SCENARIO( "pulsing conditions go away on thier own in a random matter", "[MockmonTest][condition]" ) 
+SCENARIO( "pulsing conditions go away on thier own in a random matter", "[MockmonTest][Condition]" ) 
 {
     using namespace::mockmon;
     using std::make_tuple;
@@ -246,7 +333,7 @@ SCENARIO( "pulsing conditions go away on thier own in a random matter", "[Mockmo
     }
 }
 
-SCENARIO( "light screen and reflect conditions", "[MockmonTest][condition]" ) 
+SCENARIO( "light screen and reflect conditions", "[MockmonTest][Condition]" ) 
 {
     using namespace::mockmon;
     using std::make_tuple;
@@ -280,7 +367,7 @@ SCENARIO( "light screen and reflect conditions", "[MockmonTest][condition]" )
 }
 
 /*
-SCENARIO( "confusion", "[MockmonTest][condition]" ) 
+SCENARIO( "confusion", "[MockmonTest][Condition]" ) 
 {
     using namespace::mockmon;
     using std::make_pair;

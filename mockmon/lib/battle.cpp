@@ -9,7 +9,7 @@
 
 namespace mockmon::battle
 {
-    Battle::Battle(Mockmon &playerMockmon, Mockmon &enemyMockmon) : r_playerMockmon(playerMockmon), r_enemyMockmon(enemyMockmon)
+    Battle::Battle(Mockmon &playerMockmon, Mockmon &enemyMockmon,bool silent) : r_playerMockmon(playerMockmon), r_enemyMockmon(enemyMockmon),m_arena(silent)
     {
     }
 
@@ -52,13 +52,13 @@ namespace mockmon::battle
             if (DetermineOrder(playerMV,enemyMV))
             {
 
-                AttackWith(playerMV,r_playerMockmon,r_enemyMockmon);
-                AttackWith(enemyMV,r_enemyMockmon,r_playerMockmon);
+                AttackWith(m_arena,playerMV,r_playerMockmon,r_enemyMockmon);
+                AttackWith(m_arena,enemyMV,r_enemyMockmon,r_playerMockmon);
             }
             else
             {
-                AttackWith(enemyMV,r_enemyMockmon,r_playerMockmon);
-                AttackWith(playerMV,r_playerMockmon,r_enemyMockmon);
+                AttackWith(m_arena,enemyMV,r_enemyMockmon,r_playerMockmon);
+                AttackWith(m_arena,playerMV,r_playerMockmon,r_enemyMockmon);
             }
         }
         DetermineBattle(r_playerMockmon.IsAbleToBattle());
@@ -138,6 +138,16 @@ namespace mockmon::battle
         return random::Randomer::CheckPercentage(baseChance);
     }
 
+
+    double Battle::GetCriticalHitModifier(Mockmon & attackingMockmon, const moves::MoveId mv)
+    {
+        if (IsCriticalHit(attackingMockmon,mv))
+        return (GetLevelCriticalDamageModifier(attackingMockmon));
+        else
+        return 1.0;
+    }
+
+
     /**
      * @brief 
      * normal attacking move
@@ -155,13 +165,7 @@ namespace mockmon::battle
         const auto [attackstat,defencestat] = Battle::GetStatsModifier(attacker,attackingStat,defender,defendingStat);
         const auto statsModifier = attackstat/defencestat;
         
-        auto criticalHitModifier = [](Mockmon & attacker,const moves::MoveId mv){
-            if (IsCriticalHit(attacker,mv))
-            return (GetLevelCriticalDamageModifier(attacker));
-            else
-            return 1.0;
-        }(attacker,simpleAttack.Identifier()); 
-        
+        auto criticalHitModifier = GetCriticalHitModifier(attacker,simpleAttack.Identifier()); 
         auto stabModifer {IsStabModifier(attacker,simpleAttack)}; //stab
         auto typeMofider {GetTypeEffectivenessModifer(defender,simpleAttack)};  //typeResistancs and weakness
         auto typeEffectivenessAndStab {GetStabDamageModifier(stabModifer) *  GetTypeEffetivenessModifier(typeMofider)}; //typeResistancs and weakness
@@ -171,8 +175,15 @@ namespace mockmon::battle
     }
 
     
-
-    void Battle::AttackWith(moves::MoveId mvid,Mockmon & attacker,Mockmon & defender)
+    /**
+     * @brief 
+     * perform a single attack, used in testing
+     * @param arena 
+     * @param mvid 
+     * @param attacker 
+     * @param defender 
+     */
+    void Battle::AttackWith(Arena & arena,moves::MoveId mvid,Mockmon & attacker,Mockmon & defender)
     {
         if (attacker.IsAbleToBattle() && defender.IsAbleToBattle())
         {
@@ -183,7 +194,7 @@ namespace mockmon::battle
             {
                 auto chargedMV = cv.value();
                 const auto & compositeChargedMove = moves::CompositeMove::AllChargedCompositeMoves.at(chargedMV);
-                compositeChargedMove.Perform(m_arena,attacker,defender);
+                compositeChargedMove.Perform(arena,attacker,defender);
             }
             else
             {
@@ -206,7 +217,7 @@ namespace mockmon::battle
 
                 //if there is a charged move,perform that instead
                 //const auto & compositeMove = moves::CompositeMove::AllChargedCompositeMoves.at(usedMove);
-                compositeMove.Perform(m_arena,attacker,defender);
+                compositeMove.Perform(arena,attacker,defender);
             }
 
         }

@@ -18,9 +18,9 @@ namespace mockmon
         void teachStartingMovesMoves(Mockmon & m)
         {
             using moves::MoveId;
-            m.TeachMove(MoveId::StunSpore);
-            m.TeachMove(MoveId::KarateChop);
-            m.TeachMove(MoveId::Ember);
+            m.TeachMove(MoveId::ThunderWave);
+            m.TeachMove(MoveId::BodySlam);
+            m.TeachMove(MoveId::HyperBeam);
 
         }
 

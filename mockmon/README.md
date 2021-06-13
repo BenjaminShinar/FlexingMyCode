@@ -4,6 +4,7 @@ A small project that I can be motivated to work on. A simple version of a battli
 
 ## Points of intrest
 I want to replicate the bugs. over the years, the player community discovered many bugs and glitches in the game, and i wish to see how these might have come into existence. so in some cases I will delibratly have behavior which seems non-sensical. I believe these this bugs were not put in the game intenionally, but were products of software design which was streched beyond what it was intended for, either by the constraints of the availble programming languages or by last minute changes that had to be implemented. therefore, i will try to design this program in a way that those bugs appear organically.
+topics which require modifications to create those behaviors are marked as **Gen 1 Shannignas**.
 
 
 ## Tasks and Stages - this will eventuall be the Issues tab
@@ -25,7 +26,7 @@ I want to replicate the bugs. over the years, the player community discovered ma
 - [x] opponent can do something against user
 - [x] moves effect mockmon stats rather than directly the outcome
 - [x] damage ranges [0.85-1.0]
-- [ ] fix damage ranges so test won't fail?
+- [ ] fix damage ranges so we aligned with smogon calculator
 - [ ] moves that block/protect against other moves
 - [ ] moves that are dependent on status/condition
 - [ ] unique moves (mimic, metronome, mirror move, counter)
@@ -39,17 +40,38 @@ I want to replicate the bugs. over the years, the player community discovered ma
 - [x] the type system! super, normal and not very effective!
 - [ ] ... TBC battles are between trainers
 
+#### Status Effects - stats modifers
+- [ ] moves that change stat modifers
+- [ ] **Gen 1 Shannignas** for badge boosts
+
+
+
+
 ##### Two turns moves
 - [x] moves with charging before hitting - dig, fly, skull bash,sky attack,solar beam,
 - [ ] moves with invurnability stage - dig, fly
 - [ ] moves with re-charging after hitting - hyperBeam
 - [ ] power points consumption - when damage is done
 - [ ] interacton with status effects - paused? stopped? what if i hit myself in confusion is pparalyzed
-- [ ] weird gen one mechanics
+- [ ] weird **Gen 1 Shannignas**
 
+###### Dig / Fly
+- [x] - two turn moves
+- [ ] - invernuble stage
+- [ ] - interaction with states
+- [ ] - PP consumption
+
+###### HyperBean
+- [x] - two turn move
+- [x] - recharge turn
+- [ ] - interaction with states moves
+- [ ] - **Gen 1 Shannignas**
+- [ ] - PP consumption
+- [ ] - PP overflow?
 
 ##### Multi turns moves
 - [ ] multi turn moves
+
 
 #### conditions
 figure out the voltaile/non volatile split
@@ -59,7 +81,7 @@ figure out the voltaile/non volatile split
 - [x] conditions go away after x turns...
 - [ ] conditions go away after haze or some other move
 - [ ] voltaile contions - bind, flinch, recharging?, semi invurnable?
-- [ ] Gen 1 synergy of toxic, burn, leech seed with each other.
+- [ ] **Gen 1 Shannignas** synergy of toxic, burn, leech seed with each other.
 - [ ] which conditions work with each other and which are cancelled?
 - [ ] which conditions work with moves special effects (dig, charging/recharging)?
 - [ ] pulsing conditions - conditions that do something each turn (poison,burn, etc...)
@@ -73,20 +95,20 @@ figure out the voltaile/non volatile split
 - [x] inflict damage
 - [ ] doesn't effect fire types
 - [x] halfs phyiscal moves attacks
-- [ ] more gen I shannignas
+- [ ] more **Gen 1 Shannignas**
 
 ##### frozen - pulse
 - [x] can't move
 - [ ] doesn't effect ice types
 - [x] thawed by fire attacks (and other attacks?)
-- [ ] Gen I Power points glitch
+- [ ] **Gen 1 Shannignas** Power points glitch
 - [ ] thawing with a stored move?
 
 ##### paralyzed - pulse
 - [x] a chance to not move
 - [x] speed reduction
 - [ ] can be caused by different types of attacks, and mockmon of the same type aren't effected by it.
-- [ ] more gen I shannignas
+- [ ] more **Gen 1 Shannignas**
 
 ##### poison - pulse
 - [x] inflict damage
@@ -108,14 +130,14 @@ figure out the voltaile/non volatile split
 - [ ] hit self with has no stab and no critical hit, and no random damage ranges
 - [x] chance to snap out of confusion
 - [ ] how it works with multiturn abilities
-- [ ] Gen I glitch where defence is effected by the enemy having reflect (mentioned in the wiki under confusion, not under general glitchs)
+- [ ] **Gen 1 Shannignas** glitch where defence is effected by the enemy having reflect (mentioned in the wiki under confusion, not under general glitchs)
 
 ##### haze
 - [x] remove conditions
 - [ ] some conditions shouldnt be removed: non volatile (sleep, burn, poison, paralyze,freeze)
 - [x] resets status modifiers
 - [ ] reset badge boost
-- [ ] Gen I issues
+- [ ] **Gen 1 Shannignas**
 
 ##### leech seed
 ##### subsitute
@@ -126,7 +148,7 @@ figure out the voltaile/non volatile split
 
 ##### focus energy - non-pulse
 - [x] effect critical hit rate
-- [x] gen I issues
+- [x] **Gen 1 Shannignas**
 
 
 ### What's a mockmon, actually?

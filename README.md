@@ -20,3 +20,6 @@ A program the prints 5 rows, the first row has one star, and the last has five s
 
 ## Roman_Numerals
 A class that represents roman numerals ("ivxlcdm"), an oppertuinity to play with strings.
+
+## Mockmon
+My attempt to recreate the battle engine of the famous rpg game.

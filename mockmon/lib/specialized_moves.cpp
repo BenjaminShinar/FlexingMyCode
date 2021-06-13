@@ -29,12 +29,18 @@ namespace mockmon::moves
             for (auto &mv : MoveComponenets)
             {
                 const auto outomce = mv(arena, Identifier(), attacker, defender);
-                std::cout << outomce.m_moveOutcomeDescrition << '\n';
+                if (!arena.Silent)
+                {
+                    std::cout << outomce.m_moveOutcomeDescrition << '\n';
+                }
             }
         }
         else
         {
-            std::cout << attacker.GetName() << " missed with " << Identifier() << '\n';
+            if (!arena.Silent)
+            {
+                std::cout << attacker.GetName() << " missed with " << Identifier() << '\n';
+            }
         }
     }
 
@@ -230,107 +236,108 @@ namespace mockmon::moves
     }
 
 #pragma region conditions
+
     //TODO: find a way to remove this whole mess 
     MoveOutcome AddOpponentPulsingConditionStatus(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const PulsingStatusInflicment statusConditionInflicment)
     {
         if (defender.GetMockmonSpeciesData().IsSpeciesOfType(statusConditionInflicment.moveType))
         {
-            MoveOutcome o{AppendAll({defender.GetName(), "cant be efflicted with", Stringify(statusConditionInflicment.AfflicteCondition),"by",Stringify(attackingMoveId) })};    
+            MoveOutcome o{AppendAll({defender.GetName(), "cant be efflicted with", Stringify(statusConditionInflicment.effect),"by",Stringify(attackingMoveId) })};    
             return o;
         }
-        if (defender.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.AfflicteCondition))
+        if (defender.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))
         {
             //already afflicted
-            MoveOutcome o{AppendAll({defender.GetName(), "is already", Stringify(statusConditionInflicment.AfflicteCondition),".",Stringify(attackingMoveId), "failed!"})};    
+            MoveOutcome o{AppendAll({defender.GetName(), "is already", Stringify(statusConditionInflicment.effect),".",Stringify(attackingMoveId), "failed!"})};    
             return o;
         }
         if (random::Randomer::CheckPercentage(statusConditionInflicment.ChanceToAfflictCondtion))
         {
-            defender.m_currentCondtion.CausePulsingCondition(MakeCondition(statusConditionInflicment.AfflicteCondition,defender));
-            if (defender.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.AfflicteCondition))
+            defender.m_currentCondtion.CausePulsingCondition(MakeCondition(statusConditionInflicment.effect,defender));
+            if (defender.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))
             {
                 //success
-                MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(attackingMoveId), "!", defender.GetName(),"is now", Stringify(statusConditionInflicment.AfflicteCondition)})};
+                MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(attackingMoveId), "!", defender.GetName(),"is now", Stringify(statusConditionInflicment.effect)})};
                 return o;    
             }
         }
 
         //failed to afflict / missed
-        MoveOutcome o{AppendAll({attacker.GetName(),"tried to use",Stringify(attackingMoveId), "but it failed to inflict condition",Stringify(statusConditionInflicment.AfflicteCondition)})};    
+        MoveOutcome o{AppendAll({attacker.GetName(),"tried to use",Stringify(attackingMoveId), "but it failed to inflict condition",Stringify(statusConditionInflicment.effect)})};    
         return o;
     }
 
     MoveOutcome AddSelfPulsingConditionStatus(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const PulsingStatusInflicment statusConditionInflicment)
     {
 
-        if (attacker.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.AfflicteCondition))
+        if (attacker.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))
         {
             //already afflicted
-            MoveOutcome o{AppendAll({attacker.GetName(), "is already", Stringify(statusConditionInflicment.AfflicteCondition),".",Stringify(attackingMoveId), "failed!"})};    
+            MoveOutcome o{AppendAll({attacker.GetName(), "is already", Stringify(statusConditionInflicment.effect),".",Stringify(attackingMoveId), "failed!"})};    
             return o;
         }
         if (random::Randomer::CheckPercentage(statusConditionInflicment.ChanceToAfflictCondtion))
         {
-            attacker.m_currentCondtion.CausePulsingCondition(MakeCondition(statusConditionInflicment.AfflicteCondition,attacker));
-            if (attacker.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.AfflicteCondition))
+            attacker.m_currentCondtion.CausePulsingCondition(MakeCondition(statusConditionInflicment.effect,attacker));
+            if (attacker.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))
             {
                 //success
-                MoveOutcome o{AppendAll({attacker.GetName(), "used", Stringify(attackingMoveId), "!", attacker.GetName(),"is now", Stringify(statusConditionInflicment.AfflicteCondition)})};
+                MoveOutcome o{AppendAll({attacker.GetName(), "used", Stringify(attackingMoveId), "!", attacker.GetName(),"is now", Stringify(statusConditionInflicment.effect)})};
                 return o;    
             }
         }
 
         //failed to afflict / missed
-        MoveOutcome o{AppendAll({attacker.GetName(),"tried to use",Stringify(attackingMoveId), "but it failed to inflict condition",Stringify(statusConditionInflicment.AfflicteCondition)})};    
+        MoveOutcome o{AppendAll({attacker.GetName(),"tried to use",Stringify(attackingMoveId), "but it failed to inflict condition",Stringify(statusConditionInflicment.effect)})};    
         return o;
     }
 
     MoveOutcome RemoveOpponentPulsingConditionStatus(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const PulsingStatusInflicment statusConditionInflicment)
     {
 
-        if (!defender.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.AfflicteCondition))
+        if (!defender.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))
         {
             //not afflicted
-            MoveOutcome o{AppendAll({defender.GetName(), "is not", Stringify(statusConditionInflicment.AfflicteCondition),".",Stringify(attackingMoveId), "failed!"})};    
+            MoveOutcome o{AppendAll({defender.GetName(), "is not", Stringify(statusConditionInflicment.effect),".",Stringify(attackingMoveId), "failed!"})};    
             return o;
         }
         if (random::Randomer::CheckPercentage(statusConditionInflicment.ChanceToAfflictCondtion))
         {
-            defender.m_currentCondtion.RemovePulsingCondition(statusConditionInflicment.AfflicteCondition);
-            if (!defender.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.AfflicteCondition))
+            defender.m_currentCondtion.RemovePulsingCondition(statusConditionInflicment.effect);
+            if (!defender.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))
             {
                 //success
-                MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(attackingMoveId), "!", defender.GetName(),"is no longer", Stringify(statusConditionInflicment.AfflicteCondition)})};
+                MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(attackingMoveId), "!", defender.GetName(),"is no longer", Stringify(statusConditionInflicment.effect)})};
                 return o;    
             }
         }
 
         //failed to afflict / missed
-        MoveOutcome o{AppendAll({attacker.GetName(),"tried to use",Stringify(attackingMoveId), "but it failed to remove condition",Stringify(statusConditionInflicment.AfflicteCondition)})};    
+        MoveOutcome o{AppendAll({attacker.GetName(),"tried to use",Stringify(attackingMoveId), "but it failed to remove condition",Stringify(statusConditionInflicment.effect)})};    
         return o;
     }
 
     MoveOutcome RemoveSelfPulsingConditionStatus(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const PulsingStatusInflicment statusConditionInflicment)
     {
-        if (!attacker.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.AfflicteCondition))
+        if (!attacker.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))
         {
             //not afflicted
-            MoveOutcome o{AppendAll({attacker.GetName(), "is not", Stringify(statusConditionInflicment.AfflicteCondition),".",Stringify(attackingMoveId), "failed!"})};    
+            MoveOutcome o{AppendAll({attacker.GetName(), "is not", Stringify(statusConditionInflicment.effect),".",Stringify(attackingMoveId), "failed!"})};    
             return o;
         }
         if (random::Randomer::CheckPercentage(statusConditionInflicment.ChanceToAfflictCondtion))
         {
-            attacker.m_currentCondtion.RemovePulsingCondition(statusConditionInflicment.AfflicteCondition);
-            if (!attacker.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.AfflicteCondition))
+            attacker.m_currentCondtion.RemovePulsingCondition(statusConditionInflicment.effect);
+            if (!attacker.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))
             {
                 //success
-                MoveOutcome o{AppendAll({attacker.GetName(), "used", Stringify(attackingMoveId), "!", attacker.GetName(),"is no longer", Stringify(statusConditionInflicment.AfflicteCondition)})};
+                MoveOutcome o{AppendAll({attacker.GetName(), "used", Stringify(attackingMoveId), "!", attacker.GetName(),"is no longer", Stringify(statusConditionInflicment.effect)})};
                 return o;    
             }
         }
 
         //failed to afflict / missed
-        MoveOutcome o{AppendAll({attacker.GetName(),"tried to use",Stringify(attackingMoveId), "but it failed to remove condition",Stringify(statusConditionInflicment.AfflicteCondition)})};    
+        MoveOutcome o{AppendAll({attacker.GetName(),"tried to use",Stringify(attackingMoveId), "but it failed to remove condition",Stringify(statusConditionInflicment.effect)})};    
         return o;
     }
 
@@ -338,53 +345,53 @@ namespace mockmon::moves
     {
         if (defender.GetMockmonSpeciesData().IsSpeciesOfType(statusConditionInflicment.moveType))
         {
-            MoveOutcome o{AppendAll({defender.GetName(), "cant be efflicted with", Stringify(statusConditionInflicment.AfflicteCondition),"by",Stringify(attackingMoveId) })};    
+            MoveOutcome o{AppendAll({defender.GetName(), "cant be efflicted with", Stringify(statusConditionInflicment.effect),"by",Stringify(attackingMoveId) })};    
             return o;
         }
-        if (defender.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.AfflicteCondition))
+        if (defender.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))
         {
             //already afflicted
-            MoveOutcome o{AppendAll({defender.GetName(), "is already", Stringify(statusConditionInflicment.AfflicteCondition),".",Stringify(attackingMoveId), "failed!"})};    
+            MoveOutcome o{AppendAll({defender.GetName(), "is already", Stringify(statusConditionInflicment.effect),".",Stringify(attackingMoveId), "failed!"})};    
             return o;
         }
         if (random::Randomer::CheckPercentage(statusConditionInflicment.ChanceToAfflictCondtion))
         {
-            defender.m_currentCondtion.CauseNonPulsingCondition(statusConditionInflicment.AfflicteCondition);
-            if (defender.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.AfflicteCondition))
+            defender.m_currentCondtion.CauseNonPulsingCondition(statusConditionInflicment.effect);
+            if (defender.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))
             {
                 //success
-                MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(attackingMoveId), "!", defender.GetName(),"is now", Stringify(statusConditionInflicment.AfflicteCondition)})};
+                MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(attackingMoveId), "!", defender.GetName(),"is now", Stringify(statusConditionInflicment.effect)})};
                 return o;    
             }
         }
 
         //failed to afflict / missed
-        MoveOutcome o{AppendAll({attacker.GetName(),"tried to use",Stringify(attackingMoveId), "but it failed to inflict condition",Stringify(statusConditionInflicment.AfflicteCondition)})};    
+        MoveOutcome o{AppendAll({attacker.GetName(),"tried to use",Stringify(attackingMoveId), "but it failed to inflict condition",Stringify(statusConditionInflicment.effect)})};    
         return o;
     }
 
     MoveOutcome AddSelfNonePulsingConditionStatus(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const NonPulsingStatusInflicment statusConditionInflicment)
     {
 
-        if (attacker.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.AfflicteCondition))
+        if (attacker.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))
         {
             //already afflicted
-            MoveOutcome o{AppendAll({attacker.GetName(), "is already", Stringify(statusConditionInflicment.AfflicteCondition),".",Stringify(attackingMoveId), "failed!"})};    
+            MoveOutcome o{AppendAll({attacker.GetName(), "is already", Stringify(statusConditionInflicment.effect),".",Stringify(attackingMoveId), "failed!"})};    
             return o;
         }
         if (random::Randomer::CheckPercentage(statusConditionInflicment.ChanceToAfflictCondtion))
         {
-            attacker.m_currentCondtion.CauseNonPulsingCondition(statusConditionInflicment.AfflicteCondition);
-            if (attacker.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.AfflicteCondition))
+            attacker.m_currentCondtion.CauseNonPulsingCondition(statusConditionInflicment.effect);
+            if (attacker.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))
             {
                 //success
-                MoveOutcome o{AppendAll({attacker.GetName(), "used", Stringify(attackingMoveId), "!", attacker.GetName(),"is now", Stringify(statusConditionInflicment.AfflicteCondition)})};
+                MoveOutcome o{AppendAll({attacker.GetName(), "used", Stringify(attackingMoveId), "!", attacker.GetName(),"is now", Stringify(statusConditionInflicment.effect)})};
                 return o;    
             }
         }
 
         //failed to afflict / missed
-        MoveOutcome o{AppendAll({attacker.GetName(),"tried to use",Stringify(attackingMoveId), "but it failed to inflict condition",Stringify(statusConditionInflicment.AfflicteCondition)})};    
+        MoveOutcome o{AppendAll({attacker.GetName(),"tried to use",Stringify(attackingMoveId), "but it failed to inflict condition",Stringify(statusConditionInflicment.effect)})};    
         return o;
     }
 
@@ -422,6 +429,13 @@ namespace mockmon::moves
     {
         attacker.m_currentCondtion.StoreChargedMove(storedMoveId);
         MoveOutcome o{AppendAll({attacker.GetName(),"used",Stringify(attackingMoveId), "to charge",Stringify(storedMoveId),"for next turn"})};    
+        return o;
+    }
+
+    MoveOutcome StoreOppenentChargedMove(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const moves::MoveId storedMoveId)
+    {
+        defender.m_currentCondtion.StoreChargedMove(storedMoveId);
+        MoveOutcome o{AppendAll({attacker.GetName(),"used",Stringify(attackingMoveId), "to charge",Stringify(storedMoveId),"in",defender.GetName(),"for next turn"})};    
         return o;
     }
 

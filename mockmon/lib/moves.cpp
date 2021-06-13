@@ -14,6 +14,7 @@ namespace mockmon::moves
         return SimpleMove::AllMoves.at(mvId).Type;
     }
     
+    //move this elsewhere?
     double CriticalChanceBoost(moves::MoveId mvId)
     {
         switch (mvId)
@@ -31,6 +32,7 @@ namespace mockmon::moves
         }
     }
 
+    //move this elsewhere?
     Priority GetMovePriority(moves::MoveId mvId)
     {
         switch (mvId)

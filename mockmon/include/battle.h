@@ -20,18 +20,20 @@ namespace mockmon::battle
     {
         
         public:
-        explicit Battle (Mockmon & playerMockmon, Mockmon & enemyMockmon);
+        explicit Battle (Mockmon & playerMockmon, Mockmon & enemyMockmon, bool silent=false);
         static void DoBattle(Mockmon & playerMockmon, Mockmon & enemyMockmon);       
         static double ModifyAttack(const moves::MoveId attackingMoveId, Mockmon & attacker,const StatsTypes attackingStat, Mockmon & defender,const StatsTypes defendingStat);
         static bool IsCriticalHit(Mockmon & attackingMockmon, const moves::MoveId mv);
-
-        static  std::tuple<double,double> GetStatsModifier(const Mockmon & attacker,const StatsTypes attackingStat,const Mockmon & defender,const StatsTypes defendingStat) ;
+        static double GetCriticalHitModifier(Mockmon & attackingMockmon, const moves::MoveId mv);
+        static std::tuple<double,double> GetStatsModifier(const Mockmon & attacker,const StatsTypes attackingStat,const Mockmon & defender,const StatsTypes defendingStat) ;
+        static void AttackWith(Arena & arena,moves::MoveId mvid,Mockmon & attacker,Mockmon & defender);
 
         private:
         void DetermineBattle(bool b);
         void LoopBattle();
         bool DetermineOrder(const moves::MoveId playerMv,const moves::MoveId enemyMv);
-        void AttackWith(moves::MoveId mvid,Mockmon & attacker,Mockmon & defender);
+
+        
 
         Arena m_arena;
         Mockmon & r_playerMockmon;

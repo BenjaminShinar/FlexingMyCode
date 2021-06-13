@@ -16,14 +16,16 @@ namespace mockmon::stats
 
     struct StatsValues
     {
+        unsigned int Health{1};
         unsigned int Attack{1};
         unsigned int Defence{1};
         unsigned int Special{1};
         unsigned int Speed{1};
-        unsigned int Health{1};
+       
     };
 
     //this is what species have, it cant be changed
+    //Health, attack,Defence,Special,Speed
     struct SpeciesBaseStats
     {
         const StatsValues Stats;
@@ -55,12 +57,12 @@ namespace mockmon::stats
 
     public:
         //player mockmon data
-        explicit IndividualStats(unsigned int attack, unsigned int defence, unsigned int special, unsigned int speed) : Stats{attack, defence, special, speed, CalculateHealth(attack, defence, special, speed)}
+        explicit IndividualStats(unsigned int attack, unsigned int defence, unsigned int special, unsigned int speed) : Stats{CalculateHealth(attack, defence, special, speed),attack, defence, special, speed, }
         {
         }
 
         //this is for enemies
-        explicit IndividualStats() : Stats{9u, 8u, 8u, 8u, CalculateHealth(9u, 8u, 8u, 8u)}
+        explicit IndividualStats() : Stats{CalculateHealth(9u, 8u, 8u, 8u),9u, 8u, 8u, 8u, }
         {
         }
     };

@@ -24,21 +24,20 @@ namespace mockmon::moves
 
     };
 
-
-    struct StatusInflicment
+    template <typename T>
+    struct AbstractStatusInflicment
     {   
         const types::Types moveType;
         const unsigned int ChanceToAfflictCondtion;
+        const T effect;
     };
 
-    struct PulsingStatusInflicment : StatusInflicment
+    struct PulsingStatusInflicment : AbstractStatusInflicment<condition::PulsingConditionId>
     {   
-        const condition::PulsingConditionId AfflicteCondition;
     };
 
-    struct NonPulsingStatusInflicment : StatusInflicment
+    struct NonPulsingStatusInflicment : AbstractStatusInflicment<condition::NonPulsingConditionId>
     {   
-        const condition::NonPulsingConditionId AfflicteCondition;
     };
     
     using ExMove = std::function<MoveOutcome(Arena & arena, const moves::MoveId attackingMoveId,Mockmon & attacker,Mockmon & defender)>;
