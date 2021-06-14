@@ -2,7 +2,7 @@
 
 #include <string>
 #include <iostream>
-#include <fmt\format.h>
+//#include <fmt\format.h>
 
 
 int main(int argc, char *argv[])
@@ -42,6 +42,6 @@ int main(int argc, char *argv[])
             std::cerr << "Number out of range: " << arg << '\n';
         }
     }
-    fmt::print("starting! {}\n", mockmonName);
+    //fmt::print("starting! {}\n", mockmonName);
     StartGame(mockmonName, maxFloor);
 }
