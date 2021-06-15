@@ -16,6 +16,11 @@ namespace mockmon
         // Friendship
     };
     
+    //this belongs to the mockmon species data,
+    // mockmon of type[s?] A can evolve to types B,C,D
+    // can this mockmon species evolve at all?
+    // can this individual mockmon evolve at the moment? to which mockmons?
+    // perform evolution - consume whatever, the evolving mockmon must replace it's base type with the evolved type.
     /*
     class MockmonEvolution
     {

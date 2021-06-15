@@ -28,7 +28,7 @@ namespace mockmon::moves
         MakeDictionaryPair<CompositeMove>(MoveId::Swift,CreateByPassAccuracyCheck(), il_exMV{CreateNormalDamagingMove(MovesTargeting::PurePhysical)}),
 
         //boosting/hexing moves
-        MakeDictionaryPair<CompositeMove>(MoveId::DefenseCurl,CreateByPassAccuracyCheck(), il_exMV{CreateSelfStatChangingMove(StatsTypes::Defence,StatModifiersLevels::Increase)}),
+         MakeDictionaryPair<CompositeMove>(MoveId::DefenseCurl,CreateByPassAccuracyCheck(), il_exMV{CreateSelfStatChangingMove(StatsTypes::Defence,StatModifiersLevels::Increase)}),
         MakeDictionaryPair<CompositeMove>(MoveId::Harden,CreateByPassAccuracyCheck(), il_exMV{CreateSelfStatChangingMove(StatsTypes::Defence,StatModifiersLevels::Increase)}),
         MakeDictionaryPair<CompositeMove>(MoveId::SwordsDance,CreateByPassAccuracyCheck(), il_exMV{CreateSelfStatChangingMove(StatsTypes::Attack,StatModifiersLevels::GreatlyIncrease)}),
         MakeDictionaryPair<CompositeMove>(MoveId::TailWhip,CreateNormalAccuracyCheck(100,MovesTargeting::AccuracyEvasion), il_exMV{CreateOpponentStatChangingMove(StatsTypes::Defence,StatModifiersLevels::Decrese)}),
@@ -64,8 +64,8 @@ namespace mockmon::moves
         MakeDictionaryPair<CompositeMove>(MoveId::HyperFang,CreateNormalAccuracyCheck(90,MovesTargeting::AccuracyEvasion), il_exMV{CreateNormalDamagingMove(MovesTargeting::PurePhysical),CreateOpponentPulsingConditionMove({types::Types::Normal,{10,{},{}},condition::PulsingConditionId::Flinch}) }),  
 
         // moves that only efflict conditions
-        
-        MakeDictionaryPair<CompositeMove>(MoveId::PoisonPowder,CreateNormalAccuracyCheck(75,MovesTargeting::AccuracyEvasion),il_exMV{CreateOpponentPulsingConditionMove({types::Types::Poison,{100,{types::Types::Poison},{}},condition::PulsingConditionId::Poison})}),
+        MakeDictionaryPair<CompositeMove>(MoveId::Spore,CreateNormalAccuracyCheck(75,MovesTargeting::AccuracyEvasion),il_exMV{CreateOpponentPulsingConditionMove({types::Types::Grass,{100,{types::Types::Grass},{}},condition::PulsingConditionId::Sleep})}),
+        MakeDictionaryPair<CompositeMove>(MoveId::PoisonPowder,CreateNormalAccuracyCheck(75,MovesTargeting::AccuracyEvasion),il_exMV{CreateOpponentPulsingConditionMove({types::Types::Poison,{100,{types::Types::Poison,types::Types::Steel},{}},condition::PulsingConditionId::Poison})}),
         MakeDictionaryPair<CompositeMove>(MoveId::SleepPowder,CreateNormalAccuracyCheck(75,MovesTargeting::AccuracyEvasion),il_exMV{CreateOpponentPulsingConditionMove({types::Types::Grass,{100,{types::Types::Grass},{}},condition::PulsingConditionId::Sleep})}),
         MakeDictionaryPair<CompositeMove>(MoveId::StunSpore,CreateNormalAccuracyCheck(75,MovesTargeting::AccuracyEvasion),il_exMV{CreateOpponentPulsingConditionMove({types::Types::Grass,{100,{types::Types::Grass},{}},condition::PulsingConditionId::Paralysis})}),
         MakeDictionaryPair<CompositeMove>(MoveId::ConfuseRay,CreateNormalAccuracyCheck(75,MovesTargeting::AccuracyEvasion),il_exMV{CreateOpponentPulsingConditionMove({types::Types::Ghost,{100,{},{}},condition::PulsingConditionId::Confusion})}),

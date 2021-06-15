@@ -57,6 +57,7 @@ namespace mockmon::moves
         MakeDictionaryPair<SimpleMove>(MoveId::Lick,types::Types::Ghost,20),
 
         //status condition moves
+        MakeDictionaryPair<SimpleMove>(MoveId::Spore,types::Types::Grass ,0), //status
         MakeDictionaryPair<SimpleMove>(MoveId::PoisonSting,types::Types::Poison ,15), //status
         MakeDictionaryPair<SimpleMove>(MoveId::PoisonPowder,types::Types::Poison ,0), //status
         MakeDictionaryPair<SimpleMove>(MoveId::SleepPowder,types::Types::Grass ,0), //status

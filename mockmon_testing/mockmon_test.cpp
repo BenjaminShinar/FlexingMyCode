@@ -55,6 +55,36 @@ TEST_CASE( "Base Mockmon Mew State", "[MockmonTest]" )
     }
 }
 
+//might need the [!mayfail] tag
+TEST_CASE( "All mockmons exist", "[MockmonTest][Coverage][!throws]" ) 
+{
+    const auto numberOfMockmons {151};
+    SECTION("Verify 151 mockmons species are defined")
+    {
+         CHECK(mockmon::MockmonSpecies::AllMockmons.size()==numberOfMockmons);
+    }
+    //ths +0 is required for some weird reason concernning lambda captures
+    const auto mockmonSpecicesId = GENERATE(map([](int i){return MockmonSpeciesId(i);}, range<int>(0,numberOfMockmons+0)));
+
+    DYNAMIC_SECTION("verify mockmon Id " << static_cast<int>(mockmonSpecicesId) << " has a name " << Stringify(mockmonSpecicesId) << " and can be constructed into a mockmon")
+    {
+        const auto mockmonSpeciesName{ Stringify(mockmonSpecicesId) };
+        REQUIRE_THAT(mockmonSpeciesName,!Catch::Matchers::Contains("Unknown"));
+        
+        const auto match = std::find_if(std::begin(mockmon::MockmonSpecies::AllMockmons),std::end(mockmon::MockmonSpecies::AllMockmons),
+        [&](const std::pair<MockmonSpeciesId,MockmonSpecies> & p){return p.first == mockmonSpecicesId;});
+        
+        if(match != std::end(mockmon::MockmonSpecies::AllMockmons))
+        {
+            Mockmon m(mockmonSpecicesId,mockmonSpeciesName);
+            SUCCEED(mockmonSpeciesName + std::string(" successfuly constrcutred"));
+        }
+        else
+        { 
+            FAIL(mockmonSpeciesName+std::string(" is not defined"));
+        }
+    }  
+}
 SCENARIO( "Base Mockmon Weedle State", "[MockmonTest][levelUpMoves]" ) 
 {
     const auto speciesId = MockmonSpeciesId::Weedle;

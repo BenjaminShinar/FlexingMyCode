@@ -40,12 +40,15 @@ topics which require modifications to create those behaviors are marked as **Gen
 - [x] the type system! super, normal and not very effective!
 - [ ] ... TBC battles are between trainers
 
-#### Status Effects - stats modifers
+#### moves
+##### Status Effects - stats modifers
 - [ ] moves that change stat modifers
 - [ ] **Gen 1 Shannignas** for badge boosts
 
-
-
+##### self sacrficing moves
+explosion, self destruct
+- [ ] ko user
+- [ ] half defence
 
 ##### Two turns moves
 - [x] moves with charging before hitting - dig, fly, skull bash,sky attack,solar beam,
@@ -72,6 +75,20 @@ topics which require modifications to create those behaviors are marked as **Gen
 ##### Multi turns moves
 - [ ] multi turn moves
 
+###### binding moves
+Bind, Clamp, Firespin, Wrap.
+
+###### moves that eventually confuse the user
+Petal Dance, Thrash
+
+
+##### Unique moves
+moves that require extra carefull consideration
+- [ ] leech side
+- [ ] counter
+- [ ] substitute
+- [ ] metronome
+- [ ] TBC
 
 #### conditions
 figure out the voltaile/non volatile split
@@ -93,13 +110,13 @@ figure out the voltaile/non volatile split
 
 ##### burn - pulse
 - [x] inflict damage
-- [ ] doesn't effect fire types
+- [x] doesn't effect fire types
 - [x] halfs phyiscal moves attacks
 - [ ] more **Gen 1 Shannignas**
 
 ##### frozen - pulse
 - [x] can't move
-- [ ] doesn't effect ice types
+- [x] doesn't effect ice types
 - [x] thawed by fire attacks (and other attacks?)
 - [ ] **Gen 1 Shannignas** Power points glitch
 - [ ] thawing with a stored move?
@@ -107,12 +124,12 @@ figure out the voltaile/non volatile split
 ##### paralyzed - pulse
 - [x] a chance to not move
 - [x] speed reduction
-- [ ] can be caused by different types of attacks, and mockmon of the same type aren't effected by it.
+- [x] can be caused by different types of attacks, and mockmon of the same type aren't effected by it.
 - [ ] more **Gen 1 Shannignas**
 
 ##### poison - pulse
 - [x] inflict damage
-- [ ] doesn't effect poison types, and maybe steel types.
+- [x] doesn't effect poison types, and maybe steel types.
 - [ ] effects in the outer world
 
 ###### badly poison (toxic)  - pulse
@@ -163,6 +180,20 @@ figure out the voltaile/non volatile split
 - [ ] mockmon uniquness (name, unique id)
 - [ ] mockmon evolution
 
+#### evolution
+when a mockmon evolves, what happens?
+- [ ] evolution lines
+- [ ] canceling / rejecting evolutions
+- [ ] changing stats?
+- [ ] learnning new moves?
+- [ ] before or after stats change?
+- [ ] what happens when more than one evolution is possible
+
+##### different methods of evolution:
+- [ ] by level up
+- [ ] by trade
+- [ ] by item
+
 ### This is supposed to be a game
 
 - [ ] start game, end game condition
@@ -181,8 +212,10 @@ stuff that needs to be done, but not concerning the business logic of the mockmo
 how the project is built, maintained, tested and maintened.
 
 ### Build system
-- [ ] use cmake to build
+- [x] use cmake to build
 - [x] use external packages from package managments
+- [ ] figure out how to get packages via cmake
+- [ ] have a github flow to run build
 
 ### Testing?
 can i use automated testing?
@@ -194,6 +227,11 @@ can i use automated testing?
 - [x] can tests timeout? how? (if a battle never ends)
 - [ ] test damage ranges - somehow account for the possibility of critical hits.
 
+#### test db completeness
+test that all mockmon, moves and everything is defined and doesn't crash
+- [ ] test that all 151 mockmons exist and can be constructed
+- [ ] test that all moves (how many?) exist, have a name, can be called without crushing the system.
+
 #### test conditions
 - [x] testing that burn and poison damage the mockmon
 - [x] testing that burn halfs attack
@@ -201,6 +239,11 @@ can i use automated testing?
 - [x] testing that light screen and reflect change defences
 - [ ] test that haze removes all sorts of stuff and does it job and it's bugs
 
+#### test statues
+status moves change modifiers properly
+- [ ] statues moves
+- [ ] reflect/lightscreen/focus energy?
+- [ ] ...TBC
 
 ### UMLs
 - [x] create a location for umls on the repository
@@ -209,3 +252,6 @@ can i use automated testing?
 - [ ] game driver uml - which modes are availble to use currently
 - [ ] classes uml - mockmon, conditions, etc...
 - [ ] special moves umls - maybe needed
+
+### Documentation
+- [ ] can we auto generate a documentation?

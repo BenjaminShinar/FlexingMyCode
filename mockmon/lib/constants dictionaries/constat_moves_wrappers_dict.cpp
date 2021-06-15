@@ -57,6 +57,7 @@ namespace mockmon::moves
         MakeDictionaryPair<ConstantMove>(MoveId::Lick ,30,48),
         //status condition moves
         
+        MakeDictionaryPair<ConstantMove>(MoveId::Spore ,15,24),
         MakeDictionaryPair<ConstantMove>(MoveId::PoisonPowder ,35,56),
         MakeDictionaryPair<ConstantMove>(MoveId::SleepPowder ,15,24),
         MakeDictionaryPair<ConstantMove>(MoveId::StunSpore ,30,48),
