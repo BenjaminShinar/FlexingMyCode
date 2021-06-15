@@ -1,0 +1,32 @@
+
+@startuml evolution
+skinparam ConditionEndStyle hline
+skinparam conditionStyle Inside
+title Evolution
+start 
+
+if (species can evolve) then (check mockmon)
+switch (Evolution method)
+case (level requirement)
+if (want to eveolve)
+else (cancel evoltuion)
+stop
+endif
+case (traded)
+if (want to eveolve)
+else (cancel evoltuion)
+stop
+endif
+case (held item)
+if (want to eveolve)
+:consume item;
+else (cancel evoltuion)
+stop
+endif
+endswitch
+:evolve;
+:update stats;
+:learn new moves;
+endif
+end 
+@enduml
