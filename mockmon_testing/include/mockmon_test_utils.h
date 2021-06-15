@@ -5,11 +5,6 @@
 class MockmonTestUtils
 {
     public:
-    template<typename V,typename T>
-    static auto MakePredicator(T t)
-    {
-        return ([t](const V & el){return el.IsSameAs(t);});
-    }
 
     /**
      * @brief 

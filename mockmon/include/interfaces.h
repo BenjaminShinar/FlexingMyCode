@@ -7,8 +7,16 @@
 #include <algorithm>
 #include <utility>
 #include <vector>
+#include <set>
 namespace mockmon
 {   
+
+    template<typename V,typename T>
+    static auto MakePredicator(T t)
+    {
+        return ([t](const V & el){return el.IsSameAs(t);});
+    }
+
     //needed because we are skipping braced initilization.
     template <typename T>
     using vector_type_T=std::vector<T>;
@@ -26,7 +34,7 @@ namespace mockmon
      * @return false 
      */
     template<typename T,class UnaryPredicate>
-    bool VectorContains(const std::vector<T> & v,const UnaryPredicate & p)
+    bool ContainerHas(const std::vector<T> & v,const UnaryPredicate & p)
     {
     return std::any_of(std::begin(v),std::end(v),[&](const T & e){return p(e);});   
     }

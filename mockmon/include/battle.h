@@ -35,9 +35,9 @@ namespace mockmon::battle
 
         
 
-        Arena m_arena;
         Mockmon & r_playerMockmon;
         Mockmon & r_enemyMockmon;
+        Arena m_arena;
 
         
     };

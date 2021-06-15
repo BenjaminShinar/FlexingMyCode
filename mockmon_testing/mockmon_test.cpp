@@ -10,19 +10,19 @@
  * @param ids 
  * @return auto 
  */
+    using namespace::mockmon;
+
 auto RequireMoves(const mockmon::Mockmon & m, std::initializer_list<mockmon::moves::MoveId> ids)
 {    
-    using namespace::mockmon;
     const auto & mvs = m.ViewMoveSet();
     for (auto id : ids)
     {
-        REQUIRE(VectorContains<moves::EquipedMove>(mvs,MockmonTestUtils::MakePredicator<moves::EquipedMove>(id)));
+        REQUIRE(ContainerHas<moves::EquipedMove>(mvs,MakePredicator<moves::EquipedMove>(id)));
     }
 }
 //test_casse(name[,tags])
 TEST_CASE( "Base Mockmon Mew State", "[MockmonTest]" ) 
 {
-    using namespace::mockmon;
     const auto speciesId = MockmonSpeciesId::Mew;
     Mockmon m(speciesId,"Jrose");
     SECTION("changing a mockmon name!")
@@ -57,7 +57,6 @@ TEST_CASE( "Base Mockmon Mew State", "[MockmonTest]" )
 
 SCENARIO( "Base Mockmon Weedle State", "[MockmonTest][levelUpMoves]" ) 
 {
-    using namespace::mockmon;
     const auto speciesId = MockmonSpeciesId::Weedle;
     GIVEN("A weedle mockmon")
     {
@@ -70,7 +69,7 @@ SCENARIO( "Base Mockmon Weedle State", "[MockmonTest][levelUpMoves]" )
             REQUIRE(species.IsSpeciesOfType(types::Types::Poison));
             REQUIRE_FALSE(species.IsSpeciesOfType(types::Types::Psychic));
         }
-        WHEN("its level one")
+        AND_WHEN("its level one")
         {
             THEN("it should know two moves")
             {
@@ -90,7 +89,6 @@ SCENARIO( "Base Mockmon Weedle State", "[MockmonTest][levelUpMoves]" )
 
 SCENARIO( "Base Mockmon Ratata State", "[MockmonTest][levelUpMoves]" ) 
 {
-    using namespace::mockmon;
     const auto speciesId = MockmonSpeciesId::Rattata;
     GIVEN("A ratata mockmon")
     {

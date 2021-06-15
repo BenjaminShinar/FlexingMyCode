@@ -50,7 +50,7 @@ topics which require modifications to create those behaviors are marked as **Gen
 ##### Two turns moves
 - [x] moves with charging before hitting - dig, fly, skull bash,sky attack,solar beam,
 - [ ] moves with invurnability stage - dig, fly
-- [ ] moves with re-charging after hitting - hyperBeam
+- [x] moves with re-charging after hitting - hyperBeam
 - [ ] power points consumption - when damage is done
 - [ ] interacton with status effects - paused? stopped? what if i hit myself in confusion is pparalyzed
 - [ ] weird **Gen 1 Shannignas**
@@ -58,13 +58,13 @@ topics which require modifications to create those behaviors are marked as **Gen
 ###### Dig / Fly
 - [x] - two turn moves
 - [ ] - invernuble stage
-- [ ] - interaction with states
+- [ ] - interaction with status
 - [ ] - PP consumption
 
 ###### HyperBean
 - [x] - two turn move
 - [x] - recharge turn
-- [ ] - interaction with states moves
+- [ ] - interaction with status moves
 - [ ] - **Gen 1 Shannignas**
 - [ ] - PP consumption
 - [ ] - PP overflow?

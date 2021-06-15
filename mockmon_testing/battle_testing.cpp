@@ -3,15 +3,16 @@
 #include "../mockmon/include/battle.h"
 #include "../mockmon/include/specialized_moves.h"
 #include "../mockmon/include/moves_stats_targeting.h"
+#include "../mockmon/include/interfaces.h"
 
 #include <cmath>
 #include <algorithm>
 #include <set>
 
+using namespace::mockmon;
 
 SCENARIO( "Battle test", "[MockmonTest]" ) 
 {
-    using namespace::mockmon;
     const auto speciesId = MockmonSpeciesId::Mew;
     GIVEN("two mews mockmon engaging in a battle")
     {
@@ -31,7 +32,6 @@ SCENARIO( "Battle test", "[MockmonTest]" )
 
 SCENARIO( "damage ranges test", "[MockmonTest][!mayfail]" ) 
 {
-    using namespace::mockmon;
     using std::make_tuple;
     const auto speciesId = MockmonSpeciesId::Mew;
 
@@ -95,23 +95,23 @@ SCENARIO( "damage ranges test", "[MockmonTest][!mayfail]" )
  */
 SCENARIO( "Conditions Immunities", "[MockmonTest][Condition]" ) 
 {
-    using namespace::mockmon;
     using std::make_tuple;
     const auto speciesId = MockmonSpeciesId::Mew;
     const auto expectedEnemyLevel{50};
 
     const auto [testedCondition, statusMove,targetedSpeices, shouldBeEffected,nAttempts] = GENERATE(
         make_tuple(condition::PulsingConditionId::Paralysis,moves::MoveId::ThunderWave,MockmonSpeciesId::Weedle,true,5),
-        
         make_tuple(condition::PulsingConditionId::Paralysis,moves::MoveId::ThunderWave,MockmonSpeciesId::Pikachu,false,5),
-        //make_tuple(condition::PulsingConditionId::Paralysis,moves::MoveId::ThunderWave,MockmonSpeciesId::Geodude,false,5),
+        make_tuple(condition::PulsingConditionId::Paralysis,moves::MoveId::ThunderWave,MockmonSpeciesId::Geodude,false,5),
 
         make_tuple(condition::PulsingConditionId::Paralysis,moves::MoveId::BodySlam,MockmonSpeciesId::Geodude,true,500),
         make_tuple(condition::PulsingConditionId::Paralysis,moves::MoveId::BodySlam,MockmonSpeciesId::Rattata,false,500),       
-        /*
-        make_tuple(condition::PulsingConditionId::Paralysis,moves::MoveId::Lick,MockmonSpeciesId::Mew,true,500),
-        make_tuple(condition::PulsingConditionId::Paralysis,moves::MoveId::Lick,MockmonSpeciesId::Gastly,false,500)
-        */
+        
+        make_tuple(condition::PulsingConditionId::Paralysis,moves::MoveId::Lick,MockmonSpeciesId::Rattata,true,500),
+        make_tuple(condition::PulsingConditionId::Paralysis,moves::MoveId::Lick,MockmonSpeciesId::Gastly,false,500),
+        
+        make_tuple(condition::PulsingConditionId::Freeze,moves::MoveId::IceBeam,MockmonSpeciesId::Rattata,true,500),
+        make_tuple(condition::PulsingConditionId::Freeze,moves::MoveId::IceBeam,MockmonSpeciesId::Lapras,false,500),
         make_tuple(condition::PulsingConditionId::Burn,moves::MoveId::Ember,MockmonSpeciesId::Rattata,true,500),
         make_tuple(condition::PulsingConditionId::Burn,moves::MoveId::Ember,MockmonSpeciesId::Vulpix,false,500),
         make_tuple(condition::PulsingConditionId::Poison,moves::MoveId::PoisonPowder,MockmonSpeciesId::Mew,true,5),
@@ -127,7 +127,7 @@ SCENARIO( "Conditions Immunities", "[MockmonTest][Condition]" )
         MockmonTestUtils::BringMockmonToLevel(mb,expectedEnemyLevel);
         
         auto & mvset=ma.GetMoveSet();
-        const auto pred {MockmonTestUtils::MakePredicator<moves::EquipedMove,moves::MoveId>(statusMove)};
+        const auto pred {MakePredicator<moves::EquipedMove,moves::MoveId>(statusMove)};
         auto match =std::find_if(std::begin(mvset),std::end(mvset),pred);
         WHEN(AppendAll({"it's attacked by",Stringify(statusMove),"to inflict",Stringify(testedCondition)}))
         {   
@@ -161,7 +161,6 @@ SCENARIO( "Conditions Immunities", "[MockmonTest][Condition]" )
 
 SCENARIO( "damaging conditions", "[MockmonTest][Condition]" ) 
 {
-    using namespace::mockmon;
     using std::make_pair;
     const auto speciesId = MockmonSpeciesId::Mew;
     const auto testedCondition = GENERATE(condition::PulsingConditionId::Burn, condition::PulsingConditionId::Poison);
@@ -220,7 +219,6 @@ SCENARIO( "damaging conditions", "[MockmonTest][Condition]" )
 
 SCENARIO( "pulsing conditions change stats", "[MockmonTest][Condition]" ) 
 {
-    using namespace::mockmon;
     using std::make_tuple;
     const auto speciesId = MockmonSpeciesId::Mew;
     const auto [testedCondition,effectedStat,factor] = GENERATE(
@@ -256,7 +254,6 @@ SCENARIO( "pulsing conditions change stats", "[MockmonTest][Condition]" )
 
 SCENARIO( "pulsing conditions must go away on thier own a max amount of turn", "[MockmonTest][condition]" )
 {
-    using namespace ::mockmon;
     using std::make_tuple;
     const auto speciesId = MockmonSpeciesId::Mew;
     const auto [testedCondition, maxTurns] = GENERATE(
@@ -291,7 +288,6 @@ SCENARIO( "pulsing conditions must go away on thier own a max amount of turn", "
 
 SCENARIO( "pulsing conditions go away on thier own in a random matter", "[MockmonTest][Condition]" ) 
 {
-    using namespace::mockmon;
     using std::make_tuple;
     const auto speciesId = MockmonSpeciesId::Mew;
     const auto loops{50000}; //how many times each
@@ -335,7 +331,6 @@ SCENARIO( "pulsing conditions go away on thier own in a random matter", "[Mockmo
 
 SCENARIO( "light screen and reflect conditions", "[MockmonTest][Condition]" ) 
 {
-    using namespace::mockmon;
     using std::make_tuple;
     const auto speciesId = MockmonSpeciesId::Mew;
     const auto [testedCondition,effectedStat,factor]  = GENERATE(make_tuple(condition::NonPulsingConditionId::Reflect,StatsTypes::Defence,2.0),make_tuple(condition::NonPulsingConditionId::LightScreen,StatsTypes::Special,2.0));
@@ -369,7 +364,6 @@ SCENARIO( "light screen and reflect conditions", "[MockmonTest][Condition]" )
 /*
 SCENARIO( "confusion", "[MockmonTest][Condition]" ) 
 {
-    using namespace::mockmon;
     using std::make_pair;
     const auto speciesId = MockmonSpeciesId::Mew;
     const auto testedCondition =GENERATE(condition::PulsingConditionId::Confusion);

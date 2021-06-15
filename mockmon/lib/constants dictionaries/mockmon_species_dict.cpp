@@ -102,6 +102,32 @@ namespace mockmon
             //{42,{moves::MoveId::FireSpin}},
         }
         ),
+        MakeDictionaryPair<MockmonSpecies>(MockmonSpeciesId::Gastly,
+        s_t{types::Types::Ghost,types::Types::Poison},
+        LevelUpGroup::MediumSlowLevelUp,95,
+        stats::SpeciesBaseStats{30,35,30100,80},
+        mp_i_vec_Mv{
+            //moves list
+            {1,{moves::MoveId::Lick,moves::MoveId::ConfuseRay,moves::MoveId::NightShade}},
+            //{27,{moves::MoveId::Hypnosis}},
+            //{35,{moves::MoveId::DreamEater}},
+        }
+        ),
+        MakeDictionaryPair<MockmonSpecies>(MockmonSpeciesId::Lapras,
+        s_t{types::Types::Water,types::Types::Ice},
+        LevelUpGroup::SlowLevelUp,219,
+        stats::SpeciesBaseStats{130,85,80,95,60},
+        mp_i_vec_Mv{
+            //moves list
+            {1,{moves::MoveId::WaterGun,moves::MoveId::Growl}},
+           // {16,{moves::MoveId::Sing}},
+            //{20,{moves::MoveId::Mist}},
+            {25,{moves::MoveId::BodySlam}},
+            {31,{moves::MoveId::ConfuseRay}},
+            {38,{moves::MoveId::IceBeam}},
+            //{46,{moves::MoveId::HydroPump}},
+        }
+        ),
 
     };
 

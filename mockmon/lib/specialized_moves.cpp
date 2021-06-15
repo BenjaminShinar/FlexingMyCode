@@ -3,6 +3,7 @@
 #include "random_gen.h"
 #include "stats/stats.h"
 #include "mockmon_conditions/all_conditions.h"
+#include "interfaces.h"
 
 #include <functional>
 #include <utility>
@@ -88,6 +89,9 @@ namespace mockmon::moves
         exit(1);
         return std::make_unique<EmptyCondition>();
     }
+
+
+
 
 #pragma region move success Chances
    
@@ -240,31 +244,14 @@ namespace mockmon::moves
     //TODO: find a way to remove this whole mess 
     MoveOutcome AddOpponentPulsingConditionStatus(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const PulsingStatusInflicment statusConditionInflicment)
     {
-        if (defender.GetMockmonSpeciesData().IsSpeciesOfType(statusConditionInflicment.moveType))
-        {
-            MoveOutcome o{AppendAll({defender.GetName(), "cant be efflicted with", Stringify(statusConditionInflicment.effect),"by",Stringify(attackingMoveId) })};    
-            return o;
-        }
         if (defender.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))
         {
             //already afflicted
             MoveOutcome o{AppendAll({defender.GetName(), "is already", Stringify(statusConditionInflicment.effect),".",Stringify(attackingMoveId), "failed!"})};    
             return o;
         }
-        if (random::Randomer::CheckPercentage(statusConditionInflicment.ChanceToAfflictCondtion))
-        {
-            defender.m_currentCondtion.CausePulsingCondition(MakeCondition(statusConditionInflicment.effect,defender));
-            if (defender.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))
-            {
-                //success
-                MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(attackingMoveId), "!", defender.GetName(),"is now", Stringify(statusConditionInflicment.effect)})};
-                return o;    
-            }
-        }
-
-        //failed to afflict / missed
-        MoveOutcome o{AppendAll({attacker.GetName(),"tried to use",Stringify(attackingMoveId), "but it failed to inflict condition",Stringify(statusConditionInflicment.effect)})};    
-        return o;
+        
+        return statusConditionInflicment.TryEfflict(attackingMoveId,attacker,defender);
     }
 
     MoveOutcome AddSelfPulsingConditionStatus(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const PulsingStatusInflicment statusConditionInflicment)
@@ -276,7 +263,7 @@ namespace mockmon::moves
             MoveOutcome o{AppendAll({attacker.GetName(), "is already", Stringify(statusConditionInflicment.effect),".",Stringify(attackingMoveId), "failed!"})};    
             return o;
         }
-        if (random::Randomer::CheckPercentage(statusConditionInflicment.ChanceToAfflictCondtion))
+        if (random::Randomer::CheckPercentage(statusConditionInflicment.Chance.ChanceToAfflictCondtion))
         {
             attacker.m_currentCondtion.CausePulsingCondition(MakeCondition(statusConditionInflicment.effect,attacker));
             if (attacker.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))
@@ -301,7 +288,7 @@ namespace mockmon::moves
             MoveOutcome o{AppendAll({defender.GetName(), "is not", Stringify(statusConditionInflicment.effect),".",Stringify(attackingMoveId), "failed!"})};    
             return o;
         }
-        if (random::Randomer::CheckPercentage(statusConditionInflicment.ChanceToAfflictCondtion))
+        if (random::Randomer::CheckPercentage(statusConditionInflicment.Chance.ChanceToAfflictCondtion))
         {
             defender.m_currentCondtion.RemovePulsingCondition(statusConditionInflicment.effect);
             if (!defender.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))
@@ -325,7 +312,7 @@ namespace mockmon::moves
             MoveOutcome o{AppendAll({attacker.GetName(), "is not", Stringify(statusConditionInflicment.effect),".",Stringify(attackingMoveId), "failed!"})};    
             return o;
         }
-        if (random::Randomer::CheckPercentage(statusConditionInflicment.ChanceToAfflictCondtion))
+        if (random::Randomer::CheckPercentage(statusConditionInflicment.Chance.ChanceToAfflictCondtion))
         {
             attacker.m_currentCondtion.RemovePulsingCondition(statusConditionInflicment.effect);
             if (!attacker.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))
@@ -343,31 +330,15 @@ namespace mockmon::moves
 
     MoveOutcome AddOpponentNonePulsingConditionStatus(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const NonPulsingStatusInflicment statusConditionInflicment)
     {
-        if (defender.GetMockmonSpeciesData().IsSpeciesOfType(statusConditionInflicment.moveType))
-        {
-            MoveOutcome o{AppendAll({defender.GetName(), "cant be efflicted with", Stringify(statusConditionInflicment.effect),"by",Stringify(attackingMoveId) })};    
-            return o;
-        }
         if (defender.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))
         {
             //already afflicted
             MoveOutcome o{AppendAll({defender.GetName(), "is already", Stringify(statusConditionInflicment.effect),".",Stringify(attackingMoveId), "failed!"})};    
             return o;
         }
-        if (random::Randomer::CheckPercentage(statusConditionInflicment.ChanceToAfflictCondtion))
-        {
-            defender.m_currentCondtion.CauseNonPulsingCondition(statusConditionInflicment.effect);
-            if (defender.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))
-            {
-                //success
-                MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(attackingMoveId), "!", defender.GetName(),"is now", Stringify(statusConditionInflicment.effect)})};
-                return o;    
-            }
-        }
 
-        //failed to afflict / missed
-        MoveOutcome o{AppendAll({attacker.GetName(),"tried to use",Stringify(attackingMoveId), "but it failed to inflict condition",Stringify(statusConditionInflicment.effect)})};    
-        return o;
+        return statusConditionInflicment.TryEfflict(attackingMoveId,attacker,defender);
+
     }
 
     MoveOutcome AddSelfNonePulsingConditionStatus(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const NonPulsingStatusInflicment statusConditionInflicment)
@@ -379,7 +350,7 @@ namespace mockmon::moves
             MoveOutcome o{AppendAll({attacker.GetName(), "is already", Stringify(statusConditionInflicment.effect),".",Stringify(attackingMoveId), "failed!"})};    
             return o;
         }
-        if (random::Randomer::CheckPercentage(statusConditionInflicment.ChanceToAfflictCondtion))
+        if (random::Randomer::CheckPercentage(statusConditionInflicment.Chance.ChanceToAfflictCondtion))
         {
             attacker.m_currentCondtion.CauseNonPulsingCondition(statusConditionInflicment.effect);
             if (attacker.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))

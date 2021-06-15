@@ -18,7 +18,6 @@ namespace mockmon::types
 
         if (doubleEffect)
         {
-            std::cout<<  AttackingType << " is double effective against " << defendingType <<'\n';
             return TypeEffectivenessModifier::VeryEffective;
         }
         if (noEffect)

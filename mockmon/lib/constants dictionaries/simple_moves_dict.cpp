@@ -26,6 +26,17 @@ namespace mockmon::moves
         MakeDictionaryPair<SimpleMove>(MoveId::KarateChop ,types::Types::Normal,50), //high critical hit rate
         MakeDictionaryPair<SimpleMove>(MoveId::RazorLeaf ,types::Types::Grass,55), //high critical hit rate
         
+        // moves that can't miss
+        MakeDictionaryPair<SimpleMove>(MoveId::Swift,types::Types::Normal,60), //can't miss
+        //set damage moves
+        MakeDictionaryPair<SimpleMove>(MoveId::SonicBoom,types::Types::Normal,0), //set Damage
+        MakeDictionaryPair<SimpleMove>(MoveId::SuperFang,types::Types::Normal,0), //set Damage
+        MakeDictionaryPair<SimpleMove>(MoveId::SeismicToss,types::Types::Normal,0), //set Damage
+        MakeDictionaryPair<SimpleMove>(MoveId::DragonRage,types::Types::Dragon,0), //set Damage
+        MakeDictionaryPair<SimpleMove>(MoveId::NightShade,types::Types::Ghost,0), //set Damage
+        MakeDictionaryPair<SimpleMove>(MoveId::Psywave,types::Types::Psychic,0), //set Damage
+
+
 
         MakeDictionaryPair<SimpleMove>(MoveId::Ember,types::Types::Fire,40),
         MakeDictionaryPair<SimpleMove>(MoveId::Struggle,types::Types::Typeless,30),
@@ -43,15 +54,7 @@ namespace mockmon::moves
         MakeDictionaryPair<SimpleMove>(MoveId::Blizzard,types::Types::Ice,120),
 
         MakeDictionaryPair<SimpleMove>(MoveId::BodySlam,types::Types::Normal,85),
-        // moves that can't miss
-        MakeDictionaryPair<SimpleMove>(MoveId::Swift,types::Types::Normal,60), //can't miss
-        //set damage moves
-        MakeDictionaryPair<SimpleMove>(MoveId::SonicBoom,types::Types::Normal,0), //set Damage
-        MakeDictionaryPair<SimpleMove>(MoveId::SuperFang,types::Types::Normal,0), //set Damage
-        MakeDictionaryPair<SimpleMove>(MoveId::SeismicToss,types::Types::Normal,0), //set Damage
-        MakeDictionaryPair<SimpleMove>(MoveId::DragonRage,types::Types::Dragon,0), //set Damage
-        MakeDictionaryPair<SimpleMove>(MoveId::NightShade,types::Types::Ghost,0), //set Damage
-        MakeDictionaryPair<SimpleMove>(MoveId::Psywave,types::Types::Psychic,0), //set Damage
+        MakeDictionaryPair<SimpleMove>(MoveId::Lick,types::Types::Ghost,20),
 
         //status condition moves
         MakeDictionaryPair<SimpleMove>(MoveId::PoisonSting,types::Types::Poison ,15), //status

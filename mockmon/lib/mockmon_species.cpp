@@ -1,6 +1,7 @@
 #include "mockmon_species.h"
 #include <cmath>
 #include <algorithm>
+#include <interfaces.h>
 
 namespace mockmon
 {
