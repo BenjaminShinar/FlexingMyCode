@@ -25,7 +25,7 @@ namespace mockmon
         :m_currentSpeciesId(species), m_name(name),m_trainer_ai_id(trainerAi),m_outputEvents(silent)
         {
             LearnLevelUpMoves(1);
-            CurrentBattleStats.UpdateStats(stats::MockmonStats(GetMockmonSpeciesData().MockmonSpeciesStats,IVs,EVs,CurrentLevel));
+            CurrentBattleStats.UpdateBattleStats(stats::MockmonStats(GetMockmonSpeciesData().MockmonSpeciesStats,IVs,EVs,CurrentLevel));
             CurrentBattleStats.m_battleStats.at(StatsTypes::CriticalHitChance).ChangeStat(GetMockmonSpeciesData().MockmonSpeciesStats.Stats.Speed); //critical hit chance for species
             CurrentBattleStats.Health.RestStatToMax();//max health at creation
             
@@ -52,13 +52,12 @@ namespace mockmon
         bool DisplayEvent() const {return  m_outputEvents;}
         TrainerAI GetTrainerAIID() const {return m_trainer_ai_id;}
         //battle relatedStuff probably alot of methods should go somewhere else
-
-
+        void TryEvolve();
         private:
         void LearnLevelUpMoves();
         void LearnLevelUpMoves(int level);
         void LevelUp();
-        void UpdateStats();
+        void UpdateBaseStats();
 
 
         public:

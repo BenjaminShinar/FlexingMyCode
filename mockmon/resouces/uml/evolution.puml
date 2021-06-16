@@ -8,19 +8,32 @@ start
 if (species can evolve) then (check mockmon)
 switch (Evolution method)
 case (level requirement)
+if (level >= required) then (can evolve)
 if (want to eveolve)
 else (cancel evoltuion)
+stop
+endif
+else ()
 stop
 endif
 case (traded)
+if (was traded) then (can evolve)
 if (want to eveolve)
 else (cancel evoltuion)
 stop
 endif
+else ()
+stop
+endif
 case (held item)
+case (traded)
+if (holds item) then (can evolve)
 if (want to eveolve)
 :consume item;
 else (cancel evoltuion)
+stop
+endif
+else ()
 stop
 endif
 endswitch

@@ -6,6 +6,7 @@ namespace mockmon
 
 
    using s_t = std::set<types::Types>;
+   using s_species = std::set<MockmonSpeciesId>;
    using v_Mv= vector_type_T<moves::MoveId>;
    using mp_i_vec_Mv = std::map<int,v_Mv>;
     const std::map<MockmonSpeciesId,MockmonSpecies> MockmonSpecies::AllMockmons
@@ -13,6 +14,7 @@ namespace mockmon
         //explicit MockmonSpecies(MockmonSpeciesId speciesId,types::Types type,long speciesExp,Stats & sepeciesStats,const std::map<int,moves::MoveId> & levelUpMovesList);
         
         MakeDictionaryPair<MockmonSpecies>(MockmonSpeciesId::Mew,
+        s_species{},
         s_t{types::Types::Psychic},
         LevelUpGroup::MediumSlowLevelUp,64,
         stats::SpeciesBaseStats{100,100,100,100,100},
@@ -23,6 +25,7 @@ namespace mockmon
         }
         ),
         MakeDictionaryPair<MockmonSpecies>(MockmonSpeciesId::Rattata,
+        s_species{MockmonSpeciesId::Raticate},
         s_t{types::Types::Normal},
         LevelUpGroup::MediumFastLevelUp,57,
         stats::SpeciesBaseStats{30,56,35,25,72},
@@ -36,6 +39,7 @@ namespace mockmon
         }
         ),
         MakeDictionaryPair<MockmonSpecies>(MockmonSpeciesId::Raticate,
+        s_species{},
         s_t{types::Types::Normal},
         LevelUpGroup::MediumFastLevelUp,116,
         stats::SpeciesBaseStats{55,81,60,50,97},
@@ -50,6 +54,7 @@ namespace mockmon
         ),
 
         MakeDictionaryPair<MockmonSpecies>(MockmonSpeciesId::Weedle,
+        s_species{},
         s_t{types::Types::Bug,types::Types::Poison},
         LevelUpGroup::MediumFastLevelUp,52,
         stats::SpeciesBaseStats{40,35,30,20,50},
@@ -59,6 +64,7 @@ namespace mockmon
         }
         ),
         MakeDictionaryPair<MockmonSpecies>(MockmonSpeciesId::Pikachu,
+        s_species{},
         s_t{types::Types::Electric},
         LevelUpGroup::MediumFastLevelUp,82,
         stats::SpeciesBaseStats{35,55,30,50,90},
@@ -74,6 +80,7 @@ namespace mockmon
         }
         ),
         MakeDictionaryPair<MockmonSpecies>(MockmonSpeciesId::Geodude,
+        s_species{},
         s_t{types::Types::Rock,types::Types::Ground},
         LevelUpGroup::MediumSlowLevelUp,86,
         stats::SpeciesBaseStats{40,40,100,30,20},
@@ -89,6 +96,7 @@ namespace mockmon
         }
         ),
         MakeDictionaryPair<MockmonSpecies>(MockmonSpeciesId::Vulpix,
+        s_species{},
         s_t{types::Types::Fire},
         LevelUpGroup::MediumFastLevelUp,63,
         stats::SpeciesBaseStats{38,41,40,65,65},
@@ -103,6 +111,7 @@ namespace mockmon
         }
         ),
         MakeDictionaryPair<MockmonSpecies>(MockmonSpeciesId::Gastly,
+        s_species{},
         s_t{types::Types::Ghost,types::Types::Poison},
         LevelUpGroup::MediumSlowLevelUp,95,
         stats::SpeciesBaseStats{30,35,30100,80},
@@ -114,6 +123,7 @@ namespace mockmon
         }
         ),
         MakeDictionaryPair<MockmonSpecies>(MockmonSpeciesId::Lapras,
+        s_species{},
         s_t{types::Types::Water,types::Types::Ice},
         LevelUpGroup::SlowLevelUp,219,
         stats::SpeciesBaseStats{130,85,80,95,60},

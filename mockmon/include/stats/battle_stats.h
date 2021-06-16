@@ -17,7 +17,7 @@ namespace mockmon::stats
         explicit BattleStats() = default;
 
         //this happenes at Level Up, at creation, and maybe at pokemon center / when taking vitamins?
-        void UpdateStats(const MockmonStats &mockmonStats)
+        void UpdateBattleStats(const MockmonStats &mockmonStats)
         {
             Health.ChangeStatMax(mockmonStats.Stats.Health);
             m_battleStats.at(StatsTypes::Attack).ChangeStat(mockmonStats.Stats.Attack);

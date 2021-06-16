@@ -15,7 +15,7 @@
 #include <vector>
 #include <map>
 #include <set>
-
+#include <optional>
 //this is the base class of each mockmon, the shared data between them.
 namespace mockmon
 {
@@ -24,8 +24,9 @@ namespace mockmon
     {   
         public:
         explicit MockmonSpecies()=delete;
-        explicit MockmonSpecies(MockmonSpeciesId speciesId,const std::set<types::Types> & types,LevelUpGroup speciesLevelUpGroup,int speciesExp, const stats::SpeciesBaseStats & speciesStats,const std::map<int,std::vector<moves::MoveId>> & levelUpMoves):
+        explicit MockmonSpecies(MockmonSpeciesId speciesId,const std::set<MockmonSpeciesId> & possibleEvolutions,const std::set<types::Types> & types,LevelUpGroup speciesLevelUpGroup,int speciesExp, const stats::SpeciesBaseStats & speciesStats,const std::map<int,std::vector<moves::MoveId>> & levelUpMoves):
         IdentifiybleModule(speciesId),
+        PossibleEvolutions(possibleEvolutions),
         SpeciesTypes(types),
         SpeciesLevelUpGroup(speciesLevelUpGroup),
         SpeciesExp(speciesExp),
@@ -36,17 +37,17 @@ namespace mockmon
         virtual ~MockmonSpecies()=default; //we might want some inheritance for special mockmon cases, who knows 
 
        #pragma region functions  
-        
+        std::optional<MockmonSpeciesId> NextEvolution() const;
         bool IsSpeciesOfType(types::Types type) const;
         types::TypeEffectivenessModifier GetTypeEffetivenessModifier(types::Types attackingMoveType) const;
         
         #pragma endregion
+        const std::set<MockmonSpeciesId> PossibleEvolutions;
         const std::set<types::Types> SpeciesTypes; //what types are the species (at least on, can be more)
         const LevelUpGroup SpeciesLevelUpGroup;
         const int SpeciesExp; // how much exp this mockmon gives
         const stats::SpeciesBaseStats MockmonSpeciesStats; // this belongs to the pokemon base class, not the indvidual;
         const std::map<int,std::vector<moves::MoveId>> LevelUpMoves; //which moves this species can learn naturally
-
         static const std::map<MockmonSpeciesId,MockmonSpecies> AllMockmons;
     };
 }

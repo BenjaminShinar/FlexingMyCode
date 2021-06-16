@@ -24,4 +24,11 @@ class MockmonTestUtils
         }
         m.FullRestore();
     }
+
+    static auto XorredStats(const mockmon::Mockmon & m)
+    {
+        const auto & battleStats= m.CurrentBattleStats.m_battleStats;
+        const auto xoredStats = std::accumulate(std::begin(battleStats),std::end(battleStats),0,[](int xorred, const auto & p ){return xorred ^ static_cast<int>(p.second.GetBaseStat());});
+        return xoredStats;
+    }
 };

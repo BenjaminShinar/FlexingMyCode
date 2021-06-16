@@ -57,6 +57,14 @@ namespace mockmon
         return false;
     }
 
+    void Mockmon::TryEvolve()
+    {
+        if (!GetMockmonSpeciesData().PossibleEvolutions.empty())
+        {
+            m_currentSpeciesId=*std::begin(GetMockmonSpeciesData().PossibleEvolutions);
+            UpdateBaseStats();
+        }
+    }
 /**
  * @brief 
  * returns changeble version of the move set, 
@@ -112,13 +120,13 @@ namespace mockmon
             std::cout << m_name << " level increase! [" << CurrentLevel << " -> " << (CurrentLevel+1) << "]"<<'\n';
         }
         ++CurrentLevel;
-        UpdateStats();
+        UpdateBaseStats();
         LearnLevelUpMoves(CurrentLevel);
     }
 
-     void Mockmon::UpdateStats()
+     void Mockmon::UpdateBaseStats()
      {
-         CurrentBattleStats.UpdateStats(stats::MockmonStats(GetMockmonSpeciesData().MockmonSpeciesStats,IVs,EVs,CurrentLevel));
+         CurrentBattleStats.UpdateBattleStats(stats::MockmonStats(GetMockmonSpeciesData().MockmonSpeciesStats,IVs,EVs,CurrentLevel));
      }
 
     void TeachMoves(Mockmon & m,const std::vector<moves::MoveId> & mvs)

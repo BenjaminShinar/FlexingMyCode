@@ -1,7 +1,7 @@
 #pragma once
 
 #include "mockmon_data.h"
-
+#include <optional>
 #include <functional>
 
 namespace mockmon
@@ -21,9 +21,23 @@ namespace mockmon
     // can this mockmon species evolve at all?
     // can this individual mockmon evolve at the moment? to which mockmons?
     // perform evolution - consume whatever, the evolving mockmon must replace it's base type with the evolved type.
-    /*
+    // a function that says which evolutions are possible
+    // returning a set of options?
+    // 
+
+    // maybe this should hold a weak refernce to the mockmon?
+    // what if someone saved this to a varible and things changed?
+    //
     class MockmonEvolution
     {
+        using ApplyEvolution = std::function<void(Mockmon & mockmon)>;
+
+        public:
+        bool CanEvolve(Mockmon & mockmon) const;
+        std::pair<MockmonSpeciesId,MockmonSpeciesId> EvolutionPair;
+        private:
+        
+        /*
         using ApplyEvolution = std::function<void(Mockmon & mockmon)>;
         using CheckEvolution = std::function<MockmonSpeciesId(const Mockmon & mockmon)>;
         public:
@@ -42,6 +56,6 @@ namespace mockmon
         const CheckEvolution MockmonCanEvolve = 
         [](const auto & m){return MockmonSpeciesId::UknownSpecies;};
         const ApplyEvolution PerformEvolution = [](auto & m){};
+        */
     };
-    */
 }

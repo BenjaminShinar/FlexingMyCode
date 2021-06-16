@@ -55,8 +55,8 @@ TEST_CASE( "Base Mockmon Mew State", "[MockmonTest]" )
     }
 }
 
-//might need the [!mayfail] tag
-TEST_CASE( "All mockmons exist", "[MockmonTest][Coverage][!throws]" ) 
+//remove the [!mayfail] tag when we're ready to validate that we defined all mockmons
+TEST_CASE( "All mockmons exist", "[MockmonTest][Coverage][!throws][!mayfail]" ) 
 {
     const auto numberOfMockmons {151};
     SECTION("Verify 151 mockmons species are defined")
@@ -144,6 +144,37 @@ SCENARIO( "Base Mockmon Ratata State", "[MockmonTest][levelUpMoves]" )
             {
                 REQUIRE( m.GetCurrentLevel()==7);
                 RequireMoves(m,{moves::MoveId::QuickAttack});
+            }
+        }
+    }
+}
+
+SCENARIO( "Mockmon Evolution", "[MockmonTest][Evolution]" ) 
+{
+    using std::make_tuple;
+    const auto [baseFormSpeciesId,requiredLevel,evolvedFormSpeciesId] = GENERATE(
+            make_tuple(MockmonSpeciesId::Rattata,20,MockmonSpeciesId::Raticate),
+            make_tuple(MockmonSpeciesId::Geodude,20,MockmonSpeciesId::Graveler)
+    );
+    const auto baseformNames {Stringify(baseFormSpeciesId)};
+    const auto evolevedFormName {Stringify(evolvedFormSpeciesId)};
+    GIVEN("A mockmon of type" + baseformNames);
+    {
+        Mockmon m(baseFormSpeciesId,"");
+        WHEN("we level it up to the correct level and evolve it")
+        {
+            MockmonTestUtils::BringMockmonToLevel(m,requiredLevel);
+            const auto preevolvedStats = MockmonTestUtils::XorredStats(m);
+            m.TryEvolve();
+            THEN("it should be a " + evolevedFormName)
+            {
+                const auto EvolvedStats = MockmonTestUtils::XorredStats(m);
+                const auto speciesIdentifier = m.GetMockmonSpeciesData().Identifier();
+                
+
+                REQUIRE_FALSE(speciesIdentifier == baseFormSpeciesId);
+                REQUIRE(speciesIdentifier == evolvedFormSpeciesId);
+                REQUIRE_FALSE(preevolvedStats == EvolvedStats);
             }
         }
     }
