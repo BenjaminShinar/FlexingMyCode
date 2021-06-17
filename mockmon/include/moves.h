@@ -80,18 +80,16 @@ namespace mockmon::moves
         std::optional<moves::MoveId> UseMove();
         std::string Describe() const override;
 
-
         //these probably belong with a friend class;
-        
+
         bool IncreasePowerPoints();
         void RefillPowerPoints();
-        
-        
-        static constexpr std::size_t MaxMoves = 4;
+
+        static constexpr std::size_t MaxMoves = 15;
+
     private:
         unsigned int m_fullPowerPoints;
         unsigned int m_currentPowerPoints;
-
     };
 
     bool CheckMoveAccuracy(const SimpleMove &attack);

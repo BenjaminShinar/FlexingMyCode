@@ -16,9 +16,8 @@ namespace mockmon::moves
 
         static const std::map<moves::MovesTargeting, MoveStatsTargeting> AllStatsTargeting;
         explicit MoveStatsTargeting(moves::MovesTargeting movesTargeting, StatsTypes attackerStat, StatsTypes defenederStat) : IdentifiybleModule(movesTargeting),
-                                                                                               AttackerStat(attackerStat), DefenderStat(defenederStat)
+                                                                                                                               AttackerStat(attackerStat), DefenderStat(defenederStat)
         {
-
         }
     };
 }

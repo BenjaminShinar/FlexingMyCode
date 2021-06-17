@@ -255,3 +255,9 @@ status moves change modifiers properly
 
 ### Documentation
 - [ ] can we auto generate a documentation?
+
+
+## Development takeaways: Maybe The Real Treasure Was the Lessons We Learned Along the Way
+stuff that i should keep in mind for the future
+* don't use a std::set of function objects, it won't work becuase there isn't a good way to compare two objects. use vector instead.
+* TBC...

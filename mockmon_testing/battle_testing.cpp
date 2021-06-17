@@ -9,28 +9,27 @@
 #include <algorithm>
 #include <set>
 
-using namespace::mockmon;
+using namespace ::mockmon;
 
-SCENARIO( "Battle test", "[MockmonTest]" ) 
+SCENARIO("Battle test", "[MockmonTest]")
 {
     const auto speciesId = MockmonSpeciesId::Mew;
     GIVEN("two mews mockmon engaging in a battle")
     {
-        Mockmon ma(speciesId,"mew A");
-        Mockmon mb(speciesId,"mew B");
+        Mockmon ma(speciesId, "mew A");
+        Mockmon mb(speciesId, "mew B");
         WHEN("they engage in battle")
         {
-            battle::Battle::DoBattle(ma,mb);
+            battle::Battle::DoBattle(ma, mb);
             THEN("One must fall")
             {
                 REQUIRE(ma.IsAbleToBattle() ^ mb.IsAbleToBattle());
             }
         }
-
     }
 }
 
-SCENARIO( "damage ranges test", "[MockmonTest][!mayfail]" ) 
+SCENARIO("damage ranges test", "[MockmonTest][!mayfail]")
 {
     using std::make_tuple;
     const auto speciesId = MockmonSpeciesId::Mew;
@@ -45,32 +44,30 @@ SCENARIO( "damage ranges test", "[MockmonTest][!mayfail]" )
 
     GIVEN("two mews mockmon engaging in a battle")
     {
-        Mockmon ma(speciesId,"mew A");
-        Mockmon mb(speciesId,"mew B");
-        MockmonTestUtils::BringMockmonToLevel(ma,requiredLevel);
-        MockmonTestUtils::BringMockmonToLevel(mb,requiredLevel);
+        Mockmon ma(speciesId, "mew A");
+        Mockmon mb(speciesId, "mew B");
+        MockmonTestUtils::BringMockmonToLevel(ma, requiredLevel);
+        MockmonTestUtils::BringMockmonToLevel(mb, requiredLevel);
 
-
-        WHEN(std::string("we calculate damage 10000 times for ")+Stringify(usedMove))
+        WHEN(std::string("we calculate damage 10000 times for ") + Stringify(usedMove))
         {
             std::set<int> damageRanges;
             const auto targetingPair{moves::MoveStatsTargeting::AllStatsTargeting.at(movesTargeting)};
-            for (auto i =0;i<attempts; ++i)
+            for (auto i = 0; i < attempts; ++i)
             {
-                auto damage = static_cast<int>(battle::Battle::ModifyAttack(usedMove, ma,targetingPair.AttackerStat, mb,targetingPair.DefenderStat));
+                auto damage = static_cast<int>(battle::Battle::ModifyAttack(usedMove, ma, targetingPair.AttackerStat, mb, targetingPair.DefenderStat));
 
                 damageRanges.insert(damage);
             }
             THEN("there must be the correct amounts possible damage values")
             {
-                const auto mnmx = std::minmax_element(std::begin(damageRanges),std::end(damageRanges));
+                const auto mnmx = std::minmax_element(std::begin(damageRanges), std::end(damageRanges));
                 CHECK(damageRanges.size() == expectedValuesCount);
                 //TODO: fix damage ranges?
-                CHECK(*mnmx.first == minDamage); 
+                CHECK(*mnmx.first == minDamage);
                 CHECK(*mnmx.second == maxDamage);
             }
         }
-
     }
 }
 
@@ -92,50 +89,50 @@ SCENARIO( "damage ranges test", "[MockmonTest][!mayfail]" )
  * move(which causes status) x target  = status?
  * it might be best if the defending mockmon is at a high level so it won't faint
  * 
+ * 
  */
-SCENARIO( "Conditions Immunities", "[MockmonTest][Condition]" ) 
+SCENARIO("Conditions Immunities", "[MockmonTest][Condition]")
 {
     using std::make_tuple;
     const auto speciesId = MockmonSpeciesId::Mew;
     const auto expectedEnemyLevel{50};
 
-    const auto [testedCondition, statusMove,targetedSpeices, shouldBeEffected,nAttempts] = GENERATE(
-        make_tuple(condition::PulsingConditionId::Paralysis,moves::MoveId::ThunderWave,MockmonSpeciesId::Weedle,true,5),
-        make_tuple(condition::PulsingConditionId::Paralysis,moves::MoveId::ThunderWave,MockmonSpeciesId::Pikachu,false,5),
-        make_tuple(condition::PulsingConditionId::Paralysis,moves::MoveId::ThunderWave,MockmonSpeciesId::Geodude,false,5),
+    const auto [testedCondition, statusMove, targetedSpeices, shouldBeEffected, nAttempts] = GENERATE(
+        make_tuple(condition::PulsingConditionId::Paralysis, moves::MoveId::ThunderWave, MockmonSpeciesId::Weedle, true, 5),
+        make_tuple(condition::PulsingConditionId::Paralysis, moves::MoveId::ThunderWave, MockmonSpeciesId::Pikachu, false, 5),
+        make_tuple(condition::PulsingConditionId::Paralysis, moves::MoveId::ThunderWave, MockmonSpeciesId::Geodude, false, 5),
 
-        make_tuple(condition::PulsingConditionId::Paralysis,moves::MoveId::BodySlam,MockmonSpeciesId::Geodude,true,500),
-        make_tuple(condition::PulsingConditionId::Paralysis,moves::MoveId::BodySlam,MockmonSpeciesId::Rattata,false,500),       
-        
-        make_tuple(condition::PulsingConditionId::Paralysis,moves::MoveId::Lick,MockmonSpeciesId::Rattata,true,500),
-        make_tuple(condition::PulsingConditionId::Paralysis,moves::MoveId::Lick,MockmonSpeciesId::Gastly,false,500),
-        
-        make_tuple(condition::PulsingConditionId::Freeze,moves::MoveId::IceBeam,MockmonSpeciesId::Rattata,true,500),
-        make_tuple(condition::PulsingConditionId::Freeze,moves::MoveId::IceBeam,MockmonSpeciesId::Lapras,false,500),
-        make_tuple(condition::PulsingConditionId::Burn,moves::MoveId::Ember,MockmonSpeciesId::Rattata,true,500),
-        make_tuple(condition::PulsingConditionId::Burn,moves::MoveId::Ember,MockmonSpeciesId::Vulpix,false,500),
-        make_tuple(condition::PulsingConditionId::Poison,moves::MoveId::PoisonPowder,MockmonSpeciesId::Mew,true,5),
-        make_tuple(condition::PulsingConditionId::Poison,moves::MoveId::PoisonPowder,MockmonSpeciesId::Weedle,false,5)
-    );
+        make_tuple(condition::PulsingConditionId::Paralysis, moves::MoveId::BodySlam, MockmonSpeciesId::Geodude, true, 500),
+        make_tuple(condition::PulsingConditionId::Paralysis, moves::MoveId::BodySlam, MockmonSpeciesId::Rattata, false, 500),
 
-    GIVEN(AppendAll({"an enemy mockmon of type",Stringify(targetedSpeices)}))
+        make_tuple(condition::PulsingConditionId::Paralysis, moves::MoveId::Lick, MockmonSpeciesId::Rattata, true, 500),
+        make_tuple(condition::PulsingConditionId::Paralysis, moves::MoveId::Lick, MockmonSpeciesId::Gastly, false, 500),
+
+        make_tuple(condition::PulsingConditionId::Freeze, moves::MoveId::IceBeam, MockmonSpeciesId::Rattata, true, 500),
+        make_tuple(condition::PulsingConditionId::Freeze, moves::MoveId::IceBeam, MockmonSpeciesId::Lapras, false, 500),
+        make_tuple(condition::PulsingConditionId::Burn, moves::MoveId::Ember, MockmonSpeciesId::Rattata, true, 500),
+        make_tuple(condition::PulsingConditionId::Burn, moves::MoveId::Ember, MockmonSpeciesId::Vulpix, false, 500),
+        make_tuple(condition::PulsingConditionId::Poison, moves::MoveId::PoisonPowder, MockmonSpeciesId::Mew, true, 5),
+        make_tuple(condition::PulsingConditionId::Poison, moves::MoveId::PoisonPowder, MockmonSpeciesId::Weedle, false, 5));
+
+    GIVEN(AppendAll({"an enemy mockmon of type", Stringify(targetedSpeices)}))
     {
         Arena a{true};
-        Mockmon ma(speciesId,"attacking Mew");
+        Mockmon ma(speciesId, "attacking Mew");
         ma.TeachMove(statusMove);
-        Mockmon mb(targetedSpeices,AppendAll({Stringify(targetedSpeices),"level",std::to_string(expectedEnemyLevel)}));
-        MockmonTestUtils::BringMockmonToLevel(mb,expectedEnemyLevel);
-        
-        auto & mvset=ma.GetMoveSet();
-        const auto pred {MakePredicator<moves::EquipedMove,moves::MoveId>(statusMove)};
-        auto match =std::find_if(std::begin(mvset),std::end(mvset),pred);
-        WHEN(AppendAll({"it's attacked by",Stringify(statusMove),"to inflict",Stringify(testedCondition)}))
-        {   
+        Mockmon mb(targetedSpeices, AppendAll({Stringify(targetedSpeices), "level", std::to_string(expectedEnemyLevel)}));
+        MockmonTestUtils::BringMockmonToLevel(mb, expectedEnemyLevel);
+
+        auto &mvset = ma.GetMoveSet();
+        const auto pred{MakePredicator<moves::EquipedMove, moves::MoveId>(statusMove)};
+        auto match = std::find_if(std::begin(mvset), std::end(mvset), pred);
+        WHEN(AppendAll({"it's attacked by", Stringify(statusMove), "to inflict", Stringify(testedCondition)}))
+        {
             bool currentlyEffected{false}; //enemy was not effected
 
-            for (auto i= 0; i<nAttempts && !currentlyEffected;++i)
-            {   
-                battle::Battle::AttackWith(a,statusMove,ma,mb);
+            for (auto i = 0; i < nAttempts && !currentlyEffected; ++i)
+            {
+                battle::Battle::AttackWith(a, statusMove, ma, mb);
 
                 currentlyEffected |= mb.m_currentCondtion.IsAffiliatedWithCondition(testedCondition);
                 ma.FullRestore();
@@ -145,21 +142,21 @@ SCENARIO( "Conditions Immunities", "[MockmonTest][Condition]" )
             std::string shouldStr;
             if (shouldBeEffected)
             {
-                shouldStr= "it should be effected";
+                shouldStr = "it should be effected";
             }
             else
             {
-                shouldStr= "it should not be effected";
+                shouldStr = "it should not be effected";
             }
             THEN(shouldStr)
             {
-              REQUIRE(currentlyEffected == shouldBeEffected);
+                REQUIRE(currentlyEffected == shouldBeEffected);
             }
         }
     }
 }
 
-SCENARIO( "damaging conditions", "[MockmonTest][Condition]" ) 
+SCENARIO("damaging conditions", "[MockmonTest][Condition]")
 {
     using std::make_pair;
     const auto speciesId = MockmonSpeciesId::Mew;
@@ -170,89 +167,86 @@ SCENARIO( "damaging conditions", "[MockmonTest][Condition]" )
         make_pair(90u, 16));
     GIVEN("A Normal Healthy mockmon")
     {
-        
-        Mockmon ma(speciesId,AppendAll({Stringify(speciesId),"level",std::to_string(expectedLevel)}));
-        MockmonTestUtils::BringMockmonToLevel(ma,expectedLevel);
+
+        Mockmon ma(speciesId, AppendAll({Stringify(speciesId), "level", std::to_string(expectedLevel)}));
+        MockmonTestUtils::BringMockmonToLevel(ma, expectedLevel);
         THEN("it must be healthy")
         {
             REQUIRE(ma.IsAbleToBattle());
-            REQUIRE(ma.GetCurrentLevel()==expectedLevel);
+            REQUIRE(ma.GetCurrentLevel() == expectedLevel);
             auto maxHealth = ma.CurrentBattleStats.Health.GetMaxStat();
             auto currentHealth = ma.CurrentBattleStats.Health.GetStat();
-            REQUIRE(maxHealth==currentHealth);
+            REQUIRE(maxHealth == currentHealth);
         }
         WHEN("It's effected by the condition")
         {
-            ma.m_currentCondtion.CausePulsingCondition(moves::MakeCondition(testedCondition,ma));
+            ma.m_currentCondtion.CausePulsingCondition(moves::MakeCondition(testedCondition, ma));
             THEN("it must be effected by the conditions")
             {
-              REQUIRE(ma.m_currentCondtion.IsAffiliatedWithCondition(testedCondition));
+                REQUIRE(ma.m_currentCondtion.IsAffiliatedWithCondition(testedCondition));
                 AND_WHEN("turns pass")
                 {
-                    for (auto i=0;i<turnToLast;++i)
+                    for (auto i = 0; i < turnToLast; ++i)
                     {
                         ma.m_currentCondtion.PulseBeforeTurn();
                         ma.m_currentCondtion.PulseAfterTurn();
                     }
                     THEN("it must still be alive")
                     {
-                    REQUIRE(ma.IsAbleToBattle());
-                    AND_WHEN("one more turn passes")
-                    {
-                        ma.m_currentCondtion.PulseBeforeTurn();
-                        ma.m_currentCondtion.PulseAfterTurn();
-
-                        THEN("it should be fainted")
+                        REQUIRE(ma.IsAbleToBattle());
+                        AND_WHEN("one more turn passes")
                         {
-                            REQUIRE(ma.CurrentBattleStats.Health.GetStat()==0);
-                            REQUIRE_FALSE(ma.IsAbleToBattle());
+                            ma.m_currentCondtion.PulseBeforeTurn();
+                            ma.m_currentCondtion.PulseAfterTurn();
+
+                            THEN("it should be fainted")
+                            {
+                                REQUIRE(ma.CurrentBattleStats.Health.GetStat() == 0);
+                                REQUIRE_FALSE(ma.IsAbleToBattle());
+                            }
                         }
                     }
-                    }
-                    
                 }
             }
         }
-
     }
 }
 
-SCENARIO( "pulsing conditions change stats", "[MockmonTest][Condition]" ) 
+SCENARIO("pulsing conditions change stats", "[MockmonTest][Condition]")
 {
     using std::make_tuple;
     const auto speciesId = MockmonSpeciesId::Mew;
-    const auto [testedCondition,effectedStat,factor] = GENERATE(
-        make_tuple(condition::PulsingConditionId::Burn,StatsTypes::Attack,0.5),
-        make_tuple(condition::PulsingConditionId::Paralysis,StatsTypes::Speed,0.25)
-        );
+    const auto [testedCondition, effectedStat, factor] = GENERATE(
+        make_tuple(condition::PulsingConditionId::Burn, StatsTypes::Attack, 0.5),
+        make_tuple(condition::PulsingConditionId::Paralysis, StatsTypes::Speed, 0.25));
     GIVEN("A Normal Healthy mockmon")
     {
-        Mockmon ma(speciesId,AppendAll({Stringify(speciesId),"condition",Stringify(testedCondition)}));
-        const auto [baseAttackStat,baseDefencestat] = battle::Battle::GetStatsModifier(ma,effectedStat,ma,effectedStat);
+        Mockmon ma(speciesId, AppendAll({Stringify(speciesId), "condition", Stringify(testedCondition)}));
+        const auto [baseAttackStat, baseDefencestat] = battle::Battle::GetStatsModifier(ma, effectedStat, ma, effectedStat);
 
         THEN("it must be the same stats")
         {
-                REQUIRE_FALSE(ma.m_currentCondtion.IsAffiliatedWithCondition(testedCondition));
-                REQUIRE(baseAttackStat ==  Approx(baseDefencestat));
+            REQUIRE_FALSE(ma.m_currentCondtion.IsAffiliatedWithCondition(testedCondition));
+            REQUIRE(baseAttackStat == Approx(baseDefencestat));
         }
         WHEN("It's effected by the condition")
         {
-            ma.m_currentCondtion.CausePulsingCondition(moves::MakeCondition(testedCondition,ma));
+            ma.m_currentCondtion.CausePulsingCondition(moves::MakeCondition(testedCondition, ma));
             THEN("it must be effected by the conditions")
             {
                 REQUIRE(ma.m_currentCondtion.IsAffiliatedWithCondition(testedCondition));
 
                 AND_THEN("it must have it's stats change")
                 {
-                const auto [attackstat,defencestat] = battle::Battle::GetStatsModifier(ma,effectedStat,ma,effectedStat);
-                REQUIRE(attackstat == Approx(baseAttackStat*factor));
+                    const auto [attackstat, defencestat] = battle::Battle::GetStatsModifier(ma, effectedStat, ma, effectedStat);
+                    REQUIRE(attackstat == Approx(baseAttackStat * factor));
                 }
             }
         }
     }
 }
 
-SCENARIO( "pulsing conditions must go away on thier own a max amount of turn", "[MockmonTest][condition]" )
+SCENARIO("pulsing conditions must go away on thier own a max amount of turn", "[MockmonTest][condition]")
 {
     using std::make_tuple;
     const auto speciesId = MockmonSpeciesId::Mew;
@@ -261,17 +255,17 @@ SCENARIO( "pulsing conditions must go away on thier own a max amount of turn", "
         make_tuple(condition::PulsingConditionId::Confusion, 10));
     GIVEN("A Normal Healthy mockmon")
     {
-        Mockmon ma(speciesId,AppendAll({Stringify(speciesId),"condition",Stringify(testedCondition)}));
+        Mockmon ma(speciesId, AppendAll({Stringify(speciesId), "condition", Stringify(testedCondition)}));
 
         WHEN("It's effected by the condition")
         {
-            ma.m_currentCondtion.CausePulsingCondition(moves::MakeCondition(testedCondition,ma));
+            ma.m_currentCondtion.CausePulsingCondition(moves::MakeCondition(testedCondition, ma));
             THEN("it must be effected by the conditions")
             {
                 REQUIRE(ma.m_currentCondtion.IsAffiliatedWithCondition(testedCondition));
                 AND_WHEN("turns pass")
                 {
-                    for (auto i=0;i<maxTurns;++i)
+                    for (auto i = 0; i < maxTurns; ++i)
                     {
                         ma.m_currentCondtion.PulseBeforeTurn();
                         ma.m_currentCondtion.PulseAfterTurn();
@@ -286,7 +280,7 @@ SCENARIO( "pulsing conditions must go away on thier own a max amount of turn", "
     }
 }
 
-SCENARIO( "pulsing conditions go away on thier own in a random matter", "[MockmonTest][Condition]" ) 
+SCENARIO("pulsing conditions go away on thier own in a random matter", "[MockmonTest][Condition]")
 {
     using std::make_tuple;
     const auto speciesId = MockmonSpeciesId::Mew;
@@ -302,47 +296,47 @@ SCENARIO( "pulsing conditions go away on thier own in a random matter", "[Mockmo
         make_tuple(condition::PulsingConditionId::Sleep, 8, 1.0, 0.01));
     GIVEN("A Normal Healthy mockmon")
     {
-        Mockmon ma(speciesId,AppendAll({Stringify(speciesId),"condition",Stringify(testedCondition)}));
+        Mockmon ma(speciesId, AppendAll({Stringify(speciesId), "condition", Stringify(testedCondition)}));
 
         WHEN("It's effected by the condition many times")
         {
-            auto timesRecovered {0.0};
-            for (auto l=0; (l<loops); ++l)
+            auto timesRecovered{0.0};
+            for (auto l = 0; (l < loops); ++l)
             {
-                ma.m_currentCondtion.CausePulsingCondition(moves::MakeCondition(testedCondition,ma));
-                for (auto x=0;x<maxTurns;++x)
+                ma.m_currentCondtion.CausePulsingCondition(moves::MakeCondition(testedCondition, ma));
+                for (auto x = 0; x < maxTurns; ++x)
                 {
                     ma.m_currentCondtion.PulseBeforeTurn();
-                    ma.m_currentCondtion.PulseAfterTurn();                }
+                    ma.m_currentCondtion.PulseAfterTurn();
+                }
                 if (!ma.m_currentCondtion.IsAffiliatedWithCondition(testedCondition))
                 {
                     ++timesRecovered;
                 }
                 ma.m_currentCondtion.RemovePulsingCondition(testedCondition);
-
             }
             THEN("it have spontanously recovered about ")
             {
-                REQUIRE_THAT((timesRecovered/loops),Catch::Matchers::WithinAbs(expectedRecovery,expectedMargin));
+                REQUIRE_THAT((timesRecovered / loops), Catch::Matchers::WithinAbs(expectedRecovery, expectedMargin));
             }
         }
     }
 }
 
-SCENARIO( "light screen and reflect conditions", "[MockmonTest][Condition]" ) 
+SCENARIO("light screen and reflect conditions", "[MockmonTest][Condition]")
 {
     using std::make_tuple;
     const auto speciesId = MockmonSpeciesId::Mew;
-    const auto [testedCondition,effectedStat,factor]  = GENERATE(make_tuple(condition::NonPulsingConditionId::Reflect,StatsTypes::Defence,2.0),make_tuple(condition::NonPulsingConditionId::LightScreen,StatsTypes::Special,2.0));
+    const auto [testedCondition, effectedStat, factor] = GENERATE(make_tuple(condition::NonPulsingConditionId::Reflect, StatsTypes::Defence, 2.0), make_tuple(condition::NonPulsingConditionId::LightScreen, StatsTypes::Special, 2.0));
     GIVEN("A Normal Healthy mockmon")
     {
-        Mockmon ma(speciesId,AppendAll({Stringify(speciesId),"condition",Stringify(testedCondition)}));
-        const auto [baseAttackStat,baseDefencestat] = battle::Battle::GetStatsModifier(ma,effectedStat,ma,effectedStat);
+        Mockmon ma(speciesId, AppendAll({Stringify(speciesId), "condition", Stringify(testedCondition)}));
+        const auto [baseAttackStat, baseDefencestat] = battle::Battle::GetStatsModifier(ma, effectedStat, ma, effectedStat);
 
         THEN("it must be the same stats")
         {
-                REQUIRE_FALSE(ma.m_currentCondtion.IsAffiliatedWithCondition(testedCondition));
-                REQUIRE(baseAttackStat ==  Approx(baseDefencestat));
+            REQUIRE_FALSE(ma.m_currentCondtion.IsAffiliatedWithCondition(testedCondition));
+            REQUIRE(baseAttackStat == Approx(baseDefencestat));
         }
         AND_WHEN("It's effected by the condition")
         {
@@ -352,9 +346,9 @@ SCENARIO( "light screen and reflect conditions", "[MockmonTest][Condition]" )
                 REQUIRE(ma.m_currentCondtion.IsAffiliatedWithCondition(testedCondition));
                 AND_THEN("it must have it's stats change")
                 {
-                    const auto [attackstat,defencestat] = battle::Battle::GetStatsModifier(ma,effectedStat,ma,effectedStat);
+                    const auto [attackstat, defencestat] = battle::Battle::GetStatsModifier(ma, effectedStat, ma, effectedStat);
                     REQUIRE_FALSE(attackstat == Approx(defencestat));
-                    REQUIRE(defencestat == Approx(baseDefencestat*factor));
+                    REQUIRE(defencestat == Approx(baseDefencestat * factor));
                 }
             }
         }
