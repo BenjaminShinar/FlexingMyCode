@@ -55,6 +55,45 @@ TEST_CASE("Base Mockmon Mew State", "[MockmonTest]")
     }
 }
 
+TEST_CASE("Bulbapedia L81 Stats Example", "[MockmonTest][Stats]")
+{
+    using std::make_tuple;
+    const auto [base, iv, ev, level, extra, expected] = GENERATE(
+        make_tuple(35, 7, 22850, 81, 91, 189u), //hp
+        make_tuple(55, 8, 23140, 81, 5, 137u),  //attack
+        make_tuple(30, 13, 17280, 81, 5, 101u), //defence
+        make_tuple(50, 9, 19625, 81, 5, 128u),  //special
+        make_tuple(90, 5, 24795, 81, 5, 190u)   //speed
+    );
+    auto x = stats::MockmonStats::ModifyStat(base, iv, ev, level) + extra;
+    REQUIRE(x == expected);
+}
+
+//test_casse(name[,tags])
+TEST_CASE("Stats Change between Level ups?", "[MockmonTest][Stats]")
+{
+    const auto speciesId = MockmonSpeciesId::Mew;
+    Mockmon ma(speciesId, "lowLevel");
+    Mockmon mb(speciesId, "highLevel");
+    SECTION("same level have same stats")
+    {
+        const auto maStats = MockmonTestUtils::XorredStats(ma);
+        const auto mbStats = MockmonTestUtils::XorredStats(mb);
+        REQUIRE(maStats == mbStats);
+    }
+    SECTION("different level have differents stats")
+    {
+
+        MockmonTestUtils::BringMockmonToLevel(mb, 50);
+        const auto mbStats = MockmonTestUtils::XorredStats(mb);
+        const auto maStats = MockmonTestUtils::XorredStats(ma);
+        const auto speedStat = ma.CurrentBattleStats.m_battleStats.at(StatsTypes::Speed).GetBaseStat();
+        const auto newSpeedStat = mb.CurrentBattleStats.m_battleStats.at(StatsTypes::Speed).GetBaseStat();
+        REQUIRE(newSpeedStat >= speedStat);
+        REQUIRE(maStats != mbStats);
+    }
+}
+
 //remove the [!mayfail] tag when we're ready to validate that we defined all mockmons
 TEST_CASE("All mockmons exist", "[MockmonTest][Coverage][!throws][!mayfail]")
 {
@@ -157,7 +196,7 @@ SCENARIO("Mockmon Evolution", "[MockmonTest][Evolution]")
     using std::make_tuple;
     const auto [baseFormSpeciesId, requiredLevel, evolvedFormSpeciesId] = GENERATE(
         make_tuple(MockmonSpeciesId::Rattata, 20, MockmonSpeciesId::Raticate),
-        make_tuple(MockmonSpeciesId::Geodude, 20, MockmonSpeciesId::Graveler));
+        make_tuple(MockmonSpeciesId::Geodude, 25, MockmonSpeciesId::Graveler));
     const auto baseformNames{Stringify(baseFormSpeciesId)};
     const auto evolevedFormName{Stringify(evolvedFormSpeciesId)};
     GIVEN("A mockmon of type" + baseformNames);
@@ -166,7 +205,7 @@ SCENARIO("Mockmon Evolution", "[MockmonTest][Evolution]")
         WHEN("we level it up to the level before the correct level and try to evolve it")
         {
             MockmonTestUtils::BringMockmonToLevel(m, requiredLevel - 1);
-            const auto preevolvedStats = MockmonTestUtils::XorredStats(m);
+            const auto preEvolvedStats = MockmonTestUtils::XorredStats(m);
             m.TryEvolve();
             THEN("it should be still be " + baseformNames)
             {
@@ -174,12 +213,12 @@ SCENARIO("Mockmon Evolution", "[MockmonTest][Evolution]")
                 const auto speciesIdentifier = m.GetMockmonSpeciesData().Identifier();
 
                 REQUIRE(speciesIdentifier == baseFormSpeciesId);
-                REQUIRE(preevolvedStats == unEvolvedStats);
+                REQUIRE(preEvolvedStats == unEvolvedStats);
 
                 AND_WHEN("we level it up to the correct level and evolve it")
                 {
                     MockmonTestUtils::BringMockmonToLevel(m, requiredLevel);
-                    const auto preevolvedStats = MockmonTestUtils::XorredStats(m);
+                    const auto unEvolvedStats = MockmonTestUtils::XorredStats(m);
                     m.TryEvolve();
                     THEN("it should be a " + evolevedFormName)
                     {
@@ -188,7 +227,7 @@ SCENARIO("Mockmon Evolution", "[MockmonTest][Evolution]")
 
                         REQUIRE_FALSE(speciesIdentifier == baseFormSpeciesId);
                         REQUIRE(speciesIdentifier == evolvedFormSpeciesId);
-                        REQUIRE_FALSE(preevolvedStats == EvolvedStats);
+                        REQUIRE_FALSE(unEvolvedStats == EvolvedStats);
                     }
                 }
             }

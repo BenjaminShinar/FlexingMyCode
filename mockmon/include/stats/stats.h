@@ -21,7 +21,6 @@ namespace mockmon::stats
         unsigned int Defence{1};
         unsigned int Special{1};
         unsigned int Speed{1};
-       
     };
 
     //this is what species have, it cant be changed
@@ -34,17 +33,16 @@ namespace mockmon::stats
     struct EffortValuesStats
     {
         StatsValues Stats;
-        void GainEffortValueStats(const SpeciesBaseStats & enemiesBaseStats);
-
+        void GainEffortValueStats(const SpeciesBaseStats &enemiesBaseStats);
     };
 
     struct IndividualStats
     {
-        public: 
+    public:
         const StatsValues Stats;
-    
+
     private:
-    //this is used just in the ctor.
+        //this is used just in the ctor.
         static unsigned int CalculateHealth(unsigned int attack, unsigned int defence, unsigned int special, unsigned int speed)
         {
             auto a1 = (attack & 0x1) << 0;
@@ -57,12 +55,24 @@ namespace mockmon::stats
 
     public:
         //player mockmon data
-        explicit IndividualStats(unsigned int attack, unsigned int defence, unsigned int special, unsigned int speed) : Stats{CalculateHealth(attack, defence, special, speed),attack, defence, special, speed, }
+        explicit IndividualStats(unsigned int attack, unsigned int defence, unsigned int special, unsigned int speed) : Stats{
+                                                                                                                            CalculateHealth(attack, defence, special, speed),
+                                                                                                                            attack,
+                                                                                                                            defence,
+                                                                                                                            special,
+                                                                                                                            speed,
+                                                                                                                        }
         {
         }
 
         //this is for enemies
-        explicit IndividualStats() : Stats{CalculateHealth(9u, 8u, 8u, 8u),9u, 8u, 8u, 8u, }
+        explicit IndividualStats() : Stats{
+                                         CalculateHealth(9u, 8u, 8u, 8u),
+                                         9u,
+                                         8u,
+                                         8u,
+                                         8u,
+                                     }
         {
         }
     };
@@ -74,12 +84,7 @@ namespace mockmon::stats
         explicit MockmonStats() = default;
         explicit MockmonStats(const SpeciesBaseStats &speciesBaseStats, const IndividualStats &IVStats, const EffortValuesStats &EVStats, unsigned int level);
 
-
         StatsValues Stats;
-
-
-    private:
-        //level gain
-        unsigned int ModifyStat(unsigned int base, unsigned int iv, unsigned int ev, unsigned int level);
+        static unsigned int ModifyStat(unsigned int base, unsigned int iv, unsigned int ev, unsigned int level);
     };
 }

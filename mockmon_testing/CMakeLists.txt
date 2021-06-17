@@ -31,7 +31,7 @@ catch_discover_tests(
   .xml)
 
 #this is the actual tests, just add the cpp files here to include them in the target?
-add_executable(testingMockmon mockmon_test.cpp battle_testing.cpp)
+add_executable(testingMockmon mockmon_test.cpp battle_testing.cpp conditions_testing.cpp)
 target_link_libraries(testingMockmon PRIVATE catch_main)
 target_link_libraries(testingMockmon PRIVATE mockmon)
 

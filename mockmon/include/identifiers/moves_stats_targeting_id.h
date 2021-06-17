@@ -7,6 +7,7 @@ namespace mockmon::moves
     {
         PurePhysical,
         PureSpecial,
+        SpeedRace,
         AccuracyEvasion,
     };
     std::string Stringify(const MovesTargeting movesTargeting);

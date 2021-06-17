@@ -4,13 +4,11 @@
 #include <iostream>
 //#include <fmt\format.h>
 
-
 int main(int argc, char *argv[])
 {
     std::string mockmonName{"nameless!"};
-    int maxFloor(5);
-    
-    
+    int maxFloor(10);
+
     if (argc < 3)
     {
 

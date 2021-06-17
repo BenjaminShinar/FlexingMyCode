@@ -14,7 +14,7 @@
 #include <set>
 namespace mockmon::moves
 {
-    condition::pulser_uq_ptr MakeCondition(condition::PulsingConditionId conditionid,Mockmon & effectedMockmon);
+    condition::pulser_uq_ptr MakeCondition(condition::PulsingConditionId conditionid, Mockmon &effectedMockmon);
 
     /**
      * @brief 
@@ -22,10 +22,9 @@ namespace mockmon::moves
      * mostly text for now, but we should use the success flat more often
      */
     struct MoveOutcome
-    {   
+    {
         std::string m_moveOutcomeDescrition;
         bool m_hit{true};
-
     };
 
     //maybe this needs to be somewhere else
@@ -36,19 +35,19 @@ namespace mockmon::moves
         const std::set<types::Types> ImmuneTypes;
         const std::set<types::Types> SuspectibleTypes;
     };
-    
+
     //sfinae - i'm not sure why this needs to be static or why declearing the specializations inlines matters. but this works
     template <typename T>
-    static void Efflict(T ,Mockmon &);
-    
-    template<>
-    inline void Efflict(condition::PulsingConditionId pulsingCondition,Mockmon& m)
+    static void Efflict(T, Mockmon &);
+
+    template <>
+    inline void Efflict(condition::PulsingConditionId pulsingCondition, Mockmon &m)
     {
-         m.m_currentCondtion.CausePulsingCondition(MakeCondition(pulsingCondition, m));
+        m.m_currentCondtion.CausePulsingCondition(MakeCondition(pulsingCondition, m));
     }
 
-    template<>
-    inline void Efflict(condition::NonPulsingConditionId nonepulsingCondition, Mockmon& m)
+    template <>
+    inline void Efflict(condition::NonPulsingConditionId nonepulsingCondition, Mockmon &m)
     {
         m.m_currentCondtion.CauseNonPulsingCondition(nonepulsingCondition);
     }
@@ -56,17 +55,17 @@ namespace mockmon::moves
     //not sure how to properly move this to .cpp file
     template <typename T>
     struct AbstractStatusInflicment
-    {   
+    {
         const types::Types moveType;
         const StatusChanceTypes Chance;
         const T effect;
-        MoveOutcome TryEfflict( moves::MoveId mv,Mockmon &attacker,Mockmon &defender) const
+        MoveOutcome TryEfflict(moves::MoveId mv, Mockmon &attacker, Mockmon &defender) const
         {
             if (CanEfflict(defender))
             {
                 if (AlwaysEfflict(defender) || random::Randomer::CheckPercentage(Chance.ChanceToAfflictCondtion))
                 {
-                    Efflict(effect,defender);
+                    Efflict(effect, defender);
                     if (defender.m_currentCondtion.IsAffiliatedWithCondition(effect))
                     {
                         //success
@@ -75,7 +74,7 @@ namespace mockmon::moves
                     }
                 }
                 //failed to afflict / missed
-                MoveOutcome o{AppendAll({attacker.GetName(),"tried to use",Stringify(mv), "but it failed to inflict condition",Stringify(effect)})};    
+                MoveOutcome o{AppendAll({attacker.GetName(), "tried to use", Stringify(mv), "but it failed to inflict condition", Stringify(effect)})};
                 return o;
             }
             else
@@ -85,31 +84,31 @@ namespace mockmon::moves
             }
         }
 
-        private:
-        std::vector<types::Types> GetMatchingTypes(const std::set<types::Types> & mockmonTypes, const std::set<types::Types> & innerTypes) const
+    private:
+        std::vector<types::Types> GetMatchingTypes(const std::set<types::Types> &mockmonTypes, const std::set<types::Types> &innerTypes) const
         {
             std::vector<types::Types> matchingTypes(5);
-            auto typesIter = std::set_intersection(std::begin(mockmonTypes),std::end(mockmonTypes),std::begin(innerTypes),std::end(innerTypes),std::begin(matchingTypes));
-            matchingTypes.resize(typesIter- std::begin(matchingTypes));
+            auto typesIter = std::set_intersection(std::begin(mockmonTypes), std::end(mockmonTypes), std::begin(innerTypes), std::end(innerTypes), std::begin(matchingTypes));
+            matchingTypes.resize(typesIter - std::begin(matchingTypes));
             return matchingTypes;
         }
-        bool CanEfflict(const Mockmon & m) const
+        bool CanEfflict(const Mockmon &m) const
         {
-            const auto matchingTypes = GetMatchingTypes(m.GetMockmonSpeciesData().SpeciesTypes,Chance.ImmuneTypes);
-            return (matchingTypes.empty());       
+            const auto matchingTypes = GetMatchingTypes(m.GetMockmonSpeciesData().SpeciesTypes, Chance.ImmuneTypes);
+            return (matchingTypes.empty());
         }
-        bool AlwaysEfflict(const Mockmon & m) const
+        bool AlwaysEfflict(const Mockmon &m) const
         {
-            const auto matchingTypes = GetMatchingTypes(m.GetMockmonSpeciesData().SpeciesTypes,Chance.SuspectibleTypes);
-            return (!matchingTypes.empty());       
+            const auto matchingTypes = GetMatchingTypes(m.GetMockmonSpeciesData().SpeciesTypes, Chance.SuspectibleTypes);
+            return (!matchingTypes.empty());
         }
     };
 
     using PulsingStatusInflicment = AbstractStatusInflicment<condition::PulsingConditionId>;
-    using NonPulsingStatusInflicment = AbstractStatusInflicment<condition::NonPulsingConditionId>;   
-    using ExMove = std::function<MoveOutcome(Arena & arena, const moves::MoveId attackingMoveId,Mockmon & attacker,Mockmon & defender)>;
-    using ExMoveChanceCheck = std::function<MoveOutcome(Arena & arena, Mockmon & attacker,Mockmon & defender)>;
-    using ExDamageByState= std::function<double(const Mockmon & mockmonToChoose)>;
+    using NonPulsingStatusInflicment = AbstractStatusInflicment<condition::NonPulsingConditionId>;
+    using ExMove = std::function<MoveOutcome(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender)>;
+    using ExMoveChanceCheck = std::function<MoveOutcome(Arena &arena, Mockmon &attacker, Mockmon &defender)>;
+    using ExDamageByState = std::function<double(const Mockmon &mockmonToChoose)>;
 
     /**
      * @brief 
@@ -117,21 +116,19 @@ namespace mockmon::moves
      * we need some outcome?
      * is it really describle<>?  
      */
-    class  CompositeMove : public DescribleModule<moves::MoveId>
+    class CompositeMove : public DescribleModule<moves::MoveId>
     {
-        public:
-
-        explicit CompositeMove(moves::MoveId moveId,const ExMoveChanceCheck & movechance,const std::initializer_list<ExMove> & componenets):
-        DescribleModule(moveId),
-        MoveChance(movechance),
-        MoveComponenets(componenets)
+    public:
+        explicit CompositeMove(moves::MoveId moveId, const ExMoveChanceCheck &movechance, const std::initializer_list<ExMove> &componenets) : DescribleModule(moveId),
+                                                                                                                                              MoveChance(movechance),
+                                                                                                                                              MoveComponenets(componenets)
         {
         }
-     
-        explicit CompositeMove(const CompositeMove & other ) = default;
-        CompositeMove(CompositeMove && other ) = default;
 
-        void Perform(Arena & arena, Mockmon & attacker,Mockmon & defender) const;
+        explicit CompositeMove(const CompositeMove &other) = default;
+        CompositeMove(CompositeMove &&other) = default;
+
+        void Perform(Arena &arena, Mockmon &attacker, Mockmon &defender) const;
         ExMoveChanceCheck MoveChance;
         std::vector<ExMove> MoveComponenets;
         std::string Describe() const override
@@ -139,26 +136,25 @@ namespace mockmon::moves
             return "ss";
         }
 
-        static const std::map<moves::MoveId,CompositeMove> AllCompositeMoves;
-        static const std::map<moves::MoveId,CompositeMove> AllChargedCompositeMoves; //this is for the 2nd turn of a composite move, or for effects like sleep, hit self, Freeze, parlysis..
+        static const std::map<moves::MoveId, CompositeMove> AllCompositeMoves;
+        static const std::map<moves::MoveId, CompositeMove> AllChargedCompositeMoves; //this is for the 2nd turn of a composite move, or for effects like sleep, hit self, Freeze, parlysis..
     };
 
-
-
-
-    ExMoveChanceCheck CreateNormalAccuracyCheck(int moveBaseAccuracy,const MovesTargeting movesTargeting);
+    ExMoveChanceCheck CreateNormalAccuracyCheck(int moveBaseAccuracy, const MovesTargeting movesTargeting);
     ExMoveChanceCheck CreateSetAccuracyCheck(int setchances);
     ExMoveChanceCheck CreateByPassAccuracyCheck();
+    ExMoveChanceCheck CreateCheckSpeedThenNormalAccuracyCheck(int moveBaseAccuracy, const MovesTargeting movesTargeting);
 
     ExMove CreateNormalDamagingMove(const MovesTargeting movesTargeting);
     ExMove CreateNormalSelfDamagingMove(const MovesTargeting movesTargeting);
 
     ExMove CreateNormalRecoilDamagingMove(const double divFactor);
 
+    ExMove CreateOHKOMove();
 
     ExMove CreateSelfStatChangingMove(StatsTypes effectedStat, StatModifiersLevels modifer);
     ExMove CreateOpponentStatChangingMove(StatsTypes effectedStat, StatModifiersLevels modifer);
-    
+
     //pulsing
     ExMove CreateOpponentPulsingConditionMove(const PulsingStatusInflicment statusConditionInflicment);
     ExMove CreateSelfPulsingConditionMove(const PulsingStatusInflicment statusConditionInflicment);
@@ -174,8 +170,8 @@ namespace mockmon::moves
     ExMove CreateResetOpponentConditionMove();
 
     ExMove CreateDirectDamagingMoveByPassImmunity(const double setDamage);
-    ExMove CreateDirectDamagingMoveTargetStateByPassImmunity(const ExDamageByState & dmgByStateCalc);
-    ExMove CreateDirectDamagingMoveAttackerStateByPassImmunity(const ExDamageByState & dmgByStateCalc);
+    ExMove CreateDirectDamagingMoveTargetStateByPassImmunity(const ExDamageByState &dmgByStateCalc);
+    ExMove CreateDirectDamagingMoveAttackerStateByPassImmunity(const ExDamageByState &dmgByStateCalc);
 
     ExMove CreateStoredMove(const moves::MoveId storedMove);
 

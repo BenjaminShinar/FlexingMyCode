@@ -40,7 +40,24 @@ topics which require modifications to create those behaviors are marked as **Gen
 - [x] the type system! super, normal and not very effective!
 - [ ] ... TBC battles are between trainers
 
+#### Level Up
+- [x] stats increase
+- [x] moves are learned
+- [ ] evolutions
+
 #### moves
+##### One hit Ko moves
+moves that KO the enemy if they hit
+Fissure, Guillotine, Horn Drill
+- [x] always KO enemy
+- [ ] consider type immunties/ resistances?
+- [x] always fail when speed (level?) is lower
+- [ ] X accuracy effects
+- [ ] what happens when using dig?
+- [ ] interactions with substitute
+
+
+
 ##### Status Effects - stats modifers
 - [ ] moves that change stat modifers
 - [ ] **Gen 1 Shannignas** for badge boosts
@@ -182,9 +199,9 @@ figure out the voltaile/non volatile split
 
 #### evolution
 when a mockmon evolves, what happens?
-- [ ] evolution lines
+- [x] evolution lines
 - [ ] canceling / rejecting evolutions
-- [ ] changing stats?
+- [x] changing stats?
 - [ ] learnning new moves?
 - [ ] before or after stats change?
 - [ ] what happens when more than one evolution is possible

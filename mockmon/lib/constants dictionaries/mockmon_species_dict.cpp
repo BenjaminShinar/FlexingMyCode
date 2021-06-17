@@ -73,7 +73,8 @@ namespace mockmon
                                                //{43,{moves::MoveId::Thunder}},
                                            }),
         MakeDictionaryPair<MockmonSpecies>(MockmonSpeciesId::Geodude,
-                                           il_ev_fn{},
+                                           il_ev_fn{
+                                               evolution::CreateEvolveByLevelFunction(MockmonSpeciesId::Graveler, 25)},
                                            s_t{types::Types::Rock, types::Types::Ground},
                                            LevelUpGroup::MediumSlowLevelUp, 86,
                                            stats::SpeciesBaseStats{40, 40, 100, 30, 20},
@@ -86,6 +87,21 @@ namespace mockmon
                                                {26, {moves::MoveId::Harden}},
                                                //{31,{moves::MoveId::Earthquake}},
                                                //{36,{moves::MoveId::Explosion}},
+                                           }),
+        MakeDictionaryPair<MockmonSpecies>(MockmonSpeciesId::Graveler,
+                                           il_ev_fn{},
+                                           s_t{types::Types::Rock, types::Types::Ground},
+                                           LevelUpGroup::MediumSlowLevelUp, 134,
+                                           stats::SpeciesBaseStats{55, 95, 115, 45, 35},
+                                           mp_i_vec_Mv{
+                                               //moves list
+                                               {1, {moves::MoveId::Tackle, moves::MoveId::DefenseCurl}},
+                                               {11, {moves::MoveId::DefenseCurl}},
+                                               //{16,{moves::MoveId::RockThrow}},
+                                               //{21,{moves::MoveId::SelfDestruct}},
+                                               {29, {moves::MoveId::Harden}},
+                                               //{36,{moves::MoveId::Earthquake}},
+                                               //{43,{moves::MoveId::Explosion}},
                                            }),
         MakeDictionaryPair<MockmonSpecies>(MockmonSpeciesId::Vulpix,
                                            il_ev_fn{},
@@ -129,5 +145,4 @@ namespace mockmon
                                            }),
 
     };
-
 }
