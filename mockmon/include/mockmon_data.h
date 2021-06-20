@@ -21,8 +21,8 @@ namespace mockmon
         friend class Arena;
 
     public:
-        explicit Mockmon(MockmonSpeciesId species, const std::string &name, TrainerAI trainerAi = TrainerAI::RandomChoice, bool silent = false)
-            : m_currentSpeciesId(species), m_name(name), m_trainer_ai_id(trainerAi), m_outputEvents(silent)
+        explicit Mockmon(MockmonSpeciesId species, const std::string &name, bool silent = false)
+            : m_currentSpeciesId(species), m_name(name), m_outputEvents(silent)
         {
             LearnLevelUpMoves(1);
             CurrentBattleStats.UpdateBattleStats(stats::MockmonStats(GetMockmonSpeciesData().MockmonSpeciesStats, IVs, EVs, CurrentLevel));
@@ -49,7 +49,6 @@ namespace mockmon
 
         std::string_view GetName() const;
         bool DisplayEvent() const { return m_outputEvents; }
-        TrainerAI GetTrainerAIID() const { return m_trainer_ai_id; }
         //battle relatedStuff probably alot of methods should go somewhere else
         std::set<MockmonSpeciesId> GetPossibleEvolutions() const;
         void TryEvolve();
@@ -69,7 +68,6 @@ namespace mockmon
         MockmonSpeciesId m_currentSpeciesId; //this can change when the mockmon evolves
 
         std::string m_name;
-        TrainerAI m_trainer_ai_id;
         bool m_outputEvents;
         int CurrentLevel = 1;
         long experience_points = 0;

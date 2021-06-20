@@ -72,7 +72,7 @@ SCENARIO("Conditions Immunities", "[MockmonTest][BattleTest][Condition]")
 
             for (auto i = 0; i < nAttempts && !currentlyEffected; ++i)
             {
-                battle::Battle::AttackWith(a, statusMove, ma, mb);
+                battle::AttackWith(a, statusMove, ma, mb);
 
                 currentlyEffected |= mb.m_currentCondtion.IsAffiliatedWithCondition(testedCondition);
                 ma.FullRestore();
@@ -166,7 +166,7 @@ SCENARIO("pulsing conditions change stats", "[MockmonTest][Condition]")
     GIVEN("A Normal Healthy mockmon")
     {
         Mockmon ma(speciesId, AppendAll({Stringify(speciesId), "condition", Stringify(testedCondition)}));
-        const auto [baseAttackStat, baseDefencestat] = battle::Battle::GetStatsModifier(ma, effectedStat, ma, effectedStat);
+        const auto [baseAttackStat, baseDefencestat] = battle::GetStatsModifier(ma, effectedStat, ma, effectedStat);
 
         THEN("it must be the same stats")
         {
@@ -182,7 +182,7 @@ SCENARIO("pulsing conditions change stats", "[MockmonTest][Condition]")
 
                 AND_THEN("it must have it's stats change")
                 {
-                    const auto [attackstat, defencestat] = battle::Battle::GetStatsModifier(ma, effectedStat, ma, effectedStat);
+                    const auto [attackstat, defencestat] = battle::GetStatsModifier(ma, effectedStat, ma, effectedStat);
                     REQUIRE(attackstat == Approx(baseAttackStat * factor));
                 }
             }
@@ -275,7 +275,7 @@ SCENARIO("light screen and reflect conditions", "[MockmonTest][Condition]")
     GIVEN("A Normal Healthy mockmon")
     {
         Mockmon ma(speciesId, AppendAll({Stringify(speciesId), "condition", Stringify(testedCondition)}));
-        const auto [baseAttackStat, baseDefencestat] = battle::Battle::GetStatsModifier(ma, effectedStat, ma, effectedStat);
+        const auto [baseAttackStat, baseDefencestat] = battle::GetStatsModifier(ma, effectedStat, ma, effectedStat);
 
         THEN("it must be the same stats")
         {
@@ -290,7 +290,7 @@ SCENARIO("light screen and reflect conditions", "[MockmonTest][Condition]")
                 REQUIRE(ma.m_currentCondtion.IsAffiliatedWithCondition(testedCondition));
                 AND_THEN("it must have it's stats change")
                 {
-                    const auto [attackstat, defencestat] = battle::Battle::GetStatsModifier(ma, effectedStat, ma, effectedStat);
+                    const auto [attackstat, defencestat] = battle::GetStatsModifier(ma, effectedStat, ma, effectedStat);
                     REQUIRE_FALSE(attackstat == Approx(defencestat));
                     REQUIRE(defencestat == Approx(baseDefencestat * factor));
                 }

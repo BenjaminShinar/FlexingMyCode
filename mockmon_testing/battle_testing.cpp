@@ -20,7 +20,7 @@ SCENARIO("Battle test", "[MockmonTest][BattleTest]")
         Mockmon mb(speciesId, "mew B");
         WHEN("they engage in battle")
         {
-            battle::Battle::DoBattle(ma, mb);
+            battle::Battle::DoBattle(TrainerAI::RandomChoice, ma, TrainerAI::RandomChoice, mb);
             THEN("One must fall")
             {
                 REQUIRE(ma.IsAbleToBattle() ^ mb.IsAbleToBattle());
@@ -55,7 +55,7 @@ SCENARIO("damage ranges test", "[MockmonTest][BattleTest][!mayfail]")
             const auto targetingPair{moves::MoveStatsTargeting::AllStatsTargeting.at(movesTargeting)};
             for (auto i = 0; i < attempts; ++i)
             {
-                auto damage = static_cast<int>(battle::Battle::ModifyAttack(usedMove, ma, targetingPair.AttackerStat, mb, targetingPair.DefenderStat));
+                auto damage = static_cast<int>(battle::ModifyAttack(usedMove, ma, targetingPair.AttackerStat, mb, targetingPair.DefenderStat));
 
                 damageRanges.insert(damage);
             }
@@ -81,8 +81,8 @@ SCENARIO("One Hit Ko Moves", "[MockmonTest][BattleTest]")
         make_tuple(50, moves::MoveId::Guillotine, MockmonSpeciesId::Mew),
         make_tuple(50, moves::MoveId::HornDrill, MockmonSpeciesId::Mew));
     const auto [expectedEnemyLevel, shouldSurvive, nAttempts] = GENERATE(
-        make_tuple(25, false, 50),
-        make_tuple(75, true, 500));
+        make_tuple(25, false, 50),  //success
+        make_tuple(75, true, 500)); //always fail
 
     const auto attackerTypeName{Stringify(attackerSpeciesId)};
 
@@ -107,7 +107,7 @@ SCENARIO("One Hit Ko Moves", "[MockmonTest][BattleTest]")
 
             for (auto i = 0; i < nAttempts && enemySurvived; ++i)
             {
-                battle::Battle::AttackWith(a, ohkoMove, ma, mb);
+                battle::AttackWith(a, ohkoMove, ma, mb);
 
                 enemySurvived = mb.IsAbleToBattle();
                 ma.FullRestore();

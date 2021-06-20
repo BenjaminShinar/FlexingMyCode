@@ -3,26 +3,25 @@
 #include "random_gen.h"
 #include "game_driver/controller.h"
 
-
 namespace mockmon
 {
 
- moves::MoveId PlayerInputChoice(Mockmon & attacker,Mockmon & defender)
- {
-    const auto prompt = AppendAll({"which move should",attacker.GetName(), "attack",defender.GetName(), "with?"});
-    return controller::GetAnyInput(prompt,attacker.GetMoveSet());    
- }
-
-moves::MoveId RandomChoice(Mockmon & attacker,Mockmon &)
- {
-    const auto possibleOptions = attacker.GetMoveSet().size();
-    if (possibleOptions>0)
+    moves::MoveId PlayerInputChoice(Mockmon &attacker, Mockmon &defender)
     {
-        auto randomAttack = random::Randomer::GetRandom(possibleOptions);
-        return (attacker.GetMoveSet().at(randomAttack).Identifier());
+        const auto prompt = AppendAll({"which move should", attacker.GetName(), "attack", defender.GetName(), "with?"});
+        return controller::GetAnyInput(prompt, attacker.GetMoveSet());
     }
-     return moves::MoveId::Struggle;
- }
+
+    moves::MoveId RandomChoice(Mockmon &attacker, Mockmon &)
+    {
+        const auto possibleOptions = attacker.GetMoveSet().size();
+        if (possibleOptions > 0)
+        {
+            auto randomAttack = random::Randomer::GetRandom(possibleOptions);
+            return (attacker.GetMoveSet().at(randomAttack).Identifier());
+        }
+        return moves::MoveId::Struggle;
+    }
 
     ChosenMove GetAI(const TrainerAI trainerAI)
     {
@@ -31,11 +30,20 @@ moves::MoveId RandomChoice(Mockmon & attacker,Mockmon &)
         case TrainerAI::PlayerChoice:
             return PlayerInputChoice;
             break;
-        
+
         default:
-        return RandomChoice;
+            return RandomChoice;
             break;
         }
     }
+    std::size_t Trainer::LastTrainerId = 100;
+    void Trainer::GiveBadge(badges::IndigoBadge badge)
+    {
+        m_Indigo_Badges.set(static_cast<std::size_t>(badge));
+    }
 
+    bool Trainer::CheckBadge(badges::IndigoBadge badge) const
+    {
+        return m_Indigo_Badges.test(static_cast<std::size_t>(badge));
+    }
 }

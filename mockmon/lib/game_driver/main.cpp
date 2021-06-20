@@ -10,7 +10,7 @@ using namespace mockmon;
 void StartGame(const std::string &mockmonName, int maxFloor)
 {
 
-    Mockmon m(MockmonSpeciesId::Mew, mockmonName, TrainerAI::PlayerChoice, true);
+    Mockmon m(MockmonSpeciesId::Mew, mockmonName, true);
 
     BattleTower::StartTower(m, maxFloor);
 }

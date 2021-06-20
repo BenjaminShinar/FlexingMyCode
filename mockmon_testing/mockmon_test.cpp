@@ -20,7 +20,6 @@ auto RequireMoves(const mockmon::Mockmon &m, std::initializer_list<mockmon::move
         REQUIRE(ContainerHas<moves::EquipedMove>(mvs, MakePredicator<moves::EquipedMove>(id)));
     }
 }
-//test_casse(name[,tags])
 TEST_CASE("Base Mockmon Mew State", "[MockmonTest]")
 {
     const auto speciesId = MockmonSpeciesId::Mew;
@@ -69,7 +68,6 @@ TEST_CASE("Bulbapedia L81 Stats Example", "[MockmonTest][Stats]")
     REQUIRE(x == expected);
 }
 
-//test_casse(name[,tags])
 TEST_CASE("Stats Change between Level ups?", "[MockmonTest][Stats]")
 {
     const auto speciesId = MockmonSpeciesId::Mew;

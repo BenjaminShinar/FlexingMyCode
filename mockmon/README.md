@@ -15,7 +15,44 @@ topics which require modifications to create those behaviors are marked as **Gen
 - [x] The most simple battle possible - the user has a mockmon and needs to choose the correct option to win
 - [x] Design minimal enntities for moves (attacks) and mockmon stats
 - [ ] Document code using doxygen standatds(/** /*! ///),
+- [ ] create a 'trainer' entity.
+- [ ] clean compiler warning with flags and attributes
+- [ ] can we use constexpr (constant expressions)?
 - [ ] ... TBC
+
+### UniqueId
+a uniqueId for all sorts of stuff
+- [ ] find a library to use it
+
+### What's a mockmon, actually?
+- [ ] basic mockmon class
+- [x] stats
+- [x] type(s)
+- [x] moveset
+- [ ] status
+- [x] progression (exp)
+- [x] uniqeness of stats (iv, ev)
+- [ ] mockmon uniquness (name, unique id)
+- [ ] mockmon evolution
+
+#### Level Up
+- [x] stats increase
+- [x] moves are learned
+- [ ] evolutions
+
+#### evolution
+when a mockmon evolves, what happens?
+- [x] evolution lines
+- [ ] canceling / rejecting evolutions
+- [x] changing stats?
+- [ ] learnning new moves?
+- [ ] before or after stats change?
+- [ ] what happens when more than one evolution is possible
+
+##### different methods of evolution:
+- [x] by level up
+- [ ] by trade
+- [ ] by item
 
 ### Mockmon battle mock
 
@@ -40,11 +77,6 @@ topics which require modifications to create those behaviors are marked as **Gen
 - [x] the type system! super, normal and not very effective!
 - [ ] ... TBC battles are between trainers
 
-#### Level Up
-- [x] stats increase
-- [x] moves are learned
-- [ ] evolutions
-
 #### moves
 ##### One hit Ko moves
 moves that KO the enemy if they hit
@@ -56,10 +88,10 @@ Fissure, Guillotine, Horn Drill
 - [ ] what happens when using dig?
 - [ ] interactions with substitute
 
-
-
 ##### Status Effects - stats modifers
-- [ ] moves that change stat modifers
+- [x] moves that change stat modifers
+- [ ] conditions modifiers
+- [ ] none-glitchy badge boost.
 - [ ] **Gen 1 Shannignas** for badge boosts
 
 ##### self sacrficing moves
@@ -98,7 +130,6 @@ Bind, Clamp, Firespin, Wrap.
 ###### moves that eventually confuse the user
 Petal Dance, Thrash
 
-
 ##### Unique moves
 moves that require extra carefull consideration
 - [ ] leech side
@@ -111,9 +142,9 @@ moves that require extra carefull consideration
 figure out the voltaile/non volatile split
 - [x] inflict condition
 - [x] remove condition
-- [ ] conditions can't be inflicted based on typing
+- [x] conditions can't be inflicted based on typing
 - [x] conditions go away after x turns...
-- [ ] conditions go away after haze or some other move
+- [x] conditions go away after haze or some other move
 - [ ] voltaile contions - bind, flinch, recharging?, semi invurnable?
 - [ ] **Gen 1 Shannignas** synergy of toxic, burn, leech seed with each other.
 - [ ] which conditions work with each other and which are cancelled?
@@ -174,7 +205,10 @@ figure out the voltaile/non volatile split
 - [ ] **Gen 1 Shannignas**
 
 ##### leech seed
+figure this one out
+
 ##### subsitute
+figure this one out as well
 
 ##### reflect, light screen - non-pulse
 - [x] refelct - change physical defence
@@ -184,35 +218,20 @@ figure out the voltaile/non volatile split
 - [x] effect critical hit rate
 - [x] **Gen 1 Shannignas**
 
+### Mockmon trainer - the best there ever was like no one was before
+anything that should relate to the trainer
+- [ ] "no trainer" trainer for wild mockmon
+- [ ] move the *A.I* behavior to the trainer class
+- [ ] badges?
+- [ ] obdience based on badges?
+- [ ] items?
+- [ ] switching out mockmon?
+- [ ] defer stuff from battle? arena?
+- [ ] traded mockmon?
 
-### What's a mockmon, actually?
 
-- [ ] basic mockmon class
-- [x] stats
-- [x] type(s)
-- [x] moveset
-- [ ] status
-- [x] progression (exp)
-- [x] uniqeness of stats (iv, ev)
-- [ ] mockmon uniquness (name, unique id)
-- [ ] mockmon evolution
-
-#### evolution
-when a mockmon evolves, what happens?
-- [x] evolution lines
-- [ ] canceling / rejecting evolutions
-- [x] changing stats?
-- [ ] learnning new moves?
-- [ ] before or after stats change?
-- [ ] what happens when more than one evolution is possible
-
-##### different methods of evolution:
-- [ ] by level up
-- [ ] by trade
-- [ ] by item
 
 ### This is supposed to be a game
-
 - [ ] start game, end game condition
 - [ ] display options to user
 - [ ] user control over outcome - get user choice
@@ -222,11 +241,15 @@ when a mockmon evolves, what happens?
 - [ ] can data be saved and loaded?
 
 ### Controller stuff
+pretend this is an actual gameboy
 - [ ] dpad, action, cancel, start select
 
 ## Dev Ops stuff
 stuff that needs to be done, but not concerning the business logic of the mockmon engine.
 how the project is built, maintained, tested and maintened.
+
+### compiler stuff
+- [ ] \[\[maybe_unused\]\] attributre
 
 ### Build system
 - [x] use cmake to build
@@ -252,7 +275,7 @@ test that all mockmon, moves and everything is defined and doesn't crash
 #### test conditions
 - [x] testing that burn and poison damage the mockmon
 - [x] testing that burn halfs attack
-- [ ] testing that parlysis halfs speed (can we combine them?)
+- [x] testing that parlysis halfs speed (can we combine them?)
 - [x] testing that light screen and reflect change defences
 - [ ] test that haze removes all sorts of stuff and does it job and it's bugs
 

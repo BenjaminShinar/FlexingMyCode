@@ -81,7 +81,7 @@ namespace mockmon::moves
         MakeDictionaryPair<CompositeMove>(MoveId::Haze, CreateByPassAccuracyCheck(), il_exMV{CreateResetSelfConditionMove(), CreateResetOpponentConditionMove()}),
 
         //ONE HIT KO Moves
-        MakeDictionaryPair<CompositeMove>(MoveId::Fissure, CreateCheckSpeedThenNormalAccuracyCheck(95, MovesTargeting::AccuracyEvasion), il_exMV{CreateOHKOMove()}),    //OH-KO!
+        MakeDictionaryPair<CompositeMove>(MoveId::Fissure, CreateCheckSpeedThenNormalAccuracyCheck(30, MovesTargeting::AccuracyEvasion), il_exMV{CreateOHKOMove()}),    //OH-KO!
         MakeDictionaryPair<CompositeMove>(MoveId::Guillotine, CreateCheckSpeedThenNormalAccuracyCheck(30, MovesTargeting::AccuracyEvasion), il_exMV{CreateOHKOMove()}), //OH-KO!
         MakeDictionaryPair<CompositeMove>(MoveId::HornDrill, CreateCheckSpeedThenNormalAccuracyCheck(30, MovesTargeting::AccuracyEvasion), il_exMV{CreateOHKOMove()}),  //OH-KO!
 

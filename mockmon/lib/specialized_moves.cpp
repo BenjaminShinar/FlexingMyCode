@@ -100,10 +100,10 @@ namespace mockmon::moves
     * @param movesTargeting which stats are used to calculate modifiers to the chance
     * @return MoveOutcome 
     */
-    MoveOutcome RegularAccuracyCheckMove(Arena &arena, Mockmon &attacker, Mockmon &defender, int attackingMoveBaseAccuracy, const MovesTargeting &movesTargeting)
+    MoveOutcome RegularAccuracyCheckMove([[maybe_unused]] Arena &arena, Mockmon &attacker, Mockmon &defender, int attackingMoveBaseAccuracy, const MovesTargeting &movesTargeting)
     {
         const auto targetingPair{MoveStatsTargeting::AllStatsTargeting.at(movesTargeting)};
-        const auto [attackstat, defencestat] = battle::Battle::GetStatsModifier(attacker, targetingPair.AttackerStat, defender, targetingPair.DefenderStat);
+        const auto [attackstat, defencestat] = battle::GetStatsModifier(attacker, targetingPair.AttackerStat, defender, targetingPair.DefenderStat);
         const auto modifier = attackstat * defencestat;
         const auto percentage = std::clamp(static_cast<int>(std::round(attackingMoveBaseAccuracy * modifier)), 0, 100);
         if (random::Randomer::CheckPercentage(percentage))
@@ -115,6 +115,7 @@ namespace mockmon::moves
             return MoveOutcome{"", false};
         }
     }
+
     /**
      * @brief Set the Chances Check Move object
      * set chance for moves to succeed or fail.
@@ -126,7 +127,7 @@ namespace mockmon::moves
      * @param setChances 
      * @return MoveOutcome 
      */
-    MoveOutcome SetChancesCheckMove(Arena &arena, Mockmon &attacker, Mockmon &defender, int setChances)
+    MoveOutcome SetChancesCheckMove([[maybe_unused]] Arena &arena, [[maybe_unused]] Mockmon &attacker, [[maybe_unused]] Mockmon &defender, int setChances)
     {
         if (random::Randomer::CheckPercentage(setChances))
         {
@@ -147,7 +148,7 @@ namespace mockmon::moves
      * @param defender 
      * @return MoveOutcome 
      */
-    MoveOutcome BypassAccuracyCheckMove(Arena &arena, Mockmon &attacker, Mockmon &defender)
+    MoveOutcome BypassAccuracyCheckMove([[maybe_unused]] Arena &arena, [[maybe_unused]] Mockmon &attacker, [[maybe_unused]] Mockmon &defender)
     {
         return MoveOutcome{"", true};
     }
@@ -167,7 +168,7 @@ namespace mockmon::moves
     MoveOutcome CheckSpeedAndThenAccuracyCheckMove(Arena &arena, Mockmon &attacker, Mockmon &defender, int attackingMoveBaseAccuracy, const MovesTargeting &movesTargeting)
     {
         const auto targetingPair{MoveStatsTargeting::AllStatsTargeting.at(MovesTargeting::SpeedRace)};
-        const auto [attackerSpeed, defenderSpeed] = battle::Battle::GetStatsModifier(attacker, targetingPair.AttackerStat, defender, targetingPair.DefenderStat);
+        const auto [attackerSpeed, defenderSpeed] = battle::GetStatsModifier(attacker, targetingPair.AttackerStat, defender, targetingPair.DefenderStat);
         if (attackerSpeed >= defenderSpeed)
         {
             return RegularAccuracyCheckMove(arena, attacker, defender, attackingMoveBaseAccuracy, movesTargeting);
@@ -181,40 +182,40 @@ namespace mockmon::moves
 
 #pragma region attacks
 
-    MoveOutcome WasteTurnMove(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender)
+    MoveOutcome WasteTurnMove([[maybe_unused]] Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender)
     {
         MoveOutcome o{AppendAll({attacker.GetName(), "is", Stringify(attackingMoveId), "for current turn"})};
         return o;
     }
 
-    MoveOutcome RegularMove(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const MovesTargeting &movesTargeting)
+    MoveOutcome RegularMove([[maybe_unused]] Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const MovesTargeting &movesTargeting)
     {
         const auto targetingPair{MoveStatsTargeting::AllStatsTargeting.at(movesTargeting)};
-        auto damage = static_cast<int>(battle::Battle::ModifyAttack(attackingMoveId, attacker, targetingPair.AttackerStat, defender, targetingPair.DefenderStat));
+        auto damage = static_cast<int>(battle::ModifyAttack(attackingMoveId, attacker, targetingPair.AttackerStat, defender, targetingPair.DefenderStat));
         defender.CurrentBattleStats.Health.ChangeHealth(-1 * damage);
         MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(attackingMoveId), "for", std::to_string(damage), "damage!"})};
         return o;
     }
 
-    MoveOutcome RegularSelfMove(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const MovesTargeting &movesTargeting)
+    MoveOutcome RegularSelfMove([[maybe_unused]] Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const MovesTargeting &movesTargeting)
     {
         const auto targetingPair{MoveStatsTargeting::AllStatsTargeting.at(movesTargeting)};
-        auto damage = static_cast<int>(battle::Battle::ModifyAttack(attackingMoveId, attacker, targetingPair.AttackerStat, attacker, targetingPair.DefenderStat));
+        auto damage = static_cast<int>(battle::ModifyAttack(attackingMoveId, attacker, targetingPair.AttackerStat, attacker, targetingPair.DefenderStat));
         attacker.CurrentBattleStats.Health.ChangeHealth(-1 * damage);
         MoveOutcome o{AppendAll({attacker.GetName(), "hit itself with", Stringify(attackingMoveId), "for", std::to_string(damage), "damage!"})};
         return o;
     }
 
-    MoveOutcome RecoilDamageMove(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, double divisionFactor)
+    MoveOutcome RecoilDamageMove([[maybe_unused]] Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, double divisionFactor)
     {
-        auto damage = std::max(1, static_cast<int>(battle::Battle::ModifyAttack(attackingMoveId, attacker, StatsTypes::Attack, attacker, StatsTypes::Defence) / divisionFactor));
+        auto damage = std::max(1, static_cast<int>(battle::ModifyAttack(attackingMoveId, attacker, StatsTypes::Attack, attacker, StatsTypes::Defence) / divisionFactor));
         attacker.CurrentBattleStats.Health.ChangeHealth(-1 * damage);
         MoveOutcome o{AppendAll({attacker.GetName(), "takes", std::to_string(damage), "recoil damage from", Stringify(attackingMoveId)})};
         return o;
     }
 
 #pragma region stats boosting and hexing
-    MoveOutcome ChangeSelfStatMove(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, StatsTypes effectedStat, StatModifiersLevels modifer)
+    MoveOutcome ChangeSelfStatMove([[maybe_unused]] Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, StatsTypes effectedStat, StatModifiersLevels modifer)
     {
         auto &statRef = attacker.CurrentBattleStats.m_battleStats.at(effectedStat);
         const auto previous = statRef.GetStat();
@@ -223,7 +224,7 @@ namespace mockmon::moves
         return o;
     }
 
-    MoveOutcome ChangeOpponentStatMove(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, StatsTypes effectedStat, StatModifiersLevels modifer)
+    MoveOutcome ChangeOpponentStatMove([[maybe_unused]] Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, StatsTypes effectedStat, StatModifiersLevels modifer)
     {
         auto &statRef = defender.CurrentBattleStats.m_battleStats.at(effectedStat);
         const auto previous = statRef.GetStat();
@@ -234,14 +235,14 @@ namespace mockmon::moves
 
 #pragma endregion
 
-    MoveOutcome DirectDamageByPassResistance(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, double damage)
+    MoveOutcome DirectDamageByPassResistance([[maybe_unused]] Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, double damage)
     {
         defender.CurrentBattleStats.Health.ChangeHealth(-1 * damage);
         MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(attackingMoveId), "for", std::to_string(damage), "damage!"})};
         return o;
     }
 
-    MoveOutcome DirectDamageByTargetCalculation(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const ExDamageByState &dmgByStateCalc)
+    MoveOutcome DirectDamageByTargetCalculation([[maybe_unused]] Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const ExDamageByState &dmgByStateCalc)
     {
         const auto damage = std::round(dmgByStateCalc(defender));
         defender.CurrentBattleStats.Health.ChangeHealth(-1 * damage);
@@ -249,7 +250,7 @@ namespace mockmon::moves
         return o;
     }
 
-    MoveOutcome DirectDamageByAttackerCalculation(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const ExDamageByState &dmgByStateCalc)
+    MoveOutcome DirectDamageByAttackerCalculation([[maybe_unused]] Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const ExDamageByState &dmgByStateCalc)
     {
         const auto damage = std::round(dmgByStateCalc(attacker));
         defender.CurrentBattleStats.Health.ChangeHealth(-1 * damage);
@@ -257,7 +258,7 @@ namespace mockmon::moves
         return o;
     }
 
-    MoveOutcome OneHitKO(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender)
+    MoveOutcome OneHitKO([[maybe_unused]] Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender)
     {
         const auto defenderMaxHealth = defender.CurrentBattleStats.Health.GetMaxStat();
         defender.CurrentBattleStats.Health.ChangeHealth(-1 * defenderMaxHealth);
@@ -268,7 +269,7 @@ namespace mockmon::moves
 #pragma region conditions
 
     //TODO: find a way to remove this whole mess
-    MoveOutcome AddOpponentPulsingConditionStatus(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const PulsingStatusInflicment statusConditionInflicment)
+    MoveOutcome AddOpponentPulsingConditionStatus([[maybe_unused]] Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const PulsingStatusInflicment statusConditionInflicment)
     {
         if (defender.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))
         {
@@ -280,7 +281,7 @@ namespace mockmon::moves
         return statusConditionInflicment.TryEfflict(attackingMoveId, attacker, defender);
     }
 
-    MoveOutcome AddSelfPulsingConditionStatus(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const PulsingStatusInflicment statusConditionInflicment)
+    MoveOutcome AddSelfPulsingConditionStatus([[maybe_unused]] Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const PulsingStatusInflicment statusConditionInflicment)
     {
 
         if (attacker.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))
@@ -305,7 +306,7 @@ namespace mockmon::moves
         return o;
     }
 
-    MoveOutcome RemoveOpponentPulsingConditionStatus(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const PulsingStatusInflicment statusConditionInflicment)
+    MoveOutcome RemoveOpponentPulsingConditionStatus([[maybe_unused]] Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const PulsingStatusInflicment statusConditionInflicment)
     {
 
         if (!defender.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))
@@ -330,7 +331,7 @@ namespace mockmon::moves
         return o;
     }
 
-    MoveOutcome RemoveSelfPulsingConditionStatus(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const PulsingStatusInflicment statusConditionInflicment)
+    MoveOutcome RemoveSelfPulsingConditionStatus([[maybe_unused]] Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const PulsingStatusInflicment statusConditionInflicment)
     {
         if (!attacker.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))
         {
@@ -354,7 +355,7 @@ namespace mockmon::moves
         return o;
     }
 
-    MoveOutcome AddOpponentNonePulsingConditionStatus(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const NonPulsingStatusInflicment statusConditionInflicment)
+    MoveOutcome AddOpponentNonePulsingConditionStatus([[maybe_unused]] Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const NonPulsingStatusInflicment statusConditionInflicment)
     {
         if (defender.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))
         {
@@ -366,7 +367,7 @@ namespace mockmon::moves
         return statusConditionInflicment.TryEfflict(attackingMoveId, attacker, defender);
     }
 
-    MoveOutcome AddSelfNonePulsingConditionStatus(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const NonPulsingStatusInflicment statusConditionInflicment)
+    MoveOutcome AddSelfNonePulsingConditionStatus([[maybe_unused]] Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const NonPulsingStatusInflicment statusConditionInflicment)
     {
 
         if (attacker.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))
@@ -404,14 +405,14 @@ namespace mockmon::moves
         }
     }
 
-    MoveOutcome ResetSelfAllConditions(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender)
+    MoveOutcome ResetSelfAllConditions([[maybe_unused]] Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender)
     {
         ResetAllStatsAndConditionsChanges(attacker);
         MoveOutcome o{AppendAll({attacker.GetName(), "used", Stringify(attackingMoveId), "to reset all it's stats!"})};
         return o;
     }
 
-    MoveOutcome ResetOpponenetAllConditions(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender)
+    MoveOutcome ResetOpponenetAllConditions([[maybe_unused]] Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender)
     {
         ResetAllStatsAndConditionsChanges(defender);
         MoveOutcome o{AppendAll({attacker.GetName(), "used", Stringify(attackingMoveId), "to reset all of", defender.GetName(), "stats!"})};
@@ -420,14 +421,14 @@ namespace mockmon::moves
 
 #pragma endregion
 
-    MoveOutcome StoreSelfChargedMove(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const moves::MoveId storedMoveId)
+    MoveOutcome StoreSelfChargedMove([[maybe_unused]] Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const moves::MoveId storedMoveId)
     {
         attacker.m_currentCondtion.StoreChargedMove(storedMoveId);
         MoveOutcome o{AppendAll({attacker.GetName(), "used", Stringify(attackingMoveId), "to charge", Stringify(storedMoveId), "for next turn"})};
         return o;
     }
 
-    MoveOutcome StoreOppenentChargedMove(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const moves::MoveId storedMoveId)
+    MoveOutcome StoreOppenentChargedMove([[maybe_unused]] Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const moves::MoveId storedMoveId)
     {
         defender.m_currentCondtion.StoreChargedMove(storedMoveId);
         MoveOutcome o{AppendAll({attacker.GetName(), "used", Stringify(attackingMoveId), "to charge", Stringify(storedMoveId), "in", defender.GetName(), "for next turn"})};
