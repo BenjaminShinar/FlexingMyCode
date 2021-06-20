@@ -89,10 +89,26 @@ namespace mockmon
                                                //{36,{moves::MoveId::Explosion}},
                                            }),
         MakeDictionaryPair<MockmonSpecies>(MockmonSpeciesId::Graveler,
-                                           il_ev_fn{},
+                                           il_ev_fn{
+                                               evolution::CreateEvolveByTradedFunction(MockmonSpeciesId::Golem)},
                                            s_t{types::Types::Rock, types::Types::Ground},
                                            LevelUpGroup::MediumSlowLevelUp, 134,
                                            stats::SpeciesBaseStats{55, 95, 115, 45, 35},
+                                           mp_i_vec_Mv{
+                                               //moves list
+                                               {1, {moves::MoveId::Tackle, moves::MoveId::DefenseCurl}},
+                                               {11, {moves::MoveId::DefenseCurl}},
+                                               //{16,{moves::MoveId::RockThrow}},
+                                               //{21,{moves::MoveId::SelfDestruct}},
+                                               {29, {moves::MoveId::Harden}},
+                                               //{36,{moves::MoveId::Earthquake}},
+                                               //{43,{moves::MoveId::Explosion}},
+                                           }),
+        MakeDictionaryPair<MockmonSpecies>(MockmonSpeciesId::Golem,
+                                           il_ev_fn{},
+                                           s_t{types::Types::Rock, types::Types::Ground},
+                                           LevelUpGroup::MediumSlowLevelUp, 177,
+                                           stats::SpeciesBaseStats{80, 110, 130, 55, 45},
                                            mp_i_vec_Mv{
                                                //moves list
                                                {1, {moves::MoveId::Tackle, moves::MoveId::DefenseCurl}},

@@ -9,6 +9,7 @@ namespace mockmon::evolution
 {
 
     ev_fn CreateEvolveByLevelFunction(MockmonSpeciesId evolvedForm, unsigned int requriedLevel);
+    ev_fn CreateEvolveByTradedFunction(MockmonSpeciesId evolvedForm);
 
     enum class MockmonEvolutionType
     {

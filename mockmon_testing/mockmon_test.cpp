@@ -2,7 +2,6 @@
 #include "mockmon_test_utils.h"
 #include <cmath>
 #include <algorithm>
-
 /**
  * @brief 
  * check that it has all moves
@@ -194,12 +193,14 @@ SCENARIO("Mockmon Evolution", "[MockmonTest][Evolution]")
     using std::make_tuple;
     const auto [baseFormSpeciesId, requiredLevel, evolvedFormSpeciesId] = GENERATE(
         make_tuple(MockmonSpeciesId::Rattata, 20, MockmonSpeciesId::Raticate),
-        make_tuple(MockmonSpeciesId::Geodude, 25, MockmonSpeciesId::Graveler));
+        make_tuple(MockmonSpeciesId::Geodude, 25, MockmonSpeciesId::Graveler),
+        make_tuple(MockmonSpeciesId::Graveler, 30, MockmonSpeciesId::Golem));
     const auto baseformNames{Stringify(baseFormSpeciesId)};
     const auto evolevedFormName{Stringify(evolvedFormSpeciesId)};
     GIVEN("A mockmon of type" + baseformNames);
     {
         Mockmon m(baseFormSpeciesId, "");
+        m.SetCurrentTrainer(7);
         WHEN("we level it up to the level before the correct level and try to evolve it")
         {
             MockmonTestUtils::BringMockmonToLevel(m, requiredLevel - 1);
@@ -213,10 +214,11 @@ SCENARIO("Mockmon Evolution", "[MockmonTest][Evolution]")
                 REQUIRE(speciesIdentifier == baseFormSpeciesId);
                 REQUIRE(preEvolvedStats == unEvolvedStats);
 
-                AND_WHEN("we level it up to the correct level and evolve it")
+                AND_WHEN("we level it up to the correct level and trade it and evolve it ")
                 {
                     MockmonTestUtils::BringMockmonToLevel(m, requiredLevel);
                     const auto unEvolvedStats = MockmonTestUtils::XorredStats(m);
+                    m.SetCurrentTrainer(99);
                     m.TryEvolve();
                     THEN("it should be a " + evolevedFormName)
                     {

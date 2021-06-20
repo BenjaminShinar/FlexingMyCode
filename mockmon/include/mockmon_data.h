@@ -6,6 +6,8 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <deque>
+#include <optional>
 
 #include "condition.h"
 #include "stats/stats.h"
@@ -53,6 +55,10 @@ namespace mockmon
         std::set<MockmonSpeciesId> GetPossibleEvolutions() const;
         void TryEvolve();
 
+        std::optional<unsigned int> GetCurrentTrainer() const;
+        const std::deque<unsigned int> &ViewAllPastTrainers() const;
+        void SetCurrentTrainer(unsigned int new_trainer);
+
     private:
         void LearnLevelUpMoves();
         void LearnLevelUpMoves(int level);
@@ -73,7 +79,8 @@ namespace mockmon
         long experience_points = 0;
         bool m_ableToBattle = true;
         std::vector<moves::EquipedMove> m_Moveset;
-        const stats::IndividualStats IVs; //this is calculated once when the pokemon is born;
-        stats::EffortValuesStats EVs;     // this is what we gain after each battle;
+        const stats::IndividualStats IVs;          //this is calculated once when the pokemon is born;
+        stats::EffortValuesStats EVs;              // this is what we gain after each battle;
+        std::deque<unsigned int> m_trainerHistory; // did this mockmon have previous owners?
     };
 }

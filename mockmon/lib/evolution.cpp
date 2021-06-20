@@ -16,6 +16,19 @@ namespace mockmon::evolution
         };
         return evolveByLevelFunction;
     }
+
+    ev_fn CreateEvolveByTradedFunction(MockmonSpeciesId evolvedForm)
+    {
+        ev_fn evolveByTradedFunction = [=](const Mockmon &m) -> std::optional<MockmonSpeciesId>
+        {
+            if (m.ViewAllPastTrainers().size() > 1)
+            {
+                return evolvedForm;
+            }
+            return {};
+        };
+        return evolveByTradedFunction;
+    }
     // bool MockmonEvolution::CanMockmonEvolve(const Mockmon & mockmon) const
     // {
     //     if (SpeciesCanEvolve)

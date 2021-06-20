@@ -226,7 +226,31 @@ namespace mockmon
     {
         auto speciesXp = GetMockmonSpeciesData().SpeciesExp;
         auto xp = std::floor((CurrentLevel * speciesXp * (IsWild() ? 1.0 : 1.5) / 7.0));
-        std::cout << AppendAll({GetName(), "was defeted! gives out", std::to_string(xp), "xp points!"}) << '\n';
         return xp;
     }
+
+    std::optional<unsigned int> Mockmon::GetCurrentTrainer() const
+    {
+        if (!m_trainerHistory.empty())
+        {
+            return m_trainerHistory.front();
+        }
+        return {};
+    }
+
+    const std::deque<unsigned int> &Mockmon::ViewAllPastTrainers() const
+    {
+        return m_trainerHistory;
+    }
+
+    void Mockmon::SetCurrentTrainer(unsigned int new_trainer)
+    {
+        if (auto v = GetCurrentTrainer())
+        {
+            if (v.value() == new_trainer)
+                return;
+        }
+        m_trainerHistory.push_front(new_trainer);
+    }
+
 }
