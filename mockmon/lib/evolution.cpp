@@ -4,18 +4,6 @@
 namespace mockmon::evolution
 {
     using namespace std::placeholders; //import this for _1,_2,
-
-    std::optional<MockmonSpeciesId> baseEvolutionFunction(const Mockmon &m, MockmonSpeciesId evolvedForm)
-    {
-        return {evolvedForm};
-    }
-
-    ev_fn CreateBaseEvoltuionFunction(MockmonSpeciesId evolvedForm)
-    {
-        auto bounded = std::bind(&baseEvolutionFunction, _1, evolvedForm);
-        return bounded;
-    }
-
     ev_fn CreateEvolveByLevelFunction(MockmonSpeciesId evolvedForm, unsigned int requriedLevel)
     {
         ev_fn evolveByLevelFunction = [=](const Mockmon &m) -> std::optional<MockmonSpeciesId>

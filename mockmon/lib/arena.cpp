@@ -26,10 +26,14 @@ namespace mockmon
  */
     double Arena::GetBadgeBoost(const Trainer &trainer, StatsTypes stat) const
     {
-        const auto trainer_match = m_badgeBoosts.find(trainer.UniqueTrainerID);
+        auto trainer_match = m_badgeBoosts.find(trainer.UniqueTrainerID);
         if (trainer_match != std::end(m_badgeBoosts))
         {
-            return trainer_match->second.at(stat);
+            auto stats_match = trainer_match->second.find(stat);
+            if (stats_match != std::end(trainer_match->second))
+            {
+                return stats_match->second;
+            }
         }
         return 1.0;
     }
@@ -43,6 +47,15 @@ namespace mockmon
  */
     void Arena::MultiplyBadgeBoost(const Trainer &trainer, StatsTypes stat, double multiply)
     {
+        auto trainer_match = m_badgeBoosts.find(trainer.UniqueTrainerID);
+        if (trainer_match != std::end(m_badgeBoosts))
+        {
+            auto stats_match = trainer_match->second.find(stat);
+            if (stats_match != std::end(trainer_match->second))
+            {
+                stats_match->second *= multiply;
+            }
+        }
     }
 
     /**
