@@ -36,6 +36,7 @@ namespace mockmon::moves
         MakeDictionaryPair<ConstantMove>(MoveId::SwordsDance, 20, 32),
         MakeDictionaryPair<ConstantMove>(MoveId::DefenseCurl, 40, 64),
         MakeDictionaryPair<ConstantMove>(MoveId::Harden, 30, 48),
+        MakeDictionaryPair<ConstantMove>(MoveId::DoubleTeam, 15, 24),
         //freezing moves
         MakeDictionaryPair<ConstantMove>(MoveId::IcePunch, 15, 24),
         MakeDictionaryPair<ConstantMove>(MoveId::IceBeam, 10, 16),

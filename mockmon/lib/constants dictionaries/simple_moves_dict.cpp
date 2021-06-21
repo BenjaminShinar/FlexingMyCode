@@ -43,6 +43,7 @@ namespace mockmon::moves
         MakeDictionaryPair<SimpleMove>(MoveId::SwordsDance, types::Types::Normal, 0), //boosting
         MakeDictionaryPair<SimpleMove>(MoveId::DefenseCurl, types::Types::Normal, 0), //boosting
         MakeDictionaryPair<SimpleMove>(MoveId::Harden, types::Types::Normal, 0),      //boosting
+        MakeDictionaryPair<SimpleMove>(MoveId::DoubleTeam, types::Types::Normal, 0),  //boosting
 
         //freezing moves
         MakeDictionaryPair<SimpleMove>(MoveId::IcePunch, types::Types::Ice, 75),

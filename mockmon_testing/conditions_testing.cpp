@@ -165,8 +165,9 @@ SCENARIO("pulsing conditions change stats", "[MockmonTest][Condition]")
         make_tuple(condition::PulsingConditionId::Paralysis, StatsTypes::Speed, 0.25));
     GIVEN("A Normal Healthy mockmon")
     {
+        Arena arena{true};
         Mockmon ma(speciesId, AppendAll({Stringify(speciesId), "condition", Stringify(testedCondition)}));
-        const auto [baseAttackStat, baseDefencestat] = battle::GetStatsModifier(ma, effectedStat, ma, effectedStat);
+        const auto [baseAttackStat, baseDefencestat] = arena.GetStatsModifier(ma, effectedStat, ma, effectedStat);
 
         THEN("it must be the same stats")
         {
@@ -182,7 +183,7 @@ SCENARIO("pulsing conditions change stats", "[MockmonTest][Condition]")
 
                 AND_THEN("it must have it's stats change")
                 {
-                    const auto [attackstat, defencestat] = battle::GetStatsModifier(ma, effectedStat, ma, effectedStat);
+                    const auto [attackstat, defencestat] = arena.GetStatsModifier(ma, effectedStat, ma, effectedStat);
                     REQUIRE(attackstat == Approx(baseAttackStat * factor));
                 }
             }
@@ -274,8 +275,9 @@ SCENARIO("light screen and reflect conditions", "[MockmonTest][Condition]")
     const auto [testedCondition, effectedStat, factor] = GENERATE(make_tuple(condition::NonPulsingConditionId::Reflect, StatsTypes::Defence, 2.0), make_tuple(condition::NonPulsingConditionId::LightScreen, StatsTypes::Special, 2.0));
     GIVEN("A Normal Healthy mockmon")
     {
+        Arena arena{true};
         Mockmon ma(speciesId, AppendAll({Stringify(speciesId), "condition", Stringify(testedCondition)}));
-        const auto [baseAttackStat, baseDefencestat] = battle::GetStatsModifier(ma, effectedStat, ma, effectedStat);
+        const auto [baseAttackStat, baseDefencestat] = arena.GetStatsModifier(ma, effectedStat, ma, effectedStat);
 
         THEN("it must be the same stats")
         {
@@ -290,7 +292,7 @@ SCENARIO("light screen and reflect conditions", "[MockmonTest][Condition]")
                 REQUIRE(ma.m_currentCondtion.IsAffiliatedWithCondition(testedCondition));
                 AND_THEN("it must have it's stats change")
                 {
-                    const auto [attackstat, defencestat] = battle::GetStatsModifier(ma, effectedStat, ma, effectedStat);
+                    const auto [attackstat, defencestat] = arena.GetStatsModifier(ma, effectedStat, ma, effectedStat);
                     REQUIRE_FALSE(attackstat == Approx(defencestat));
                     REQUIRE(defencestat == Approx(baseDefencestat * factor));
                 }

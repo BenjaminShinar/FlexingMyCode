@@ -11,5 +11,5 @@ file(GLOB identifiers_dictionaries_src CONFIGURE_DEPENDS
 
 
 add_library(mockmon lib/battle.cpp lib/condition.cpp lib/mockmon_data.cpp lib/mockmon_exp.cpp lib/mockmon_species.cpp lib/moves.cpp lib/random_gen.cpp lib/types.cpp lib/evolution.cpp lib/speciesId.cpp lib/specialized_moves.cpp lib/arena.cpp lib/interfaces.cpp lib/trainer_ai.cpp
-            lib/damage_calculations.cpp
+            lib/damage_calculations.cpp lib/trainer.cpp
             ${identifiers_dictionaries_src}) 

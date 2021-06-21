@@ -244,6 +244,34 @@ anything that should relate to the trainer
 pretend this is an actual gameboy
 - [ ] dpad, action, cancel, start select
 
+## Testing?
+can i use automated testing?
+- [x] add testing package
+- [ ] integrate testing to repository on git
+- [x] add actual relevent test
+- [ ] learn more about testing and clean the code
+- [ ] expand testing to anything we can test
+- [x] can tests timeout? how? (if a battle never ends)
+- [ ] test damage ranges - somehow account for the possibility of critical hits.
+
+### test db completeness
+test that all mockmon, moves and everything is defined and doesn't crash
+- [ ] test that all 151 mockmons exist and can be constructed
+- [ ] test that all moves (how many?) exist, have a name, can be called without crushing the system.
+
+### test conditions
+- [x] testing that burn and poison damage the mockmon
+- [x] testing that burn halfs attack
+- [x] testing that parlysis halfs speed (can we combine them?)
+- [x] testing that light screen and reflect change defences
+- [ ] test that haze removes all sorts of stuff and does it job and it's bugs
+
+### test statues
+status moves change modifiers properly
+- [ ] statues moves - test stats are changed
+- [ ] reflect/lightscreen/focus energy?
+- [ ] ...TBC
+
 ## Dev Ops stuff
 stuff that needs to be done, but not concerning the business logic of the mockmon engine.
 how the project is built, maintained, tested and maintened.
@@ -257,33 +285,7 @@ how the project is built, maintained, tested and maintened.
 - [ ] figure out how to get packages via cmake
 - [ ] have a github flow to run build
 
-### Testing?
-can i use automated testing?
-- [x] add testing package
-- [ ] integrate testing to repository on git
-- [x] add actual relevent test
-- [ ] learn more about testing and clean the code
-- [ ] expand testing to anything we can test
-- [x] can tests timeout? how? (if a battle never ends)
-- [ ] test damage ranges - somehow account for the possibility of critical hits.
 
-#### test db completeness
-test that all mockmon, moves and everything is defined and doesn't crash
-- [ ] test that all 151 mockmons exist and can be constructed
-- [ ] test that all moves (how many?) exist, have a name, can be called without crushing the system.
-
-#### test conditions
-- [x] testing that burn and poison damage the mockmon
-- [x] testing that burn halfs attack
-- [x] testing that parlysis halfs speed (can we combine them?)
-- [x] testing that light screen and reflect change defences
-- [ ] test that haze removes all sorts of stuff and does it job and it's bugs
-
-#### test statues
-status moves change modifiers properly
-- [ ] statues moves
-- [ ] reflect/lightscreen/focus energy?
-- [ ] ...TBC
 
 ### UMLs
 - [x] create a location for umls on the repository

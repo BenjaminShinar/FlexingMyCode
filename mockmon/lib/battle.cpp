@@ -65,7 +65,7 @@ namespace mockmon::battle
             }
         }
         // same priority
-        const auto [playerSpeed, enemySpeed] = GetStatsModifier(player_pair.second, StatsTypes::Speed, enemy_pair.second, StatsTypes::Speed);
+        const auto [playerSpeed, enemySpeed] = m_arena.GetStatsModifier(player_pair.second, StatsTypes::Speed, enemy_pair.second, StatsTypes::Speed);
         if (playerSpeed > enemySpeed)
         {
             return true;
@@ -93,12 +93,6 @@ namespace mockmon::battle
         }
     }
 
-    double GetSingleStatsModifier(const Mockmon &mockmon, const StatsTypes statType, bool isAttacking)
-    {
-        const auto stat = mockmon.CurrentBattleStats.m_battleStats.at(statType).GetStat() * mockmon.m_currentCondtion.GetConditionalBoost(statType, isAttacking);
-        return stat;
-    }
-
     //do something else
     bool IsStabModifier(const Mockmon &m, const moves::SimpleMove &AttackingMove)
     {
@@ -108,13 +102,6 @@ namespace mockmon::battle
     types::TypeEffectivenessModifier GetTypeEffectivenessModifer(const Mockmon &m, const moves::SimpleMove &AttackingMove)
     {
         return m.GetMockmonSpeciesData().GetTypeEffetivenessModifier(AttackingMove.Type);
-    }
-
-    std::tuple<double, double> GetStatsModifier(const Mockmon &attacker, const StatsTypes attackingStat, const Mockmon &defender, const StatsTypes defendingStat)
-    {
-        const auto attackerStat = GetSingleStatsModifier(attacker, attackingStat, true);
-        const auto defenderStat = GetSingleStatsModifier(defender, defendingStat, false);
-        return std::make_tuple(attackerStat, defenderStat); //attack / defence
     }
 
     /**
@@ -156,7 +143,8 @@ namespace mockmon::battle
     {
         const auto &simpleAttack = moves::SimpleMove::AllMoves.at(attackingMoveId);
         auto levelModifier = GetLevelDamageModifier(attacker);
-        const auto [attackstat, defencestat] = GetStatsModifier(attacker, attackingStat, defender, defendingStat);
+        const Arena a{true};
+        const auto [attackstat, defencestat] = a.GetStatsModifier(attacker, attackingStat, defender, defendingStat);
         const auto statsModifier = attackstat / defencestat;
 
         auto criticalHitModifier = GetCriticalHitModifier(attacker, simpleAttack.Identifier());

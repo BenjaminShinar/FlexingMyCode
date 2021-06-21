@@ -1,6 +1,5 @@
 #pragma once
 
-#include "identifiers/trainer_ai_id.h"
 #include "moves.h"
 //#include <string_view>
 #include <string>
@@ -43,7 +42,7 @@ namespace mockmon
         void LoseSomehow();
         void FullRestore();
         bool IsAbleToBattle() const;
-        bool IsWild() const { return false; }
+        bool IsWild() const;
         bool TeachMove(moves::MoveId);
 
         std::vector<moves::EquipedMove> &GetMoveSet();
@@ -55,9 +54,9 @@ namespace mockmon
         std::set<MockmonSpeciesId> GetPossibleEvolutions() const;
         void TryEvolve();
 
-        std::optional<unsigned int> GetCurrentTrainer() const;
-        const std::deque<unsigned int> &ViewAllPastTrainers() const;
-        void SetCurrentTrainer(unsigned int new_trainer);
+        std::optional<std::size_t> GetCurrentTrainer() const;
+        const std::deque<std::size_t> &ViewAllPastTrainers() const;
+        void SetCurrentTrainer(std::size_t new_trainer);
 
     private:
         void LearnLevelUpMoves();
@@ -79,8 +78,8 @@ namespace mockmon
         long experience_points = 0;
         bool m_ableToBattle = true;
         std::vector<moves::EquipedMove> m_Moveset;
-        const stats::IndividualStats IVs;          //this is calculated once when the pokemon is born;
-        stats::EffortValuesStats EVs;              // this is what we gain after each battle;
-        std::deque<unsigned int> m_trainerHistory; // did this mockmon have previous owners?
+        const stats::IndividualStats IVs;         //this is calculated once when the pokemon is born;
+        stats::EffortValuesStats EVs;             // this is what we gain after each battle;
+        std::deque<std::size_t> m_trainerHistory; // did this mockmon have previous owners?
     };
 }

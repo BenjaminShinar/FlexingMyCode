@@ -23,6 +23,19 @@ namespace mockmon
         return m_ableToBattle && CurrentBattleStats.Health.GetStat() > 0;
     }
 
+    /**
+ * @brief 
+ * check if this mockmon is wild
+ * a mockmon can go from wild to owned, but not the other way around
+ * used when calculating xp and when 'catching' mockmon
+ * @return true - doesn't have a trainer
+ * @return false - had a trainer in the past
+ */
+    bool Mockmon::IsWild() const
+    {
+        return m_trainerHistory.empty();
+    }
+
     void Mockmon::LoseSomehow()
     {
         m_ableToBattle = false;
@@ -55,6 +68,7 @@ namespace mockmon
         }
         return false;
     }
+
     std::set<MockmonSpeciesId> Mockmon::GetPossibleEvolutions() const
     {
         std::set<MockmonSpeciesId> evolutions;
@@ -105,16 +119,14 @@ namespace mockmon
         auto positivePoints = static_cast<unsigned long>(points);
         auto neededToNextLevelAbs = MockmonExp::TotalExperinceForLevel(CurrentLevel + 1, GetMockmonSpeciesData().SpeciesLevelUpGroup);
         auto neededToNextLevel = neededToNextLevelAbs - experience_points;
-        //std::cout<< m_name << " required exp for nexy level " << level+1 << " is " << neededToNextLevelAbs <<'\n';
-        auto reminder = positivePoints - neededToNextLevel;
 
         if (positivePoints < neededToNextLevel)
         {
             experience_points += positivePoints;
-            //std::cout<< m_name << " cant increase it's level! has " << experience_points << " and needs total of: " << neededToNextLevelAbs <<'\n';
         }
         else
         {
+            auto reminder = positivePoints - neededToNextLevel;
             experience_points += neededToNextLevel;
             LevelUp();
             GrantExperiencePoints(reminder);
@@ -224,12 +236,13 @@ namespace mockmon
 
     long Mockmon::ExpFromDefeating() const
     {
-        auto speciesXp = GetMockmonSpeciesData().SpeciesExp;
-        auto xp = std::floor((CurrentLevel * speciesXp * (IsWild() ? 1.0 : 1.5) / 7.0));
-        return xp;
+        const auto speciesXp = GetMockmonSpeciesData().SpeciesExp;
+        const auto wildXpModifer = IsWild() ? 1.0 : 1.5;
+        const auto xp = (CurrentLevel * speciesXp * wildXpModifer / 7.0);
+        return std::floor(xp);
     }
 
-    std::optional<unsigned int> Mockmon::GetCurrentTrainer() const
+    std::optional<std::size_t> Mockmon::GetCurrentTrainer() const
     {
         if (!m_trainerHistory.empty())
         {
@@ -238,12 +251,12 @@ namespace mockmon
         return {};
     }
 
-    const std::deque<unsigned int> &Mockmon::ViewAllPastTrainers() const
+    const std::deque<std::size_t> &Mockmon::ViewAllPastTrainers() const
     {
         return m_trainerHistory;
     }
 
-    void Mockmon::SetCurrentTrainer(unsigned int new_trainer)
+    void Mockmon::SetCurrentTrainer(std::size_t new_trainer)
     {
         if (auto v = GetCurrentTrainer())
         {

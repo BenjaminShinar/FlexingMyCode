@@ -11,14 +11,14 @@ namespace mockmon::battle
      * @param m the attacking mockmon
      * @return double 
      */
-    double GetLevelDamageModifier(const Mockmon & m);
+    double GetLevelDamageModifier(const Mockmon &m);
     /**
      * @brief Get the Level Critical Damage Modifier 
      * how levels effect damage in critical hits
      * @param m the attacking mockmon
      * @return double 
      */
-    double GetLevelCriticalDamageModifier(const Mockmon & m);
+    double GetLevelCriticalDamageModifier(const Mockmon &m);
 
     /**
      * @brief Get the Stab Damage Modifier 
@@ -27,7 +27,7 @@ namespace mockmon::battle
      * @return double 
      */
     double GetStabDamageModifier(bool isStab);
-    
+
     /**
      * @brief Get the Type Effetiveness Modifier 
      * how the type effectiness is translated into damage
@@ -42,4 +42,16 @@ namespace mockmon::battle
      * @return double 
      */
     double GetDamageRanges();
+
+    /**
+ * @brief Get the Single Stats Modifier object
+ * get a signle stat data of a mockmon, with modifeiers and condition changes
+ * without arena boosts such as badge boost
+ * @param mockmon 
+ * @param statType 
+ * @param isAttacking 
+ * @return double 
+ */
+    double GetSingleStatsModifier(const Mockmon &mockmon, const StatsTypes statType, bool isAttacking);
+
 }

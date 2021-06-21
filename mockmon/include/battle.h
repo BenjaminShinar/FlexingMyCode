@@ -3,7 +3,7 @@
 #include "identifiers/moves_id.h"
 #include "identifiers/type_effectiveness_id.h"
 #include "trainer_ai.h"
-
+#include "trainer.h"
 #include "mockmon_data.h"
 #include "arena.h"
 #include <string>
@@ -17,7 +17,7 @@ namespace mockmon::battle
     double ModifyAttack(const moves::MoveId attackingMoveId, Mockmon &attacker, const StatsTypes attackingStat, Mockmon &defender, const StatsTypes defendingStat);
     bool IsCriticalHit(Mockmon &attackingMockmon, const moves::MoveId mv);
     double GetCriticalHitModifier(Mockmon &attackingMockmon, const moves::MoveId mv);
-    std::tuple<double, double> GetStatsModifier(const Mockmon &attacker, const StatsTypes attackingStat, const Mockmon &defender, const StatsTypes defendingStat);
+    //    std::tuple<double, double> GetStatsModifier(const Mockmon &attacker, const StatsTypes attackingStat, const Mockmon &defender, const StatsTypes defendingStat);
     void AttackWith(Arena &arena, moves::MoveId mvid, Mockmon &attacker, Mockmon &defender);
 
     //this class will be used to simulate battles without the overworld

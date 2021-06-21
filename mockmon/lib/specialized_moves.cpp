@@ -103,7 +103,7 @@ namespace mockmon::moves
     MoveOutcome RegularAccuracyCheckMove([[maybe_unused]] Arena &arena, Mockmon &attacker, Mockmon &defender, int attackingMoveBaseAccuracy, const MovesTargeting &movesTargeting)
     {
         const auto targetingPair{MoveStatsTargeting::AllStatsTargeting.at(movesTargeting)};
-        const auto [attackstat, defencestat] = battle::GetStatsModifier(attacker, targetingPair.AttackerStat, defender, targetingPair.DefenderStat);
+        const auto [attackstat, defencestat] = arena.GetStatsModifier(attacker, targetingPair.AttackerStat, defender, targetingPair.DefenderStat);
         const auto modifier = attackstat * defencestat;
         const auto percentage = std::clamp(static_cast<int>(std::round(attackingMoveBaseAccuracy * modifier)), 0, 100);
         if (random::Randomer::CheckPercentage(percentage))
@@ -168,7 +168,7 @@ namespace mockmon::moves
     MoveOutcome CheckSpeedAndThenAccuracyCheckMove(Arena &arena, Mockmon &attacker, Mockmon &defender, int attackingMoveBaseAccuracy, const MovesTargeting &movesTargeting)
     {
         const auto targetingPair{MoveStatsTargeting::AllStatsTargeting.at(MovesTargeting::SpeedRace)};
-        const auto [attackerSpeed, defenderSpeed] = battle::GetStatsModifier(attacker, targetingPair.AttackerStat, defender, targetingPair.DefenderStat);
+        const auto [attackerSpeed, defenderSpeed] = arena.GetStatsModifier(attacker, targetingPair.AttackerStat, defender, targetingPair.DefenderStat);
         if (attackerSpeed >= defenderSpeed)
         {
             return RegularAccuracyCheckMove(arena, attacker, defender, attackingMoveBaseAccuracy, movesTargeting);

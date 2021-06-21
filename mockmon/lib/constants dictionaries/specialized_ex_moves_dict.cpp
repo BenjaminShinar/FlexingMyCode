@@ -34,6 +34,7 @@ namespace mockmon::moves
         MakeDictionaryPair<CompositeMove>(MoveId::TailWhip, CreateNormalAccuracyCheck(100, MovesTargeting::AccuracyEvasion), il_exMV{CreateOpponentStatChangingMove(StatsTypes::Defence, StatModifiersLevels::Decrese)}),
         MakeDictionaryPair<CompositeMove>(MoveId::StringShot, CreateNormalAccuracyCheck(95, MovesTargeting::AccuracyEvasion), il_exMV{CreateOpponentStatChangingMove(StatsTypes::Speed, StatModifiersLevels::Decrese)}),
         MakeDictionaryPair<CompositeMove>(MoveId::Growl, CreateNormalAccuracyCheck(100, MovesTargeting::AccuracyEvasion), il_exMV{CreateOpponentStatChangingMove(StatsTypes::Attack, StatModifiersLevels::Decrese)}),
+        MakeDictionaryPair<CompositeMove>(MoveId::DoubleTeam, CreateByPassAccuracyCheck(), il_exMV{CreateSelfStatChangingMove(StatsTypes::Evasion, StatModifiersLevels::Increase)}),
 
         //set damage moves
         MakeDictionaryPair<CompositeMove>(MoveId::SonicBoom, CreateNormalAccuracyCheck(90, MovesTargeting::AccuracyEvasion), il_exMV{CreateDirectDamagingMoveByPassImmunity(20)}),
