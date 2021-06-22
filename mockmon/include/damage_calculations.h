@@ -52,6 +52,6 @@ namespace mockmon::battle
  * @param isAttacking 
  * @return double 
  */
-    double GetSingleStatsModifier(const Mockmon &mockmon, const StatsTypes statType, bool isAttacking);
+    [[nodiscard]] double GetSingleStatsModifier(const Mockmon &mockmon, const StatsTypes statType, bool isAttacking);
 
 }

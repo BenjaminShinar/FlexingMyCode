@@ -278,6 +278,8 @@ how the project is built, maintained, tested and maintened.
 
 ### compiler stuff
 - [ ] \[\[maybe_unused\]\] attributre
+- [ ] \[\[nodiscard\]\] attribute, wherever possible.
+- [ ] add as many relevent compiler warnings flags:
 
 ### Build system
 - [x] use cmake to build
@@ -302,4 +304,5 @@ how the project is built, maintained, tested and maintened.
 ## Development takeaways: Maybe The Real Treasure Was the Lessons We Learned Along the Way
 stuff that i should keep in mind for the future
 * don't use a std::set of function objects, it won't work becuase there isn't a good way to compare two objects. use vector instead.
+* constexpr requires being defined in Header (.h) file, not cpp file.
 * TBC...

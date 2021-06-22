@@ -3,7 +3,7 @@
 #include "../interfaces.h"
 namespace mockmon::condition
 {
- 
+
     /**
      * @brief 
      * a functor that does something to the mockmon each turn, like take damage?
@@ -12,18 +12,18 @@ namespace mockmon::condition
      */
     class ConditonPulseEffect : public IdentifiybleModule<PulsingConditionId>
     {
-        protected:
-        explicit ConditonPulseEffect(PulsingConditionId condition):IdentifiybleModule(condition)
-        {}
+    protected:
+        explicit ConditonPulseEffect(PulsingConditionId condition) : IdentifiybleModule(condition)
+        {
+        }
 
         bool m_conditionFinished{false};
 
-        public:
-        
+    public:
         virtual ~ConditonPulseEffect() = default;
-        virtual void PulseAfterTurn() {}; //virtual function       
-        virtual void PulseBeforeTurn() {}; //virtual function       
-        bool CanBeRemoved() const {return m_conditionFinished;} //stuff that removes itself after X turns?
+        virtual void PulseAfterTurn(){};                                                  //virtual function
+        virtual void PulseBeforeTurn(){};                                                 //virtual function
+        [[nodiscard]] bool constexpr CanBeRemoved() const { return m_conditionFinished; } //stuff that removes itself after X turns?
     };
 
 }

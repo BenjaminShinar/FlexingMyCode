@@ -15,6 +15,6 @@ namespace mockmon
     //does some magic and returns an attac
     using ChosenMove = std::function<moves::MoveId(Mockmon &attacker, Mockmon &defender)>;
 
-    ChosenMove GetAI(const TrainerAI trainerAI);
+    [[nodiscard]] ChosenMove GetAI(const TrainerAI trainerAI);
 
 }

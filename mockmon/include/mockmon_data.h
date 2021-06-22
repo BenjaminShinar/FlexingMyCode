@@ -31,25 +31,25 @@ namespace mockmon
             CurrentBattleStats.Health.RestStatToMax();                                                                                              //max health at creation
         }
 
-        unsigned int GetCurrentLevel() const;
-        const MockmonSpecies &GetMockmonSpeciesData() const;
+        [[nodiscard]] unsigned int GetCurrentLevel() const;
+        [[nodiscard]] const MockmonSpecies &GetMockmonSpeciesData() const;
         void ChangeName(const std::string &newName); //needs to be somewhere else.
         void GrantExperiencePoints(long points);
         MockmonExp CheckExperiencePoints() const;
-        long ExpFromDefeating() const;
+        [[nodiscard]] long ExpFromDefeating() const;
         void GainEffortValueFromVictory(const Mockmon &defeatedMon);
         void GainExperienceFromVictory(const Mockmon &defeatedMon);
-        void LoseSomehow();
+        constexpr void LoseSomehow() { m_ableToBattle = false; }
         void FullRestore();
-        bool IsAbleToBattle() const;
-        bool IsWild() const;
+        [[nodiscard]] bool IsAbleToBattle() const;
+        [[nodiscard]] bool IsWild() const;
         bool TeachMove(moves::MoveId);
 
-        std::vector<moves::EquipedMove> &GetMoveSet();
+        [[nodiscard]] std::vector<moves::EquipedMove> &GetMoveSet();
         const std::vector<moves::EquipedMove> &ViewMoveSet() const;
 
-        std::string_view GetName() const;
-        bool DisplayEvent() const { return m_outputEvents; }
+        [[nodiscard]] std::string_view GetName() const;
+        constexpr bool DisplayEvent() const { return m_outputEvents; }
         //battle relatedStuff probably alot of methods should go somewhere else
         std::set<MockmonSpeciesId> GetPossibleEvolutions() const;
         void TryEvolve();

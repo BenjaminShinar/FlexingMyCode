@@ -22,12 +22,12 @@ namespace mockmon
         }
         explicit Arena(const Arena &other) = default;
         ~Arena() = default;
-        double GetBadgeBoost(const Trainer &trainer, StatsTypes stat) const;
-        double GetBadgeBoost(const std::size_t &trainerId, StatsTypes stat) const;
+        [[nodiscard]] double GetBadgeBoost(const Trainer &trainer, StatsTypes stat) const;
+        [[nodiscard]] double GetBadgeBoost(const std::size_t &trainerId, StatsTypes stat) const;
 
         void MultiplyBadgeBoost(const Trainer &, StatsTypes stat, double multiply);
         void SetBadgeBoosts(const Trainer &);
-        std::tuple<double, double> GetStatsModifier(const Mockmon &attacker, const StatsTypes attackingStat, const Mockmon &defender, const StatsTypes defendingStat) const;
+        [[nodiscard]] std::tuple<double, double> GetStatsModifier(const Mockmon &attacker, const StatsTypes attackingStat, const Mockmon &defender, const StatsTypes defendingStat) const;
         const bool Silent;
 
     private:

@@ -11,11 +11,11 @@
 namespace mockmon::controller
 {
     void TestControllerToString();
-    unsigned int ReadInput(std::size_t max);
+    [[nodiscard]] unsigned int ReadInput(std::size_t max);
 
     /* has to be defined here because it uses a template argument*/
-    template <typename T,std::size_t N>
-    T GetAnyInput(const std::string &prompt, const std::array<std::pair<std::string, T>, N> & options)
+    template <typename T, std::size_t N>
+    [[nodiscard]] T GetAnyInput(const std::string &prompt, const std::array<std::pair<std::string, T>, N> &options)
     {
         std::cout << prompt << '\n';
         auto d = ReadInput(N);
@@ -25,7 +25,7 @@ namespace mockmon::controller
     }
 
     template <typename T>
-    auto GetAnyInput(const std::string &prompt, const std::vector<T> & options)
+    [[nodiscard]] auto GetAnyInput(const std::string &prompt, const std::vector<T> &options)
     {
         std::cout << prompt << '\n';
         auto d = ReadInput(options.size());
@@ -33,4 +33,4 @@ namespace mockmon::controller
         std::cout << p.Describe() << '\n';
         return p.Identifier();
     }
- }
+}

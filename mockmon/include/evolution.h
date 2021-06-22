@@ -38,7 +38,7 @@ namespace mockmon::evolution
         using ApplyEvolution = std::function<void(Mockmon &mockmon)>;
 
     public:
-        bool CanEvolve(Mockmon &mockmon) const;
+        [[nodiscard]] bool CanEvolve(Mockmon &mockmon) const;
         std::pair<MockmonSpeciesId, MockmonSpeciesId> EvolutionPair;
 
     private:

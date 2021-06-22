@@ -14,9 +14,9 @@
 namespace mockmon::battle
 {
 
-    double ModifyAttack(const moves::MoveId attackingMoveId, Mockmon &attacker, const StatsTypes attackingStat, Mockmon &defender, const StatsTypes defendingStat);
-    bool IsCriticalHit(Mockmon &attackingMockmon, const moves::MoveId mv);
-    double GetCriticalHitModifier(Mockmon &attackingMockmon, const moves::MoveId mv);
+    [[nodiscard]] double ModifyAttack(const moves::MoveId attackingMoveId, Mockmon &attacker, const StatsTypes attackingStat, Mockmon &defender, const StatsTypes defendingStat);
+    [[nodiscard]] bool IsCriticalHit(Mockmon &attackingMockmon, const moves::MoveId mv);
+    [[nodiscard]] double GetCriticalHitModifier(Mockmon &attackingMockmon, const moves::MoveId mv);
     //    std::tuple<double, double> GetStatsModifier(const Mockmon &attacker, const StatsTypes attackingStat, const Mockmon &defender, const StatsTypes defendingStat);
     void AttackWith(Arena &arena, moves::MoveId mvid, Mockmon &attacker, Mockmon &defender);
 
@@ -32,7 +32,7 @@ namespace mockmon::battle
     private:
         void DetermineBattle(bool b);
         void LoopBattle();
-        bool DetermineOrder(const moves::MoveId playerMv, const moves::MoveId enemyMv);
+        [[nodiscard]] bool DetermineOrder(const moves::MoveId playerMv, const moves::MoveId enemyMv);
 
         std::pair<Trainer &, Mockmon &> player_pair;
         std::pair<Trainer &, Mockmon &> enemy_pair;

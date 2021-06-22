@@ -13,7 +13,6 @@ namespace mockmon
     };
 
     std::string Stringify(const TrainerAI trainer_ai_id);
-        std::ostream &operator<<(std::ostream &os, const TrainerAI &e);
-
+    std::ostream &operator<<(std::ostream &os, const TrainerAI &e);
 
 }

@@ -21,7 +21,7 @@ namespace mockmon
         const TrainerAI TrainerAIType{TrainerAI::RandomChoice};
 
         void GiveBadge(badges::IndigoBadge badge);
-        bool CheckBadge(badges::IndigoBadge badge) const;
+        [[nodiscard]] bool CheckBadge(badges::IndigoBadge badge) const;
 
     private:
         std::bitset<badges::IndigoBadgesNumber> m_Indigo_Badges{0};

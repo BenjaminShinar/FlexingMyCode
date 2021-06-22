@@ -3,7 +3,7 @@
 namespace mockmon
 {
 
-/**
+    /**
  * @brief 
  * like C# string.join(), but doesn't work properly.
  * always sticks an extra space at the end...
@@ -11,9 +11,9 @@ namespace mockmon
  * @param words 
  * @return std::string 
  */
-    std::string AppendAll(const std::initializer_list<std::string_view> &words)
+    [[nodiscard]] std::string AppendAll(const std::initializer_list<std::string_view> &words)
     {
-        
+
         std::string s;
         for (const auto &word : words)
         {

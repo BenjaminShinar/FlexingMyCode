@@ -43,7 +43,7 @@ namespace mockmon::stats
 
     private:
         //this is used just in the ctor.
-        static unsigned int CalculateHealth(unsigned int attack, unsigned int defence, unsigned int special, unsigned int speed)
+        [[nodiscard]] static constexpr unsigned int CalculateHealth(unsigned int attack, unsigned int defence, unsigned int special, unsigned int speed)
         {
             auto a1 = (attack & 0x1) << 0;
             auto a2 = (defence & 0x1) << 1;
@@ -85,6 +85,6 @@ namespace mockmon::stats
         explicit MockmonStats(const SpeciesBaseStats &speciesBaseStats, const IndividualStats &IVStats, const EffortValuesStats &EVStats, unsigned int level);
 
         StatsValues Stats;
-        static unsigned int ModifyStat(unsigned int base, unsigned int iv, unsigned int ev, unsigned int level);
+        [[nodiscard]] static unsigned int ModifyStat(unsigned int base, unsigned int iv, unsigned int ev, unsigned int level);
     };
 }

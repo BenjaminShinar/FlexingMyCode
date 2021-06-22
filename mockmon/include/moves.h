@@ -25,7 +25,7 @@ namespace mockmon::moves
     };
 
     //unique move name
-    types::Types GetMoveType(moves::MoveId mvId);
+    [[nodiscard]] types::Types GetMoveType(moves::MoveId mvId);
     struct BaseMove : public IdentifiybleModule<moves::MoveId>
     {
         explicit BaseMove(moves::MoveId moveId, types::Types type) : IdentifiybleModule(moveId),
@@ -75,14 +75,14 @@ namespace mockmon::moves
         }
 
         const ConstantMove &BaseMoveStats; //what move it refers to, constant db of moves;
-        unsigned int RemainningPowerPoints() const;
+        [[nodiscard]] unsigned int RemainningPowerPoints() const;
 
         std::optional<moves::MoveId> UseMove();
         std::string Describe() const override;
 
         //these probably belong with a friend class;
 
-        bool IncreasePowerPoints();
+        [[nodiscard]] bool IncreasePowerPoints();
         void RefillPowerPoints();
 
         static constexpr std::size_t MaxMoves = 15;
@@ -92,8 +92,8 @@ namespace mockmon::moves
         unsigned int m_currentPowerPoints;
     };
 
-    bool CheckMoveAccuracy(const SimpleMove &attack);
-    double CriticalChanceBoost(moves::MoveId mvId);
-    Priority GetMovePriority(moves::MoveId mvId);
+    [[nodiscard]] bool CheckMoveAccuracy(const SimpleMove &attack);
+    [[nodiscard]] double CriticalChanceBoost(moves::MoveId mvId);
+    [[nodiscard]] Priority GetMovePriority(moves::MoveId mvId);
 
 }

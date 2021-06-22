@@ -38,8 +38,8 @@ namespace mockmon
         virtual ~MockmonSpecies() = default; //we might want some inheritance for special mockmon cases, who knows
 
 #pragma region functions
-        bool IsSpeciesOfType(types::Types type) const;
-        types::TypeEffectivenessModifier GetTypeEffetivenessModifier(types::Types attackingMoveType) const;
+        [[nodiscard]] bool IsSpeciesOfType(types::Types type) const;
+        [[nodiscard]] types::TypeEffectivenessModifier GetTypeEffetivenessModifier(types::Types attackingMoveType) const;
 
 #pragma endregion
         const std::vector<ev_fn> PossibleEvolutionsFunctions;

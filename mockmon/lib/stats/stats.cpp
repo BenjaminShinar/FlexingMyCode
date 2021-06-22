@@ -74,6 +74,7 @@ namespace mockmon::stats
 
   unsigned int MockmonStats::ModifyStat(unsigned int base, unsigned int iv, unsigned int ev, unsigned int level)
   {
+
     auto stat = ((2.0 * (base + iv)) + (sqrt(ev) / 4.0)) * level / 100.0;
     return std::floor(stat);
   }

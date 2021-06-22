@@ -14,7 +14,7 @@
 #include <set>
 namespace mockmon::moves
 {
-    condition::pulser_uq_ptr MakeCondition(condition::PulsingConditionId conditionid, Mockmon &effectedMockmon);
+    [[nodiscard]] condition::pulser_uq_ptr MakeCondition(condition::PulsingConditionId conditionid, Mockmon &effectedMockmon);
 
     /**
      * @brief 
@@ -85,19 +85,19 @@ namespace mockmon::moves
         }
 
     private:
-        std::vector<types::Types> GetMatchingTypes(const std::set<types::Types> &mockmonTypes, const std::set<types::Types> &innerTypes) const
+        [[nodiscard]] std::vector<types::Types> GetMatchingTypes(const std::set<types::Types> &mockmonTypes, const std::set<types::Types> &innerTypes) const
         {
             std::vector<types::Types> matchingTypes(5);
             auto typesIter = std::set_intersection(std::begin(mockmonTypes), std::end(mockmonTypes), std::begin(innerTypes), std::end(innerTypes), std::begin(matchingTypes));
             matchingTypes.resize(typesIter - std::begin(matchingTypes));
             return matchingTypes;
         }
-        bool CanEfflict(const Mockmon &m) const
+        [[nodiscard]] bool CanEfflict(const Mockmon &m) const
         {
             const auto matchingTypes = GetMatchingTypes(m.GetMockmonSpeciesData().SpeciesTypes, Chance.ImmuneTypes);
             return (matchingTypes.empty());
         }
-        bool AlwaysEfflict(const Mockmon &m) const
+        [[nodiscard]] bool AlwaysEfflict(const Mockmon &m) const
         {
             const auto matchingTypes = GetMatchingTypes(m.GetMockmonSpeciesData().SpeciesTypes, Chance.SuspectibleTypes);
             return (!matchingTypes.empty());
@@ -133,47 +133,47 @@ namespace mockmon::moves
         std::vector<ExMove> MoveComponenets;
         std::string Describe() const override
         {
-            return "ss";
+            return "fix this";
         }
 
         static const std::map<moves::MoveId, CompositeMove> AllCompositeMoves;
         static const std::map<moves::MoveId, CompositeMove> AllChargedCompositeMoves; //this is for the 2nd turn of a composite move, or for effects like sleep, hit self, Freeze, parlysis..
     };
 
-    ExMoveChanceCheck CreateNormalAccuracyCheck(int moveBaseAccuracy, const MovesTargeting movesTargeting);
-    ExMoveChanceCheck CreateSetAccuracyCheck(int setchances);
-    ExMoveChanceCheck CreateByPassAccuracyCheck();
-    ExMoveChanceCheck CreateCheckSpeedThenNormalAccuracyCheck(int moveBaseAccuracy, const MovesTargeting movesTargeting);
+    [[nodiscard]] ExMoveChanceCheck CreateNormalAccuracyCheck(int moveBaseAccuracy, const MovesTargeting movesTargeting);
+    [[nodiscard]] ExMoveChanceCheck CreateSetAccuracyCheck(int setchances);
+    [[nodiscard]] ExMoveChanceCheck CreateByPassAccuracyCheck();
+    [[nodiscard]] ExMoveChanceCheck CreateCheckSpeedThenNormalAccuracyCheck(int moveBaseAccuracy, const MovesTargeting movesTargeting);
 
-    ExMove CreateNormalDamagingMove(const MovesTargeting movesTargeting);
-    ExMove CreateNormalSelfDamagingMove(const MovesTargeting movesTargeting);
+    [[nodiscard]] ExMove CreateNormalDamagingMove(const MovesTargeting movesTargeting);
+    [[nodiscard]] ExMove CreateNormalSelfDamagingMove(const MovesTargeting movesTargeting);
 
-    ExMove CreateNormalRecoilDamagingMove(const double divFactor);
+    [[nodiscard]] ExMove CreateNormalRecoilDamagingMove(const double divFactor);
 
-    ExMove CreateOHKOMove();
+    [[nodiscard]] ExMove CreateOHKOMove();
 
-    ExMove CreateSelfStatChangingMove(StatsTypes effectedStat, StatModifiersLevels modifer);
-    ExMove CreateOpponentStatChangingMove(StatsTypes effectedStat, StatModifiersLevels modifer);
+    [[nodiscard]] ExMove CreateSelfStatChangingMove(StatsTypes effectedStat, StatModifiersLevels modifer);
+    [[nodiscard]] ExMove CreateOpponentStatChangingMove(StatsTypes effectedStat, StatModifiersLevels modifer);
 
     //pulsing
-    ExMove CreateOpponentPulsingConditionMove(const PulsingStatusInflicment statusConditionInflicment);
-    ExMove CreateSelfPulsingConditionMove(const PulsingStatusInflicment statusConditionInflicment);
+    [[nodiscard]] ExMove CreateOpponentPulsingConditionMove(const PulsingStatusInflicment statusConditionInflicment);
+    [[nodiscard]] ExMove CreateSelfPulsingConditionMove(const PulsingStatusInflicment statusConditionInflicment);
     //none pulsing
-    ExMove CreateOpponentNonPulsingConditionMove(const NonPulsingStatusInflicment statusConditionInflicment);
-    ExMove CreateSelfNonPulsingConditionMove(const NonPulsingStatusInflicment statusConditionInflicment);
+    [[nodiscard]] ExMove CreateOpponentNonPulsingConditionMove(const NonPulsingStatusInflicment statusConditionInflicment);
+    [[nodiscard]] ExMove CreateSelfNonPulsingConditionMove(const NonPulsingStatusInflicment statusConditionInflicment);
 
     //remove one spesific pulsing condition - freeze by burn
-    ExMove CreateRemoveOpponentPulsingConditionMove(const PulsingStatusInflicment statusConditionInflicment);
-    ExMove CreateRemoveSelfPulsingConditionMove(const PulsingStatusInflicment statusConditionInflicment);
+    [[nodiscard]] ExMove CreateRemoveOpponentPulsingConditionMove(const PulsingStatusInflicment statusConditionInflicment);
+    [[nodiscard]] ExMove CreateRemoveSelfPulsingConditionMove(const PulsingStatusInflicment statusConditionInflicment);
 
-    ExMove CreateResetSelfConditionMove();
-    ExMove CreateResetOpponentConditionMove();
+    [[nodiscard]] ExMove CreateResetSelfConditionMove();
+    [[nodiscard]] ExMove CreateResetOpponentConditionMove();
 
-    ExMove CreateDirectDamagingMoveByPassImmunity(const double setDamage);
-    ExMove CreateDirectDamagingMoveTargetStateByPassImmunity(const ExDamageByState &dmgByStateCalc);
-    ExMove CreateDirectDamagingMoveAttackerStateByPassImmunity(const ExDamageByState &dmgByStateCalc);
+    [[nodiscard]] ExMove CreateDirectDamagingMoveByPassImmunity(const double setDamage);
+    [[nodiscard]] ExMove CreateDirectDamagingMoveTargetStateByPassImmunity(const ExDamageByState &dmgByStateCalc);
+    [[nodiscard]] ExMove CreateDirectDamagingMoveAttackerStateByPassImmunity(const ExDamageByState &dmgByStateCalc);
 
-    ExMove CreateStoredMove(const moves::MoveId storedMove);
+    [[nodiscard]] ExMove CreateStoredMove(const moves::MoveId storedMove);
 
-    ExMove CreateWastedTurnMove();
+    [[nodiscard]] ExMove CreateWastedTurnMove();
 }

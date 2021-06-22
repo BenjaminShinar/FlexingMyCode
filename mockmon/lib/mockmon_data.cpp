@@ -36,11 +36,6 @@ namespace mockmon
         return m_trainerHistory.empty();
     }
 
-    void Mockmon::LoseSomehow()
-    {
-        m_ableToBattle = false;
-    }
-
     void Mockmon::FullRestore()
     {
         CurrentBattleStats.Health.RestStatToMax();
