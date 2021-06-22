@@ -28,13 +28,23 @@ namespace mockmon::moves
         MakeDictionaryPair<CompositeMove>(MoveId::Swift, CreateByPassAccuracyCheck(), il_exMV{CreateNormalDamagingMove(MovesTargeting::PurePhysical)}),
 
         //boosting/hexing moves
-        MakeDictionaryPair<CompositeMove>(MoveId::DefenseCurl, CreateByPassAccuracyCheck(), il_exMV{CreateSelfStatChangingMove(StatsTypes::Defence, StatModifiersLevels::Increase)}),
-        MakeDictionaryPair<CompositeMove>(MoveId::Harden, CreateByPassAccuracyCheck(), il_exMV{CreateSelfStatChangingMove(StatsTypes::Defence, StatModifiersLevels::Increase)}),
-        MakeDictionaryPair<CompositeMove>(MoveId::SwordsDance, CreateByPassAccuracyCheck(), il_exMV{CreateSelfStatChangingMove(StatsTypes::Attack, StatModifiersLevels::GreatlyIncrease)}),
-        MakeDictionaryPair<CompositeMove>(MoveId::TailWhip, CreateNormalAccuracyCheck(100, MovesTargeting::AccuracyEvasion), il_exMV{CreateOpponentStatChangingMove(StatsTypes::Defence, StatModifiersLevels::Decrese)}),
         MakeDictionaryPair<CompositeMove>(MoveId::StringShot, CreateNormalAccuracyCheck(95, MovesTargeting::AccuracyEvasion), il_exMV{CreateOpponentStatChangingMove(StatsTypes::Speed, StatModifiersLevels::Decrese)}),
         MakeDictionaryPair<CompositeMove>(MoveId::Growl, CreateNormalAccuracyCheck(100, MovesTargeting::AccuracyEvasion), il_exMV{CreateOpponentStatChangingMove(StatsTypes::Attack, StatModifiersLevels::Decrese)}),
+        MakeDictionaryPair<CompositeMove>(MoveId::TailWhip, CreateNormalAccuracyCheck(100, MovesTargeting::AccuracyEvasion), il_exMV{CreateOpponentStatChangingMove(StatsTypes::Defence, StatModifiersLevels::Decrese)}),
+
+        MakeDictionaryPair<CompositeMove>(MoveId::Sharpen, CreateByPassAccuracyCheck(), il_exMV{CreateSelfStatChangingMove(StatsTypes::Attack, StatModifiersLevels::Increase)}),
+        MakeDictionaryPair<CompositeMove>(MoveId::SwordsDance, CreateByPassAccuracyCheck(), il_exMV{CreateSelfStatChangingMove(StatsTypes::Attack, StatModifiersLevels::GreatlyIncrease)}),
+        MakeDictionaryPair<CompositeMove>(MoveId::DefenseCurl, CreateByPassAccuracyCheck(), il_exMV{CreateSelfStatChangingMove(StatsTypes::Defence, StatModifiersLevels::Increase)}),
+        MakeDictionaryPair<CompositeMove>(MoveId::Harden, CreateByPassAccuracyCheck(), il_exMV{CreateSelfStatChangingMove(StatsTypes::Defence, StatModifiersLevels::Increase)}),
+        MakeDictionaryPair<CompositeMove>(MoveId::AcidArmor, CreateByPassAccuracyCheck(), il_exMV{CreateSelfStatChangingMove(StatsTypes::Defence, StatModifiersLevels::GreatlyIncrease)}),
+        MakeDictionaryPair<CompositeMove>(MoveId::Barrier, CreateByPassAccuracyCheck(), il_exMV{CreateSelfStatChangingMove(StatsTypes::Defence, StatModifiersLevels::GreatlyIncrease)}),
+        MakeDictionaryPair<CompositeMove>(MoveId::Withdraw, CreateByPassAccuracyCheck(), il_exMV{CreateSelfStatChangingMove(StatsTypes::Defence, StatModifiersLevels::GreatlyIncrease)}),
+        MakeDictionaryPair<CompositeMove>(MoveId::Agility, CreateByPassAccuracyCheck(), il_exMV{CreateSelfStatChangingMove(StatsTypes::Speed, StatModifiersLevels::GreatlyIncrease)}),
+        MakeDictionaryPair<CompositeMove>(MoveId::Growth, CreateByPassAccuracyCheck(), il_exMV{CreateSelfStatChangingMove(StatsTypes::Special, StatModifiersLevels::Increase)}),
+        MakeDictionaryPair<CompositeMove>(MoveId::Amnesia, CreateByPassAccuracyCheck(), il_exMV{CreateSelfStatChangingMove(StatsTypes::Special, StatModifiersLevels::GreatlyIncrease)}),
+
         MakeDictionaryPair<CompositeMove>(MoveId::DoubleTeam, CreateByPassAccuracyCheck(), il_exMV{CreateSelfStatChangingMove(StatsTypes::Evasion, StatModifiersLevels::Increase)}),
+        MakeDictionaryPair<CompositeMove>(MoveId::Minimize, CreateByPassAccuracyCheck(), il_exMV{CreateSelfStatChangingMove(StatsTypes::Evasion, StatModifiersLevels::Increase)}),
 
         //set damage moves
         MakeDictionaryPair<CompositeMove>(MoveId::SonicBoom, CreateNormalAccuracyCheck(90, MovesTargeting::AccuracyEvasion), il_exMV{CreateDirectDamagingMoveByPassImmunity(20)}),

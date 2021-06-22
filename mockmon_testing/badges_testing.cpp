@@ -59,7 +59,7 @@ SCENARIO("Base Badge Boost", "[MockmonTest][Badge Boost]")
     }
 }
 
-SCENARIO("Badge Boost Glitch", "[MockmonTest][Badge Boost][Gen 1 Glitch]")
+SCENARIO("Badge Boost Glitch", "[MockmonTest][Badge Boost][StatModifiers][Gen 1 Glitch]")
 {
 
     using std::make_tuple;
@@ -103,12 +103,12 @@ SCENARIO("Badge Boost Glitch", "[MockmonTest][Badge Boost][Gen 1 Glitch]")
     }
 }
 
-SCENARIO("Badge Boost Glitch Reset at Level Up", "[MockmonTest][Badge Boost][Gen 1 Glitch][!mayfail]")
+SCENARIO("Badge Boost Glitch Reset at Level Up", "[MockmonTest][Badge Boost][StatModifiers][Gen 1 Glitch][!mayfail]")
 {
     FAIL_CHECK("not implemnted");
 }
 
-SCENARIO("Badge Boost Glitch Haze glitch", "[MockmonTest][Badge Boost][Gen 1 Glitch][!mayfail]")
+SCENARIO("Badge Boost Glitch Haze glitch", "[MockmonTest][Badge Boost][StatModifiers][Gen 1 Glitch][!mayfail]")
 {
     FAIL_CHECK("not implemnted");
 }

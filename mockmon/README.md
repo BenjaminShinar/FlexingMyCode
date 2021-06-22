@@ -136,6 +136,7 @@ moves that require extra carefull consideration
 - [ ] counter
 - [ ] substitute
 - [ ] metronome
+- [ ] rage
 - [ ] TBC
 
 #### conditions

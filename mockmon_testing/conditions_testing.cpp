@@ -156,7 +156,7 @@ SCENARIO("damaging conditions", "[MockmonTest][Condition]")
     }
 }
 
-SCENARIO("pulsing conditions change stats", "[MockmonTest][Condition]")
+SCENARIO("pulsing conditions change stats", "[MockmonTest][Condition][StatModifiers]")
 {
     using std::make_tuple;
     const auto speciesId = MockmonSpeciesId::Mew;
@@ -268,7 +268,7 @@ SCENARIO("pulsing conditions go away on thier own in a random matter", "[Mockmon
     }
 }
 
-SCENARIO("light screen and reflect conditions", "[MockmonTest][Condition]")
+SCENARIO("light screen and reflect conditions", "[MockmonTest][Condition][StatModifiers]")
 {
     using std::make_tuple;
     const auto speciesId = MockmonSpeciesId::Mew;

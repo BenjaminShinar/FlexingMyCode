@@ -33,10 +33,21 @@ namespace mockmon::moves
 
         MakeDictionaryPair<ConstantMove>(MoveId::StringShot, 40, 64),
         MakeDictionaryPair<ConstantMove>(MoveId::Growl, 40, 64),
+
+        //positive boosting
+        MakeDictionaryPair<ConstantMove>(MoveId::Sharpen, 30, 48),
         MakeDictionaryPair<ConstantMove>(MoveId::SwordsDance, 20, 32),
         MakeDictionaryPair<ConstantMove>(MoveId::DefenseCurl, 40, 64),
         MakeDictionaryPair<ConstantMove>(MoveId::Harden, 30, 48),
+        MakeDictionaryPair<ConstantMove>(MoveId::AcidArmor, 40, 64),
+        MakeDictionaryPair<ConstantMove>(MoveId::Barrier, 30, 48),
+        MakeDictionaryPair<ConstantMove>(MoveId::Withdraw, 40, 64),
+        MakeDictionaryPair<ConstantMove>(MoveId::Agility, 30, 48),
+        MakeDictionaryPair<ConstantMove>(MoveId::Growth, 40, 64),
+        MakeDictionaryPair<ConstantMove>(MoveId::Amnesia, 20, 32),
         MakeDictionaryPair<ConstantMove>(MoveId::DoubleTeam, 15, 24),
+        MakeDictionaryPair<ConstantMove>(MoveId::Minimize, 20, 32),
+
         //freezing moves
         MakeDictionaryPair<ConstantMove>(MoveId::IcePunch, 15, 24),
         MakeDictionaryPair<ConstantMove>(MoveId::IceBeam, 10, 16),

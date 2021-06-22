@@ -71,6 +71,53 @@ SCENARIO("damage ranges test", "[MockmonTest][BattleTest][!mayfail]")
     }
 }
 
+SCENARIO("Self Boosting Stat Modifier moves", "[MockmonTest][BattleTest][StatModifiers]")
+{
+    using std::make_tuple;
+
+    const auto speciesId = MockmonSpeciesId::Mew;
+    const auto requiredLevel{50};
+    const auto [boostingMove, effectedStat, expectedDifferncesFactors] = GENERATE(
+        make_tuple(moves::MoveId::Sharpen, StatsTypes::Attack, MockmonTestUtils::JumpByOneStage()),
+        make_tuple(moves::MoveId::SwordsDance, StatsTypes::Attack, MockmonTestUtils::JumpByTwoStages()),
+        make_tuple(moves::MoveId::DefenseCurl, StatsTypes::Defence, MockmonTestUtils::JumpByOneStage()),
+        make_tuple(moves::MoveId::Harden, StatsTypes::Defence, MockmonTestUtils::JumpByOneStage()),
+        make_tuple(moves::MoveId::AcidArmor, StatsTypes::Defence, MockmonTestUtils::JumpByTwoStages()),
+        make_tuple(moves::MoveId::Barrier, StatsTypes::Defence, MockmonTestUtils::JumpByTwoStages()),
+        make_tuple(moves::MoveId::Withdraw, StatsTypes::Defence, MockmonTestUtils::JumpByTwoStages()),
+        make_tuple(moves::MoveId::Agility, StatsTypes::Speed, MockmonTestUtils::JumpByTwoStages()),
+        make_tuple(moves::MoveId::Growth, StatsTypes::Special, MockmonTestUtils::JumpByOneStage()),
+        make_tuple(moves::MoveId::Amnesia, StatsTypes::Special, MockmonTestUtils::JumpByTwoStages()),
+        make_tuple(moves::MoveId::DoubleTeam, StatsTypes::Evasion, MockmonTestUtils::JumpByOneStage()),
+        make_tuple(moves::MoveId::Minimize, StatsTypes::Evasion, MockmonTestUtils::JumpByOneStage()));
+
+    const auto boostingMoveName{Stringify(boostingMove)};
+    const auto effectedStatName{Stringify(effectedStat)};
+    GIVEN("two mockmon engaging in a battle")
+    {
+        Arena arena{true};
+        Mockmon ma(speciesId, "mew A");
+        ma.TeachMove(boostingMove);
+        MockmonTestUtils::BringMockmonToLevel(ma, requiredLevel);
+
+        Mockmon mb(speciesId, "mew B");
+        MockmonTestUtils::BringMockmonToLevel(mb, requiredLevel);
+
+        const auto [statBeforeBoost, _] = arena.GetStatsModifier(ma, effectedStat, ma, effectedStat);
+
+        WHEN(AppendAll({"the attacker uses", boostingMoveName, "to increas it's", effectedStatName}))
+        {
+            battle::AttackWith(arena, boostingMove, ma, mb);
+
+            THEN(AppendAll({"The", effectedStatName, "of the attacker Should be multiply by a factor of"}))
+            {
+                const auto [statAfterBoost, _] = arena.GetStatsModifier(ma, effectedStat, ma, effectedStat);
+                REQUIRE(statAfterBoost == Approx(statBeforeBoost * expectedDifferncesFactors.front()));
+            }
+        }
+    }
+}
+
 SCENARIO("One Hit Ko Moves", "[MockmonTest][BattleTest]")
 {
     using std::make_tuple;

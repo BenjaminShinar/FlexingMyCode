@@ -40,10 +40,18 @@ namespace mockmon::moves
         MakeDictionaryPair<SimpleMove>(MoveId::StringShot, types::Types::Bug, 0), //negative boosting
         MakeDictionaryPair<SimpleMove>(MoveId::Growl, types::Types::Normal, 0),   //negative boosting
 
+        MakeDictionaryPair<SimpleMove>(MoveId::Sharpen, types::Types::Normal, 0),     //boosting
         MakeDictionaryPair<SimpleMove>(MoveId::SwordsDance, types::Types::Normal, 0), //boosting
         MakeDictionaryPair<SimpleMove>(MoveId::DefenseCurl, types::Types::Normal, 0), //boosting
         MakeDictionaryPair<SimpleMove>(MoveId::Harden, types::Types::Normal, 0),      //boosting
+        MakeDictionaryPair<SimpleMove>(MoveId::AcidArmor, types::Types::Poison, 0),   //boosting
+        MakeDictionaryPair<SimpleMove>(MoveId::Barrier, types::Types::Psychic, 0),    //boosting
+        MakeDictionaryPair<SimpleMove>(MoveId::Withdraw, types::Types::Water, 0),     //boosting
+        MakeDictionaryPair<SimpleMove>(MoveId::Agility, types::Types::Psychic, 0),    //boosting
+        MakeDictionaryPair<SimpleMove>(MoveId::Growth, types::Types::Normal, 0),      //boosting
+        MakeDictionaryPair<SimpleMove>(MoveId::Amnesia, types::Types::Psychic, 0),    //boosting
         MakeDictionaryPair<SimpleMove>(MoveId::DoubleTeam, types::Types::Normal, 0),  //boosting
+        MakeDictionaryPair<SimpleMove>(MoveId::Minimize, types::Types::Normal, 0),    //boosting
 
         //freezing moves
         MakeDictionaryPair<SimpleMove>(MoveId::IcePunch, types::Types::Ice, 75),
