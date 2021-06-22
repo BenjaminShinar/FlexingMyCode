@@ -180,6 +180,15 @@ namespace mockmon::moves
     }
 #pragma endregion
 
+    bool AlwaysSameFN(bool sameValue)
+    {
+        return sameValue;
+    };
+    bool ChancePercentageFN(int chance)
+    {
+        return random::Randomer::CheckPercentage(chance);
+    };
+
 #pragma region attacks
 
     MoveOutcome WasteTurnMove([[maybe_unused]] Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender)
@@ -215,22 +224,30 @@ namespace mockmon::moves
     }
 
 #pragma region stats boosting and hexing
-    MoveOutcome ChangeSelfStatMove([[maybe_unused]] Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, StatsTypes effectedStat, StatModifiersLevels modifer)
+    MoveOutcome ChangeSelfStatMove([[maybe_unused]] Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const ChanceToInflict &chanceToInflictFN, StatsTypes effectedStat, StatModifiersLevels modifer)
     {
-        auto &statRef = attacker.CurrentBattleStats.m_battleStats.at(effectedStat);
-        const auto previous = statRef.GetStat();
-        statRef.AddModifier(modifer);
-        MoveOutcome o{AppendAll({attacker.GetName(), "used", Stringify(attackingMoveId), "and changed stat from", std::to_string(previous), "to", std::to_string(statRef.GetStat())})};
-        return o;
+        if (chanceToInflictFN())
+        {
+            auto &statRef = attacker.CurrentBattleStats.m_battleStats.at(effectedStat);
+            const auto previous = statRef.GetStat();
+            statRef.AddModifier(modifer);
+            MoveOutcome o{AppendAll({attacker.GetName(), "used", Stringify(attackingMoveId), "and changed stat from", std::to_string(previous), "to", std::to_string(statRef.GetStat())})};
+            return o;
+        }
+        return {};
     }
 
-    MoveOutcome ChangeOpponentStatMove([[maybe_unused]] Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, StatsTypes effectedStat, StatModifiersLevels modifer)
+    MoveOutcome ChangeOpponentStatMove([[maybe_unused]] Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const ChanceToInflict &chanceToInflictFN, StatsTypes effectedStat, StatModifiersLevels modifer)
     {
-        auto &statRef = defender.CurrentBattleStats.m_battleStats.at(effectedStat);
-        const auto previous = statRef.GetStat();
-        statRef.AddModifier(modifer);
-        MoveOutcome o{AppendAll({attacker.GetName(), "used", Stringify(attackingMoveId), "and changed", defender.GetName(), "stat from", std::to_string(previous), "to", std::to_string(statRef.GetStat())})};
-        return o;
+        if (chanceToInflictFN())
+        {
+            auto &statRef = defender.CurrentBattleStats.m_battleStats.at(effectedStat);
+            const auto previous = statRef.GetStat();
+            statRef.AddModifier(modifer);
+            MoveOutcome o{AppendAll({attacker.GetName(), "used", Stringify(attackingMoveId), "and changed", defender.GetName(), "stat from", std::to_string(previous), "to", std::to_string(statRef.GetStat())})};
+            return o;
+        }
+        return {};
     }
 
 #pragma endregion
@@ -466,15 +483,15 @@ namespace mockmon::moves
 
 #pragma region exposed methods
 
-    ExMove CreateSelfStatChangingMove(StatsTypes effectedStat, StatModifiersLevels modifer)
+    ExMove CreateSelfStatChangingMove(const ChanceToInflict &chanceToInflictFN, StatsTypes effectedStat, StatModifiersLevels modifer)
     {
-        auto bounded = std::bind(&ChangeSelfStatMove, _1, _2, _3, _4, effectedStat, modifer);
+        auto bounded = std::bind(&ChangeSelfStatMove, _1, _2, _3, _4, chanceToInflictFN, effectedStat, modifer);
         return bounded;
     }
 
-    ExMove CreateOpponentStatChangingMove(StatsTypes effectedStat, StatModifiersLevels modifer)
+    ExMove CreateOpponentStatChangingMove(const ChanceToInflict &chanceToInflictFN, StatsTypes effectedStat, StatModifiersLevels modifer)
     {
-        auto bounded = std::bind(&ChangeOpponentStatMove, _1, _2, _3, _4, effectedStat, modifer);
+        auto bounded = std::bind(&ChangeOpponentStatMove, _1, _2, _3, _4, chanceToInflictFN, effectedStat, modifer);
         return bounded;
     }
 
@@ -590,5 +607,17 @@ namespace mockmon::moves
         return bounded;
     }
 #pragma endregion
+
+    ChanceToInflict CreateAllwaysSameChance(bool sameValue)
+    {
+        auto bounded = std::bind(&AlwaysSameFN, sameValue);
+        return bounded;
+    }
+
+    ChanceToInflict CreatePercentageChance(int chance)
+    {
+        auto bounded = std::bind(&ChancePercentageFN, chance);
+        return bounded;
+    }
 
 }

@@ -10,7 +10,6 @@ namespace mockmon::moves
    */
     const std::map<MoveId, ConstantMove> ConstantMove::AllMovesWrappers{
         MakeDictionaryPair<ConstantMove>(MoveId::Tackle, 35, 56),
-        MakeDictionaryPair<ConstantMove>(MoveId::TailWhip, 30, 48),
         MakeDictionaryPair<ConstantMove>(MoveId::QuickAttack, 30, 48),
         MakeDictionaryPair<ConstantMove>(MoveId::HyperFang, 15, 24),
 
@@ -31,8 +30,22 @@ namespace mockmon::moves
 
         MakeDictionaryPair<ConstantMove>(MoveId::Swift, 20, 32),
 
-        MakeDictionaryPair<ConstantMove>(MoveId::StringShot, 40, 64),
+        //negative boosting
+        MakeDictionaryPair<ConstantMove>(MoveId::AuroraBeam, 20, 32),
         MakeDictionaryPair<ConstantMove>(MoveId::Growl, 40, 64),
+        MakeDictionaryPair<ConstantMove>(MoveId::Acid, 30, 48),
+        MakeDictionaryPair<ConstantMove>(MoveId::Leer, 30, 48),
+        MakeDictionaryPair<ConstantMove>(MoveId::TailWhip, 30, 48),
+        MakeDictionaryPair<ConstantMove>(MoveId::Screech, 40, 64),
+        MakeDictionaryPair<ConstantMove>(MoveId::Bubble, 30, 48),
+        MakeDictionaryPair<ConstantMove>(MoveId::BubbleBeam, 20, 32),
+        MakeDictionaryPair<ConstantMove>(MoveId::Constrict, 35, 56),
+        MakeDictionaryPair<ConstantMove>(MoveId::StringShot, 40, 64),
+        MakeDictionaryPair<ConstantMove>(MoveId::Psychic, 10, 16),
+        MakeDictionaryPair<ConstantMove>(MoveId::Flash, 20, 32),
+        MakeDictionaryPair<ConstantMove>(MoveId::Kinesis, 15, 24),
+        MakeDictionaryPair<ConstantMove>(MoveId::SandAttack, 15, 24),
+        MakeDictionaryPair<ConstantMove>(MoveId::Smokescreen, 20, 32),
 
         //positive boosting
         MakeDictionaryPair<ConstantMove>(MoveId::Sharpen, 30, 48),

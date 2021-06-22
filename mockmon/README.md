@@ -305,5 +305,6 @@ how the project is built, maintained, tested and maintened.
 ## Development takeaways: Maybe The Real Treasure Was the Lessons We Learned Along the Way
 stuff that i should keep in mind for the future
 * don't use a std::set of function objects, it won't work becuase there isn't a good way to compare two objects. use vector instead.
+* std::transform requries std::back_inserter if it's used to populate a new container
 * constexpr requires being defined in Header (.h) file, not cpp file.
 * TBC...

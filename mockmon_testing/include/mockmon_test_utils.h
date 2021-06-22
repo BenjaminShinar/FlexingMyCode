@@ -41,4 +41,14 @@ public:
     {
         return {2.0, 3.0, 4.0};
     };
+
+    [[nodiscard]] static const std::vector<double> FallByOneStage()
+    {
+        return {0.66, 0.50, 0.40, 0.33, 0.28, 0.25};
+    };
+
+    [[nodiscard]] static const std::vector<double> FallByTwoStages()
+    {
+        return {0.50, 0.33, 0.25};
+    };
 };

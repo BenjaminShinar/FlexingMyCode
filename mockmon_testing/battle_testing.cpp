@@ -107,12 +107,107 @@ SCENARIO("Self Boosting Stat Modifier moves", "[MockmonTest][BattleTest][StatMod
 
         WHEN(AppendAll({"the attacker uses", boostingMoveName, "to increas it's", effectedStatName}))
         {
-            battle::AttackWith(arena, boostingMove, ma, mb);
 
+            const auto possibleStatValues{expectedDifferncesFactors.size()};
+            std::vector<double> measuredStats;
+            std::vector<double> expectedStats;
+
+            std::transform(std::begin(expectedDifferncesFactors), std::end(expectedDifferncesFactors), std::back_inserter(expectedStats),
+                           [&](auto boostFactor)
+                           { return boostFactor * statBeforeBoost; });
             THEN(AppendAll({"The", effectedStatName, "of the attacker Should be multiply by a factor of"}))
             {
-                const auto [statAfterBoost, _] = arena.GetStatsModifier(ma, effectedStat, ma, effectedStat);
-                REQUIRE(statAfterBoost == Approx(statBeforeBoost * expectedDifferncesFactors.front()));
+                for (auto i = 0u; i < possibleStatValues; ++i)
+                {
+                    battle::AttackWith(arena, boostingMove, ma, mb);
+                    const auto [statAfterBoost, _] = arena.GetStatsModifier(ma, effectedStat, ma, effectedStat);
+                    measuredStats.push_back(statAfterBoost);
+                }
+
+                REQUIRE_THAT(measuredStats, Catch::Matchers::Approx(expectedStats));
+
+                AND_WHEN("we try to boost again")
+                {
+                    battle::AttackWith(arena, boostingMove, ma, mb);
+                    const auto [statAfterBoost, _] = arena.GetStatsModifier(ma, effectedStat, ma, effectedStat);
+                    THEN("the value shouldn't go any further")
+                    {
+                        REQUIRE(statAfterBoost == Approx(expectedStats.back()));
+                    }
+                }
+            }
+        }
+    }
+}
+
+SCENARIO("Enemy hexing Stat Modifier moves", "[MockmonTest][BattleTest][StatModifiers]")
+{
+    using std::make_tuple;
+
+    const auto speciesId = MockmonSpeciesId::Mew;
+    const auto requiredLevel{50};
+    //const auto attempts{1000};
+    const auto [hexingMove, effectedStat, expectedDifferncesFactors] = GENERATE(
+        make_tuple(moves::MoveId::AuroraBeam, StatsTypes::Attack, MockmonTestUtils::FallByOneStage()),
+        make_tuple(moves::MoveId::Growl, StatsTypes::Attack, MockmonTestUtils::FallByOneStage()),
+        make_tuple(moves::MoveId::Acid, StatsTypes::Defence, MockmonTestUtils::FallByOneStage()),
+        make_tuple(moves::MoveId::Leer, StatsTypes::Defence, MockmonTestUtils::FallByOneStage()),
+        make_tuple(moves::MoveId::TailWhip, StatsTypes::Defence, MockmonTestUtils::FallByOneStage()),
+        make_tuple(moves::MoveId::Screech, StatsTypes::Defence, MockmonTestUtils::FallByTwoStages()),
+        make_tuple(moves::MoveId::Bubble, StatsTypes::Defence, MockmonTestUtils::FallByOneStage()),
+        make_tuple(moves::MoveId::BubbleBeam, StatsTypes::Speed, MockmonTestUtils::FallByOneStage()),
+        make_tuple(moves::MoveId::Constrict, StatsTypes::Speed, MockmonTestUtils::FallByOneStage()),
+        make_tuple(moves::MoveId::StringShot, StatsTypes::Speed, MockmonTestUtils::FallByOneStage()),
+        make_tuple(moves::MoveId::Psychic, StatsTypes::Special, MockmonTestUtils::FallByOneStage()),
+        make_tuple(moves::MoveId::Flash, StatsTypes::Accuracy, MockmonTestUtils::FallByOneStage()),
+        make_tuple(moves::MoveId::Kinesis, StatsTypes::Accuracy, MockmonTestUtils::FallByOneStage()),
+        make_tuple(moves::MoveId::SandAttack, StatsTypes::Accuracy, MockmonTestUtils::FallByOneStage()),
+        make_tuple(moves::MoveId::Smokescreen, StatsTypes::Accuracy, MockmonTestUtils::FallByOneStage()));
+
+    const auto boostingMoveName{Stringify(hexingMove)};
+    const auto effectedStatName{Stringify(effectedStat)};
+    GIVEN("two mockmon engaging in a battle")
+    {
+        Arena arena{true};
+        Mockmon ma(speciesId, "mew A");
+        ma.TeachMove(hexingMove);
+        MockmonTestUtils::BringMockmonToLevel(ma, requiredLevel);
+
+        Mockmon mb(speciesId, "mew B");
+        MockmonTestUtils::BringMockmonToLevel(mb, requiredLevel);
+
+        const auto [_, statBeforeHex] = arena.GetStatsModifier(ma, effectedStat, mb, effectedStat);
+
+        WHEN(AppendAll({"the attacker uses", boostingMoveName, "to decreate the defenders' ", effectedStatName}))
+        {
+
+            const auto possibleStatValues{expectedDifferncesFactors.size()};
+            std::vector<double> measuredStats;
+            std::vector<double> expectedStats;
+
+            std::transform(std::begin(expectedDifferncesFactors), std::end(expectedDifferncesFactors), std::back_inserter(expectedStats),
+                           [&](auto hexFactor)
+                           { return hexFactor * statBeforeHex; });
+            THEN(AppendAll({"The", effectedStatName, "of the defender Should be multiply by a factor of"}))
+            {
+                for (auto i = 0u; i < possibleStatValues; ++i)
+                {
+                    battle::AttackWith(arena, hexingMove, ma, mb);
+                    const auto [_, statAfterHex] = arena.GetStatsModifier(ma, effectedStat, mb, effectedStat);
+                    measuredStats.push_back(statAfterHex);
+                }
+
+                REQUIRE_THAT(measuredStats, Catch::Matchers::Approx(expectedStats));
+
+                AND_WHEN("we try to hex again")
+                {
+                    battle::AttackWith(arena, hexingMove, ma, mb);
+                    const auto [_, statAfterFinalHex] = arena.GetStatsModifier(ma, effectedStat, mb, effectedStat);
+                    THEN("the value shouldn't Change any further")
+                    {
+                        REQUIRE(statAfterFinalHex == Approx(expectedStats.back()));
+                    }
+                }
             }
         }
     }

@@ -109,6 +109,7 @@ namespace mockmon::moves
     using ExMove = std::function<MoveOutcome(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender)>;
     using ExMoveChanceCheck = std::function<MoveOutcome(Arena &arena, Mockmon &attacker, Mockmon &defender)>;
     using ExDamageByState = std::function<double(const Mockmon &mockmonToChoose)>;
+    using ChanceToInflict = std::function<bool()>;
 
     /**
      * @brief 
@@ -152,8 +153,8 @@ namespace mockmon::moves
 
     [[nodiscard]] ExMove CreateOHKOMove();
 
-    [[nodiscard]] ExMove CreateSelfStatChangingMove(StatsTypes effectedStat, StatModifiersLevels modifer);
-    [[nodiscard]] ExMove CreateOpponentStatChangingMove(StatsTypes effectedStat, StatModifiersLevels modifer);
+    [[nodiscard]] ExMove CreateSelfStatChangingMove(const ChanceToInflict &chanceToInflictFN, StatsTypes effectedStat, StatModifiersLevels modifer);
+    [[nodiscard]] ExMove CreateOpponentStatChangingMove(const ChanceToInflict &chanceToInflictFN, StatsTypes effectedStat, StatModifiersLevels modifer);
 
     //pulsing
     [[nodiscard]] ExMove CreateOpponentPulsingConditionMove(const PulsingStatusInflicment statusConditionInflicment);
@@ -176,4 +177,7 @@ namespace mockmon::moves
     [[nodiscard]] ExMove CreateStoredMove(const moves::MoveId storedMove);
 
     [[nodiscard]] ExMove CreateWastedTurnMove();
+
+    [[nodiscard]] ChanceToInflict CreateAllwaysSameChance(bool sameValue);
+    [[nodiscard]] ChanceToInflict CreatePercentageChance(int chance);
 }
