@@ -14,11 +14,22 @@
 namespace mockmon::battle
 {
 
+    /**
+     * @brief 
+     * how we expose the outcome of a move
+     * mostly text for now, but we should use the success flat more often
+     */
+    struct MoveOutcome
+    {
+        bool m_hit;
+        std::string m_moveOutcomeDescrition;
+    };
+
     [[nodiscard]] double ModifyAttack(const moves::MoveId attackingMoveId, Mockmon &attacker, const StatsTypes attackingStat, Mockmon &defender, const StatsTypes defendingStat);
     [[nodiscard]] bool IsCriticalHit(Mockmon &attackingMockmon, const moves::MoveId mv);
     [[nodiscard]] double GetCriticalHitModifier(Mockmon &attackingMockmon, const moves::MoveId mv);
     //    std::tuple<double, double> GetStatsModifier(const Mockmon &attacker, const StatsTypes attackingStat, const Mockmon &defender, const StatsTypes defendingStat);
-    void AttackWith(Arena &arena, moves::MoveId mvid, Mockmon &attacker, Mockmon &defender);
+    std::vector<MoveOutcome> AttackWith(Arena &arena, moves::MoveId mvid, Mockmon &attacker, Mockmon &defender);
 
     //this class will be used to simulate battles without the overworld
     class Battle

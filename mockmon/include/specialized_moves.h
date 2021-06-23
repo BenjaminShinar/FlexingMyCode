@@ -16,17 +16,6 @@ namespace mockmon::moves
 {
     [[nodiscard]] condition::pulser_uq_ptr MakeCondition(condition::PulsingConditionId conditionid, Mockmon &effectedMockmon);
 
-    /**
-     * @brief 
-     * how we expose the outcome of a move
-     * mostly text for now, but we should use the success flat more often
-     */
-    struct MoveOutcome
-    {
-        std::string m_moveOutcomeDescrition;
-        bool m_hit{true};
-    };
-
     //maybe this needs to be somewhere else
     //there are too many declerations dependencies in this file..
     struct StatusChanceTypes
@@ -59,7 +48,7 @@ namespace mockmon::moves
         const types::Types moveType;
         const StatusChanceTypes Chance;
         const T effect;
-        MoveOutcome TryEfflict(moves::MoveId mv, Mockmon &attacker, Mockmon &defender) const
+        battle::MoveOutcome TryEfflict(moves::MoveId mv, Mockmon &attacker, Mockmon &defender) const
         {
             if (CanEfflict(defender))
             {
@@ -69,17 +58,17 @@ namespace mockmon::moves
                     if (defender.m_currentCondtion.IsAffiliatedWithCondition(effect))
                     {
                         //success
-                        MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(mv), "!", defender.GetName(), "is now", Stringify(effect)})};
+                        battle::MoveOutcome o{true, AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(mv), "!", defender.GetName(), "is now", Stringify(effect)})};
                         return o;
                     }
                 }
                 //failed to afflict / missed
-                MoveOutcome o{AppendAll({attacker.GetName(), "tried to use", Stringify(mv), "but it failed to inflict condition", Stringify(effect)})};
+                battle::MoveOutcome o{false, AppendAll({attacker.GetName(), "tried to use", Stringify(mv), "but it failed to inflict condition", Stringify(effect)})};
                 return o;
             }
             else
             {
-                MoveOutcome o{AppendAll({defender.GetName(), "cant be efflicted with", Stringify(effect), "by", Stringify(mv)})};
+                battle::MoveOutcome o{false, AppendAll({defender.GetName(), "cant be efflicted with", Stringify(effect), "by", Stringify(mv)})};
                 return o;
             }
         }
@@ -106,8 +95,8 @@ namespace mockmon::moves
 
     using PulsingStatusInflicment = AbstractStatusInflicment<condition::PulsingConditionId>;
     using NonPulsingStatusInflicment = AbstractStatusInflicment<condition::NonPulsingConditionId>;
-    using ExMove = std::function<MoveOutcome(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender)>;
-    using ExMoveChanceCheck = std::function<MoveOutcome(Arena &arena, Mockmon &attacker, Mockmon &defender)>;
+    using ExMove = std::function<battle::MoveOutcome(Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender)>;
+    using ExMoveChanceCheck = std::function<battle::MoveOutcome(Arena &arena, Mockmon &attacker, Mockmon &defender)>;
     using ExDamageByState = std::function<double(const Mockmon &mockmonToChoose)>;
     using ChanceToInflict = std::function<bool()>;
 
@@ -129,7 +118,7 @@ namespace mockmon::moves
         explicit CompositeMove(const CompositeMove &other) = default;
         CompositeMove(CompositeMove &&other) = default;
 
-        void Perform(Arena &arena, Mockmon &attacker, Mockmon &defender) const;
+        std::vector<battle::MoveOutcome> Perform(Arena &arena, Mockmon &attacker, Mockmon &defender) const;
         ExMoveChanceCheck MoveChance;
         std::vector<ExMove> MoveComponenets;
         std::string Describe() const override

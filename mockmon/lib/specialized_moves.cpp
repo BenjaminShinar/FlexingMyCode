@@ -13,7 +13,7 @@
 namespace mockmon::moves
 {
     using namespace std::placeholders; //import this for _1,_2,
-
+    using battle::MoveOutcome;
     /**
      * @brief 
      * perform all the parts of the move
@@ -21,9 +21,11 @@ namespace mockmon::moves
      * @param attacker 
      * @param defender 
      */
-    void CompositeMove::Perform(Arena &arena, Mockmon &attacker, Mockmon &defender) const
+    std::vector<battle::MoveOutcome> CompositeMove::Perform(Arena &arena, Mockmon &attacker, Mockmon &defender) const
     {
+
         const auto o = MoveChance(arena, attacker, defender);
+        std::vector<battle::MoveOutcome> outcomes{o};
         if (o.m_hit)
         {
             for (auto &mv : MoveComponenets)
@@ -33,15 +35,18 @@ namespace mockmon::moves
                 {
                     std::cout << outomce.m_moveOutcomeDescrition << '\n';
                 }
+                outcomes.push_back(outomce);
             }
         }
         else
         {
+
             if (!arena.Silent)
             {
                 std::cout << attacker.GetName() << " missed with " << Identifier() << '\n';
             }
         }
+        return outcomes;
     }
 
     /**
@@ -108,11 +113,11 @@ namespace mockmon::moves
         const auto percentage = std::clamp(static_cast<int>(std::round(attackingMoveBaseAccuracy * modifier)), 0, 100);
         if (random::Randomer::CheckPercentage(percentage))
         {
-            return MoveOutcome{"", true};
+            return MoveOutcome{true, ""};
         }
         else
         {
-            return MoveOutcome{"", false};
+            return MoveOutcome{false, ""};
         }
     }
 
@@ -131,11 +136,11 @@ namespace mockmon::moves
     {
         if (random::Randomer::CheckPercentage(setChances))
         {
-            return MoveOutcome{"", true};
+            return MoveOutcome{true, ""};
         }
         else
         {
-            return MoveOutcome{"", false};
+            return MoveOutcome{false, ""};
         }
     }
     /**
@@ -150,7 +155,7 @@ namespace mockmon::moves
      */
     MoveOutcome BypassAccuracyCheckMove([[maybe_unused]] Arena &arena, [[maybe_unused]] Mockmon &attacker, [[maybe_unused]] Mockmon &defender)
     {
-        return MoveOutcome{"", true};
+        return MoveOutcome{true, ""};
     }
 
     /**
@@ -175,7 +180,7 @@ namespace mockmon::moves
         }
         else
         {
-            return MoveOutcome{"", false};
+            return MoveOutcome{false, ""};
         }
     }
 #pragma endregion
@@ -183,17 +188,17 @@ namespace mockmon::moves
     bool AlwaysSameFN(bool sameValue)
     {
         return sameValue;
-    };
+    }
     bool ChancePercentageFN(int chance)
     {
         return random::Randomer::CheckPercentage(chance);
-    };
+    }
 
 #pragma region attacks
 
     MoveOutcome WasteTurnMove([[maybe_unused]] Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender)
     {
-        MoveOutcome o{AppendAll({attacker.GetName(), "is", Stringify(attackingMoveId), "for current turn"})};
+        MoveOutcome o{false, AppendAll({attacker.GetName(), "is", Stringify(attackingMoveId), "for current turn"})};
         return o;
     }
 
@@ -202,7 +207,7 @@ namespace mockmon::moves
         const auto targetingPair{MoveStatsTargeting::AllStatsTargeting.at(movesTargeting)};
         auto damage = static_cast<int>(battle::ModifyAttack(attackingMoveId, attacker, targetingPair.AttackerStat, defender, targetingPair.DefenderStat));
         defender.CurrentBattleStats.Health.ChangeHealth(-1 * damage);
-        MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(attackingMoveId), "for", std::to_string(damage), "damage!"})};
+        MoveOutcome o{true, AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(attackingMoveId), "for", std::to_string(damage), "damage!"})};
         return o;
     }
 
@@ -211,7 +216,7 @@ namespace mockmon::moves
         const auto targetingPair{MoveStatsTargeting::AllStatsTargeting.at(movesTargeting)};
         auto damage = static_cast<int>(battle::ModifyAttack(attackingMoveId, attacker, targetingPair.AttackerStat, attacker, targetingPair.DefenderStat));
         attacker.CurrentBattleStats.Health.ChangeHealth(-1 * damage);
-        MoveOutcome o{AppendAll({attacker.GetName(), "hit itself with", Stringify(attackingMoveId), "for", std::to_string(damage), "damage!"})};
+        MoveOutcome o{true, AppendAll({attacker.GetName(), "hit itself with", Stringify(attackingMoveId), "for", std::to_string(damage), "damage!"})};
         return o;
     }
 
@@ -219,7 +224,7 @@ namespace mockmon::moves
     {
         auto damage = std::max(1, static_cast<int>(battle::ModifyAttack(attackingMoveId, attacker, StatsTypes::Attack, attacker, StatsTypes::Defence) / divisionFactor));
         attacker.CurrentBattleStats.Health.ChangeHealth(-1 * damage);
-        MoveOutcome o{AppendAll({attacker.GetName(), "takes", std::to_string(damage), "recoil damage from", Stringify(attackingMoveId)})};
+        MoveOutcome o{true, AppendAll({attacker.GetName(), "takes", std::to_string(damage), "recoil damage from", Stringify(attackingMoveId)})};
         return o;
     }
 
@@ -231,7 +236,7 @@ namespace mockmon::moves
             auto &statRef = attacker.CurrentBattleStats.m_battleStats.at(effectedStat);
             const auto previous = statRef.GetStat();
             statRef.AddModifier(modifer);
-            MoveOutcome o{AppendAll({attacker.GetName(), "used", Stringify(attackingMoveId), "and changed stat from", std::to_string(previous), "to", std::to_string(statRef.GetStat())})};
+            MoveOutcome o{true, AppendAll({attacker.GetName(), "used", Stringify(attackingMoveId), "and changed stat from", std::to_string(previous), "to", std::to_string(statRef.GetStat())})};
             return o;
         }
         return {};
@@ -244,7 +249,7 @@ namespace mockmon::moves
             auto &statRef = defender.CurrentBattleStats.m_battleStats.at(effectedStat);
             const auto previous = statRef.GetStat();
             statRef.AddModifier(modifer);
-            MoveOutcome o{AppendAll({attacker.GetName(), "used", Stringify(attackingMoveId), "and changed", defender.GetName(), "stat from", std::to_string(previous), "to", std::to_string(statRef.GetStat())})};
+            MoveOutcome o{true, AppendAll({attacker.GetName(), "used", Stringify(attackingMoveId), "and changed", defender.GetName(), "stat from", std::to_string(previous), "to", std::to_string(statRef.GetStat())})};
             return o;
         }
         return {};
@@ -255,7 +260,7 @@ namespace mockmon::moves
     MoveOutcome DirectDamageByPassResistance([[maybe_unused]] Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, double damage)
     {
         defender.CurrentBattleStats.Health.ChangeHealth(-1 * damage);
-        MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(attackingMoveId), "for", std::to_string(damage), "damage!"})};
+        MoveOutcome o{true, AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(attackingMoveId), "for", std::to_string(damage), "damage!"})};
         return o;
     }
 
@@ -263,7 +268,7 @@ namespace mockmon::moves
     {
         const auto damage = std::round(dmgByStateCalc(defender));
         defender.CurrentBattleStats.Health.ChangeHealth(-1 * damage);
-        MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(attackingMoveId), "for", std::to_string(damage), "damage!"})};
+        MoveOutcome o{true, AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(attackingMoveId), "for", std::to_string(damage), "damage!"})};
         return o;
     }
 
@@ -271,7 +276,7 @@ namespace mockmon::moves
     {
         const auto damage = std::round(dmgByStateCalc(attacker));
         defender.CurrentBattleStats.Health.ChangeHealth(-1 * damage);
-        MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(attackingMoveId), "for", std::to_string(damage), "damage!"})};
+        MoveOutcome o{true, AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(attackingMoveId), "for", std::to_string(damage), "damage!"})};
         return o;
     }
 
@@ -279,7 +284,7 @@ namespace mockmon::moves
     {
         const auto defenderMaxHealth = defender.CurrentBattleStats.Health.GetMaxStat();
         defender.CurrentBattleStats.Health.ChangeHealth(-1 * defenderMaxHealth);
-        MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(attackingMoveId), "it's a One-Hit KO!"})};
+        MoveOutcome o{true, AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(attackingMoveId), "it's a One-Hit KO!"})};
         return o;
     }
 
@@ -291,7 +296,7 @@ namespace mockmon::moves
         if (defender.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))
         {
             //already afflicted
-            MoveOutcome o{AppendAll({defender.GetName(), "is already", Stringify(statusConditionInflicment.effect), ".", Stringify(attackingMoveId), "failed!"})};
+            MoveOutcome o{false, AppendAll({defender.GetName(), "is already", Stringify(statusConditionInflicment.effect), ".", Stringify(attackingMoveId), "failed!"})};
             return o;
         }
 
@@ -304,7 +309,7 @@ namespace mockmon::moves
         if (attacker.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))
         {
             //already afflicted
-            MoveOutcome o{AppendAll({attacker.GetName(), "is already", Stringify(statusConditionInflicment.effect), ".", Stringify(attackingMoveId), "failed!"})};
+            MoveOutcome o{false, AppendAll({attacker.GetName(), "is already", Stringify(statusConditionInflicment.effect), ".", Stringify(attackingMoveId), "failed!"})};
             return o;
         }
         if (random::Randomer::CheckPercentage(statusConditionInflicment.Chance.ChanceToAfflictCondtion))
@@ -313,13 +318,13 @@ namespace mockmon::moves
             if (attacker.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))
             {
                 //success
-                MoveOutcome o{AppendAll({attacker.GetName(), "used", Stringify(attackingMoveId), "!", attacker.GetName(), "is now", Stringify(statusConditionInflicment.effect)})};
+                MoveOutcome o{true, AppendAll({attacker.GetName(), "used", Stringify(attackingMoveId), "!", attacker.GetName(), "is now", Stringify(statusConditionInflicment.effect)})};
                 return o;
             }
         }
 
         //failed to afflict / missed
-        MoveOutcome o{AppendAll({attacker.GetName(), "tried to use", Stringify(attackingMoveId), "but it failed to inflict condition", Stringify(statusConditionInflicment.effect)})};
+        MoveOutcome o{false, AppendAll({attacker.GetName(), "tried to use", Stringify(attackingMoveId), "but it failed to inflict condition", Stringify(statusConditionInflicment.effect)})};
         return o;
     }
 
@@ -329,7 +334,7 @@ namespace mockmon::moves
         if (!defender.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))
         {
             //not afflicted
-            MoveOutcome o{AppendAll({defender.GetName(), "is not", Stringify(statusConditionInflicment.effect), ".", Stringify(attackingMoveId), "failed!"})};
+            MoveOutcome o{false, AppendAll({defender.GetName(), "is not", Stringify(statusConditionInflicment.effect), ".", Stringify(attackingMoveId), "failed!"})};
             return o;
         }
         if (random::Randomer::CheckPercentage(statusConditionInflicment.Chance.ChanceToAfflictCondtion))
@@ -338,13 +343,13 @@ namespace mockmon::moves
             if (!defender.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))
             {
                 //success
-                MoveOutcome o{AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(attackingMoveId), "!", defender.GetName(), "is no longer", Stringify(statusConditionInflicment.effect)})};
+                MoveOutcome o{true, AppendAll({attacker.GetName(), "hit", defender.GetName(), "with", Stringify(attackingMoveId), "!", defender.GetName(), "is no longer", Stringify(statusConditionInflicment.effect)})};
                 return o;
             }
         }
 
         //failed to afflict / missed
-        MoveOutcome o{AppendAll({attacker.GetName(), "tried to use", Stringify(attackingMoveId), "but it failed to remove condition", Stringify(statusConditionInflicment.effect)})};
+        MoveOutcome o{false, AppendAll({attacker.GetName(), "tried to use", Stringify(attackingMoveId), "but it failed to remove condition", Stringify(statusConditionInflicment.effect)})};
         return o;
     }
 
@@ -353,7 +358,7 @@ namespace mockmon::moves
         if (!attacker.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))
         {
             //not afflicted
-            MoveOutcome o{AppendAll({attacker.GetName(), "is not", Stringify(statusConditionInflicment.effect), ".", Stringify(attackingMoveId), "failed!"})};
+            MoveOutcome o{false, AppendAll({attacker.GetName(), "is not", Stringify(statusConditionInflicment.effect), ".", Stringify(attackingMoveId), "failed!"})};
             return o;
         }
         if (random::Randomer::CheckPercentage(statusConditionInflicment.Chance.ChanceToAfflictCondtion))
@@ -362,13 +367,13 @@ namespace mockmon::moves
             if (!attacker.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))
             {
                 //success
-                MoveOutcome o{AppendAll({attacker.GetName(), "used", Stringify(attackingMoveId), "!", attacker.GetName(), "is no longer", Stringify(statusConditionInflicment.effect)})};
+                MoveOutcome o{true, AppendAll({attacker.GetName(), "used", Stringify(attackingMoveId), "!", attacker.GetName(), "is no longer", Stringify(statusConditionInflicment.effect)})};
                 return o;
             }
         }
 
         //failed to afflict / missed
-        MoveOutcome o{AppendAll({attacker.GetName(), "tried to use", Stringify(attackingMoveId), "but it failed to remove condition", Stringify(statusConditionInflicment.effect)})};
+        MoveOutcome o{false, AppendAll({attacker.GetName(), "tried to use", Stringify(attackingMoveId), "but it failed to remove condition", Stringify(statusConditionInflicment.effect)})};
         return o;
     }
 
@@ -377,7 +382,7 @@ namespace mockmon::moves
         if (defender.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))
         {
             //already afflicted
-            MoveOutcome o{AppendAll({defender.GetName(), "is already", Stringify(statusConditionInflicment.effect), ".", Stringify(attackingMoveId), "failed!"})};
+            MoveOutcome o{false, AppendAll({defender.GetName(), "is already", Stringify(statusConditionInflicment.effect), ".", Stringify(attackingMoveId), "failed!"})};
             return o;
         }
 
@@ -390,7 +395,7 @@ namespace mockmon::moves
         if (attacker.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))
         {
             //already afflicted
-            MoveOutcome o{AppendAll({attacker.GetName(), "is already", Stringify(statusConditionInflicment.effect), ".", Stringify(attackingMoveId), "failed!"})};
+            MoveOutcome o{false, AppendAll({attacker.GetName(), "is already", Stringify(statusConditionInflicment.effect), ".", Stringify(attackingMoveId), "failed!"})};
             return o;
         }
         if (random::Randomer::CheckPercentage(statusConditionInflicment.Chance.ChanceToAfflictCondtion))
@@ -399,13 +404,13 @@ namespace mockmon::moves
             if (attacker.m_currentCondtion.IsAffiliatedWithCondition(statusConditionInflicment.effect))
             {
                 //success
-                MoveOutcome o{AppendAll({attacker.GetName(), "used", Stringify(attackingMoveId), "!", attacker.GetName(), "is now", Stringify(statusConditionInflicment.effect)})};
+                MoveOutcome o{true, AppendAll({attacker.GetName(), "used", Stringify(attackingMoveId), "!", attacker.GetName(), "is now", Stringify(statusConditionInflicment.effect)})};
                 return o;
             }
         }
 
         //failed to afflict / missed
-        MoveOutcome o{AppendAll({attacker.GetName(), "tried to use", Stringify(attackingMoveId), "but it failed to inflict condition", Stringify(statusConditionInflicment.effect)})};
+        MoveOutcome o{false, AppendAll({attacker.GetName(), "tried to use", Stringify(attackingMoveId), "but it failed to inflict condition", Stringify(statusConditionInflicment.effect)})};
         return o;
     }
 
@@ -425,14 +430,14 @@ namespace mockmon::moves
     MoveOutcome ResetSelfAllConditions([[maybe_unused]] Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender)
     {
         ResetAllStatsAndConditionsChanges(attacker);
-        MoveOutcome o{AppendAll({attacker.GetName(), "used", Stringify(attackingMoveId), "to reset all it's stats!"})};
+        MoveOutcome o{true, AppendAll({attacker.GetName(), "used", Stringify(attackingMoveId), "to reset all it's stats!"})};
         return o;
     }
 
     MoveOutcome ResetOpponenetAllConditions([[maybe_unused]] Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender)
     {
         ResetAllStatsAndConditionsChanges(defender);
-        MoveOutcome o{AppendAll({attacker.GetName(), "used", Stringify(attackingMoveId), "to reset all of", defender.GetName(), "stats!"})};
+        MoveOutcome o{true, AppendAll({attacker.GetName(), "used", Stringify(attackingMoveId), "to reset all of", defender.GetName(), "stats!"})};
         return o;
     }
 
@@ -441,14 +446,14 @@ namespace mockmon::moves
     MoveOutcome StoreSelfChargedMove([[maybe_unused]] Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const moves::MoveId storedMoveId)
     {
         attacker.m_currentCondtion.StoreChargedMove(storedMoveId);
-        MoveOutcome o{AppendAll({attacker.GetName(), "used", Stringify(attackingMoveId), "to charge", Stringify(storedMoveId), "for next turn"})};
+        MoveOutcome o{true, AppendAll({attacker.GetName(), "used", Stringify(attackingMoveId), "to charge", Stringify(storedMoveId), "for next turn"})};
         return o;
     }
 
     MoveOutcome StoreOppenentChargedMove([[maybe_unused]] Arena &arena, const moves::MoveId attackingMoveId, Mockmon &attacker, Mockmon &defender, const moves::MoveId storedMoveId)
     {
         defender.m_currentCondtion.StoreChargedMove(storedMoveId);
-        MoveOutcome o{AppendAll({attacker.GetName(), "used", Stringify(attackingMoveId), "to charge", Stringify(storedMoveId), "in", defender.GetName(), "for next turn"})};
+        MoveOutcome o{true, AppendAll({attacker.GetName(), "used", Stringify(attackingMoveId), "to charge", Stringify(storedMoveId), "in", defender.GetName(), "for next turn"})};
         return o;
     }
 

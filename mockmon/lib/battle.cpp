@@ -164,8 +164,9 @@ namespace mockmon::battle
      * @param attacker 
      * @param defender 
      */
-    void AttackWith(Arena &arena, moves::MoveId mvid, Mockmon &attacker, Mockmon &defender)
+    std::vector<battle::MoveOutcome> AttackWith(Arena &arena, moves::MoveId mvid, Mockmon &attacker, Mockmon &defender)
     {
+        std::vector<battle::MoveOutcome> o;
         if (attacker.IsAbleToBattle() && defender.IsAbleToBattle())
         {
 
@@ -175,7 +176,7 @@ namespace mockmon::battle
             {
                 auto chargedMV = cv.value();
                 const auto &compositeChargedMove = moves::CompositeMove::AllChargedCompositeMoves.at(chargedMV);
-                compositeChargedMove.Perform(arena, attacker, defender);
+                o = compositeChargedMove.Perform(arena, attacker, defender);
             }
             else
             {
@@ -199,7 +200,7 @@ namespace mockmon::battle
 
                 //if there is a charged move,perform that instead
                 //const auto & compositeMove = moves::CompositeMove::AllChargedCompositeMoves.at(usedMove);
-                compositeMove.Perform(arena, attacker, defender);
+                o = compositeMove.Perform(arena, attacker, defender);
             }
         }
         if (attacker.IsAbleToBattle() && defender.IsAbleToBattle())
@@ -208,5 +209,6 @@ namespace mockmon::battle
             // this is a gen 1 thing!
             attacker.m_currentCondtion.PulseAfterTurn();
         }
+        return o;
     }
 }

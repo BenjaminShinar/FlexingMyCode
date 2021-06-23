@@ -38,11 +38,15 @@ namespace mockmon
 
     void Mockmon::FullRestore()
     {
-        CurrentBattleStats.Health.RestStatToMax();
+        RestoreHealth();
         for (auto &stat : CurrentBattleStats.m_battleStats)
         {
             stat.second.ResetBoost();
         }
+    }
+    void Mockmon::RestoreHealth()
+    {
+        CurrentBattleStats.Health.RestStatToMax();
         m_ableToBattle = true;
     }
 

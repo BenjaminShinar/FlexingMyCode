@@ -41,6 +41,8 @@ namespace mockmon
         void GainExperienceFromVictory(const Mockmon &defeatedMon);
         constexpr void LoseSomehow() { m_ableToBattle = false; }
         void FullRestore();
+        void RestoreHealth();
+
         [[nodiscard]] bool IsAbleToBattle() const;
         [[nodiscard]] bool IsWild() const;
         bool TeachMove(moves::MoveId);
