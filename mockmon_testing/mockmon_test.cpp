@@ -10,6 +10,7 @@
  * @return auto 
  */
 using namespace ::mockmon;
+using std::make_tuple;
 
 auto RequireMoves(const mockmon::Mockmon &m, std::initializer_list<mockmon::moves::MoveId> ids)
 {
@@ -21,8 +22,7 @@ auto RequireMoves(const mockmon::Mockmon &m, std::initializer_list<mockmon::move
 }
 TEST_CASE("Base Mockmon Mew State", "[MockmonTest]")
 {
-    const auto speciesId = MockmonSpeciesId::Mew;
-    Mockmon m(speciesId, "Jrose");
+    Mockmon m(MockmonTestUtils::mewSpeciesId, "Jrose");
     SECTION("changing a mockmon name!")
     {
         m.ChangeName("Garry");
@@ -34,7 +34,7 @@ TEST_CASE("Base Mockmon Mew State", "[MockmonTest]")
         //todo:
         // make this thing into a function somehow? give it types to check and deduce the rest from the types list
         const auto species = m.GetMockmonSpeciesData();
-        REQUIRE(species.IsSameAs(speciesId));
+        REQUIRE(species.IsSameAs(MockmonTestUtils::mewSpeciesId));
         REQUIRE(species.IsSpeciesOfType(types::Types::Psychic));
         REQUIRE_FALSE(species.IsSpeciesOfType(types::Types::Fighting));
     }
@@ -55,7 +55,6 @@ TEST_CASE("Base Mockmon Mew State", "[MockmonTest]")
 
 TEST_CASE("Bulbapedia L81 Stats Example", "[MockmonTest][Stats]")
 {
-    using std::make_tuple;
     const auto [base, iv, ev, level, extra, expected] = GENERATE(
         make_tuple(35, 7, 22850, 81, 91, 189u), //hp
         make_tuple(55, 8, 23140, 81, 5, 137u),  //attack
@@ -69,9 +68,8 @@ TEST_CASE("Bulbapedia L81 Stats Example", "[MockmonTest][Stats]")
 
 TEST_CASE("Stats Change between Level ups?", "[MockmonTest][Stats]")
 {
-    const auto speciesId = MockmonSpeciesId::Mew;
-    Mockmon ma(speciesId, "lowLevel");
-    Mockmon mb(speciesId, "highLevel");
+    Mockmon ma(MockmonTestUtils::mewSpeciesId, "lowLevel");
+    Mockmon mb(MockmonTestUtils::mewSpeciesId, "highLevel");
     SECTION("same level have same stats")
     {
         const auto maStats = MockmonTestUtils::XorredStats(ma);
@@ -126,14 +124,14 @@ TEST_CASE("All mockmons exist", "[MockmonTest][Coverage][!throws][!mayfail]")
 }
 SCENARIO("Base Mockmon Weedle State", "[MockmonTest][levelUpMoves]")
 {
-    const auto speciesId = MockmonSpeciesId::Weedle;
+    const auto weedleSpeciesId = MockmonSpeciesId::Weedle;
     GIVEN("A weedle mockmon")
     {
-        Mockmon m(speciesId, "weedy");
+        auto m{MockmonTestUtils::CreateTestMockmon("weedle", weedleSpeciesId)};
         THEN("it should be bug/poison type")
         {
             const auto species = m.GetMockmonSpeciesData();
-            REQUIRE(species.IsSameAs(speciesId));
+            REQUIRE(species.IsSameAs(weedleSpeciesId));
             REQUIRE(species.IsSpeciesOfType(types::Types::Bug));
             REQUIRE(species.IsSpeciesOfType(types::Types::Poison));
             REQUIRE_FALSE(species.IsSpeciesOfType(types::Types::Psychic));
@@ -158,14 +156,15 @@ SCENARIO("Base Mockmon Weedle State", "[MockmonTest][levelUpMoves]")
 
 SCENARIO("Base Mockmon Ratata State", "[MockmonTest][levelUpMoves]")
 {
-    const auto speciesId = MockmonSpeciesId::Rattata;
+    const auto rattataSpeciesId = MockmonSpeciesId::Rattata;
     GIVEN("A ratata mockmon")
     {
-        Mockmon m(speciesId, "ratata");
+        auto m{MockmonTestUtils::CreateTestMockmon("ratatta", rattataSpeciesId)};
+
         THEN("it should be Normal type")
         {
             const auto species = m.GetMockmonSpeciesData();
-            REQUIRE(species.IsSameAs(speciesId));
+            REQUIRE(species.IsSameAs(rattataSpeciesId));
             REQUIRE(species.IsSpeciesOfType(types::Types::Normal));
             REQUIRE_FALSE(species.IsSpeciesOfType(types::Types::Fire));
         }
@@ -190,7 +189,6 @@ SCENARIO("Base Mockmon Ratata State", "[MockmonTest][levelUpMoves]")
 
 SCENARIO("Mockmon Evolution", "[MockmonTest][Evolution]")
 {
-    using std::make_tuple;
     const auto [baseFormSpeciesId, requiredLevel, evolvedFormSpeciesId] = GENERATE(
         make_tuple(MockmonSpeciesId::Rattata, 20, MockmonSpeciesId::Raticate),
         make_tuple(MockmonSpeciesId::Geodude, 25, MockmonSpeciesId::Graveler),
@@ -199,7 +197,7 @@ SCENARIO("Mockmon Evolution", "[MockmonTest][Evolution]")
     const auto evolevedFormName{Stringify(evolvedFormSpeciesId)};
     GIVEN("A mockmon of type" + baseformNames);
     {
-        Mockmon m(baseFormSpeciesId, "");
+        auto m{MockmonTestUtils::CreateTestMockmon("", baseFormSpeciesId)};
         m.SetCurrentTrainer(7);
         WHEN("we level it up to the level before the correct level and try to evolve it")
         {

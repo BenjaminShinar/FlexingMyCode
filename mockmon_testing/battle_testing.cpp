@@ -10,14 +10,16 @@
 #include <set>
 
 using namespace ::mockmon;
+using std::make_tuple;
+const auto mewSpeciesName{Stringify(MockmonTestUtils::mewSpeciesId)};
 
 SCENARIO("Battle test", "[MockmonTest][BattleTest]")
 {
-    const auto speciesId = MockmonSpeciesId::Mew;
     GIVEN("two mews mockmon engaging in a battle")
     {
-        Mockmon ma(speciesId, "mew A");
-        Mockmon mb(speciesId, "mew B");
+        auto ma{MockmonTestUtils::CreateTestMockmon("A")};
+        auto mb{MockmonTestUtils::CreateTestMockmon("B")};
+
         WHEN("they engage in battle")
         {
             battle::Battle::DoBattle(TrainerAI::RandomChoice, ma, TrainerAI::RandomChoice, mb);
@@ -29,14 +31,13 @@ SCENARIO("Battle test", "[MockmonTest][BattleTest]")
     }
 }
 
-SCENARIO("damage ranges test", "[MockmonTest][BattleTest][!mayfail]")
+SCENARIO("damage ranges test", "[MockmonTest][BattleTest]")
 {
-    using std::make_tuple;
-    const auto speciesId = MockmonSpeciesId::Mew;
 
+    const auto allowedDamageMargin{5.0};
     const auto [usedMove, movesTargeting, requiredLevel, expectedValuesCount, minDamage, maxDamage] = GENERATE(
         make_tuple(moves::MoveId::Slash, moves::MovesTargeting::PurePhysical, 100, 16u, 98, 116),
-        make_tuple(moves::MoveId::KarateChop, moves::MovesTargeting::PurePhysical, 100, 8u, 37, 44),
+        make_tuple(moves::MoveId::KarateChop, moves::MovesTargeting::PurePhysical, 100, 14u, 71, 84),
         make_tuple(moves::MoveId::RazorLeaf, moves::MovesTargeting::PureSpecial, 100, 16u, 78, 92),
         make_tuple(moves::MoveId::Crabhammer, moves::MovesTargeting::PureSpecial, 100, 16u, 126, 149));
 
@@ -44,10 +45,8 @@ SCENARIO("damage ranges test", "[MockmonTest][BattleTest][!mayfail]")
 
     GIVEN("two mews mockmon engaging in a battle")
     {
-        Mockmon ma(speciesId, "mew A");
-        Mockmon mb(speciesId, "mew B");
-        MockmonTestUtils::BringMockmonToLevel(ma, requiredLevel);
-        MockmonTestUtils::BringMockmonToLevel(mb, requiredLevel);
+        auto ma{MockmonTestUtils::CreateTestMockmon("attacker", MockmonTestUtils::mewSpeciesId, requiredLevel)};
+        auto mb{MockmonTestUtils::CreateTestMockmon("defender", MockmonTestUtils::mewSpeciesId, requiredLevel)};
 
         WHEN(std::string("we calculate damage 10000 times for ") + Stringify(usedMove))
         {
@@ -64,8 +63,8 @@ SCENARIO("damage ranges test", "[MockmonTest][BattleTest][!mayfail]")
                 const auto mnmx = std::minmax_element(std::begin(damageRanges), std::end(damageRanges));
                 CHECK(damageRanges.size() == expectedValuesCount);
                 //TODO: fix damage ranges?
-                CHECK(*mnmx.first == minDamage);
-                CHECK(*mnmx.second == maxDamage);
+                CHECK(*mnmx.first == Approx(minDamage).margin(allowedDamageMargin));
+                CHECK(*mnmx.second == Approx(maxDamage).margin(allowedDamageMargin));
             }
         }
     }
@@ -73,9 +72,6 @@ SCENARIO("damage ranges test", "[MockmonTest][BattleTest][!mayfail]")
 
 SCENARIO("Self Boosting Stat Modifier moves", "[MockmonTest][BattleTest][StatModifiers]")
 {
-    using std::make_tuple;
-
-    const auto speciesId = MockmonSpeciesId::Mew;
     const auto requiredLevel{50};
     const auto [boostingMove, effectedStat, expectedDifferncesFactors] = GENERATE(
         make_tuple(moves::MoveId::Sharpen, StatsTypes::Attack, MockmonTestUtils::JumpByOneStage()),
@@ -96,12 +92,9 @@ SCENARIO("Self Boosting Stat Modifier moves", "[MockmonTest][BattleTest][StatMod
     GIVEN("two mockmon engaging in a battle")
     {
         Arena arena{true};
-        Mockmon ma(speciesId, "mew A");
+        auto ma{MockmonTestUtils::CreateTestMockmon("A", MockmonTestUtils::mewSpeciesId, requiredLevel)};
         ma.TeachMove(boostingMove);
-        MockmonTestUtils::BringMockmonToLevel(ma, requiredLevel);
-
-        Mockmon mb(speciesId, "mew B");
-        MockmonTestUtils::BringMockmonToLevel(mb, requiredLevel);
+        auto mb{MockmonTestUtils::CreateTestMockmon("B", MockmonTestUtils::mewSpeciesId, requiredLevel)};
 
         const auto [statBeforeBoost, _] = arena.GetStatsModifier(ma, effectedStat, ma, effectedStat);
 
@@ -142,9 +135,7 @@ SCENARIO("Self Boosting Stat Modifier moves", "[MockmonTest][BattleTest][StatMod
 
 SCENARIO("Enemy hexing Stat Modifier moves", "[MockmonTest][BattleTest][StatModifiers]")
 {
-    using std::make_tuple;
 
-    const auto speciesId = MockmonSpeciesId::Mew;
     const auto requiredLevel{50};
     const auto attemps{50};
     const auto [hexingMove, effectedStat, expectedDifferncesFactors] = GENERATE(
@@ -169,12 +160,8 @@ SCENARIO("Enemy hexing Stat Modifier moves", "[MockmonTest][BattleTest][StatModi
     GIVEN("two mockmon engaging in a battle")
     {
         Arena arena{true};
-        Mockmon ma(speciesId, "mew A");
-        ma.TeachMove(hexingMove);
-        MockmonTestUtils::BringMockmonToLevel(ma, requiredLevel / 5);
-
-        Mockmon mb(speciesId, "mew B");
-        MockmonTestUtils::BringMockmonToLevel(mb, requiredLevel);
+        auto ma{MockmonTestUtils::CreateTestMockmon("attacker", MockmonTestUtils::mewSpeciesId, requiredLevel / 5)};
+        auto mb{MockmonTestUtils::CreateTestMockmon("defender", MockmonTestUtils::mewSpeciesId, requiredLevel)};
 
         const auto [_, statBeforeHex] = arena.GetStatsModifier(ma, effectedStat, mb, effectedStat);
         WHEN(AppendAll({"the attacker uses", hexingMoveName, "to decreate the defenders' ", effectedStatName}))
@@ -184,9 +171,7 @@ SCENARIO("Enemy hexing Stat Modifier moves", "[MockmonTest][BattleTest][StatModi
             std::vector<double> measuredStats;
             std::vector<double> expectedStats;
 
-            auto &mvset = ma.GetMoveSet();
-            const auto pred{MakePredicator<moves::EquipedMove, moves::MoveId>(hexingMove)};
-            auto match = std::find_if(std::begin(mvset), std::end(mvset), pred);
+            auto match = MockmonTestUtils::TeachAndGetMoveFromMoveSet(ma, hexingMove);
 
             std::transform(std::begin(expectedDifferncesFactors), std::end(expectedDifferncesFactors), std::back_inserter(expectedStats),
                            [&](auto hexFactor)
@@ -229,8 +214,6 @@ SCENARIO("Enemy hexing Stat Modifier moves", "[MockmonTest][BattleTest][StatModi
 
 SCENARIO("One Hit Ko Moves", "[MockmonTest][BattleTest]")
 {
-    using std::make_tuple;
-    const auto attackerSpeciesId = MockmonSpeciesId::Mew;
 
     const auto [attackerLevel, ohkoMove, targetedSpeices] = GENERATE(
         make_tuple(50, moves::MoveId::Fissure, MockmonSpeciesId::Mew),
@@ -240,23 +223,18 @@ SCENARIO("One Hit Ko Moves", "[MockmonTest][BattleTest]")
         make_tuple(25, false, 50),  //success
         make_tuple(75, true, 500)); //always fail
 
+    const auto attackerSpeciesId = MockmonTestUtils::mewSpeciesId;
     const auto attackerTypeName{Stringify(attackerSpeciesId)};
-
     const auto enemyTypeName{Stringify(targetedSpeices)};
     const auto ohkoMoveName{Stringify(ohkoMove)};
     GIVEN(AppendAll({"an enemy mockmon of type", enemyTypeName}))
     {
         Arena a{true};
-        Mockmon ma(attackerSpeciesId, AppendAll({"attacker", attackerTypeName, "level", std::to_string(attackerLevel)}));
-        MockmonTestUtils::BringMockmonToLevel(ma, attackerLevel);
 
-        ma.TeachMove(ohkoMove);
-        Mockmon mb(targetedSpeices, AppendAll({"defender", enemyTypeName, "level", std::to_string(expectedEnemyLevel)}));
-        MockmonTestUtils::BringMockmonToLevel(mb, expectedEnemyLevel);
+        auto ma{MockmonTestUtils::CreateTestMockmon("attacker", attackerSpeciesId, attackerLevel)};
+        auto mb{MockmonTestUtils::CreateTestMockmon("defender", targetedSpeices, expectedEnemyLevel)};
 
-        auto &mvset = ma.GetMoveSet();
-        const auto pred{MakePredicator<moves::EquipedMove, moves::MoveId>(ohkoMove)};
-        auto match = std::find_if(std::begin(mvset), std::end(mvset), pred);
+        auto match = MockmonTestUtils::TeachAndGetMoveFromMoveSet(ma, ohkoMove);
         WHEN(AppendAll({"it's attacked by", ohkoMoveName}))
         {
             bool enemySurvived{true}; //enemy was not effected

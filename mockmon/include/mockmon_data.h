@@ -22,8 +22,8 @@ namespace mockmon
         friend class Arena;
 
     public:
-        explicit Mockmon(MockmonSpeciesId species, const std::string &name, bool silent = false)
-            : m_currentSpeciesId(species), m_name(name), m_outputEvents(silent)
+        explicit Mockmon(MockmonSpeciesId species, const std::string &name, bool silent = true)
+            : m_currentSpeciesId(species), m_name(name), m_outputEvents(!silent)
         {
             LearnLevelUpMoves(1);
             CurrentBattleStats.UpdateBattleStats(stats::MockmonStats(GetMockmonSpeciesData().MockmonSpeciesStats, IVs, EVs, CurrentLevel));

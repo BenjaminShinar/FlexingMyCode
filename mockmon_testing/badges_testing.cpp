@@ -10,10 +10,11 @@
 #include <set>
 
 using namespace ::mockmon;
+using std::make_tuple;
+const auto mewSpeciesName{Stringify(MockmonTestUtils::mewSpeciesId)};
 
 SCENARIO("Base Badge Boost", "[MockmonTest][Badge Boost]")
 {
-    using std::make_tuple;
     const auto [testedBadge, testedStat, otherStat, expectedBoost] = GENERATE(
         make_tuple(badges::IndigoBadge::Boulder_Badge, StatsTypes::Attack, StatsTypes::Special, 1.125),
         make_tuple(badges::IndigoBadge::Thunder_Badge, StatsTypes::Defence, StatsTypes::Attack, 1.125),
@@ -28,8 +29,7 @@ SCENARIO("Base Badge Boost", "[MockmonTest][Badge Boost]")
         Trainer t{"check"};
         Arena arena{true};
         arena.SetBadgeBoosts(t);
-        Mockmon m{MockmonSpeciesId::Mew, "test mockmon"};
-        MockmonTestUtils::BringMockmonToLevel(m, 50);
+        auto m{MockmonTestUtils::CreateTestMockmon("test", MockmonSpeciesId::Mew, 50)};
         m.SetCurrentTrainer(t.UniqueTrainerID);
 
         THEN(AppendAll({"the trainer should not have the", badgeName, "badge", "or a boost to the", statName, "stat"}))
@@ -62,7 +62,6 @@ SCENARIO("Base Badge Boost", "[MockmonTest][Badge Boost]")
 SCENARIO("Badge Boost Glitch", "[MockmonTest][Badge Boost][StatModifiers][Gen 1 Glitch]")
 {
 
-    using std::make_tuple;
     const auto [testedBadge, testedStat, otherStat, expectedBoost] = GENERATE(
         make_tuple(badges::IndigoBadge::Boulder_Badge, StatsTypes::Attack, StatsTypes::Special, 1.125),
         make_tuple(badges::IndigoBadge::Thunder_Badge, StatsTypes::Defence, StatsTypes::Attack, 1.125),
@@ -80,9 +79,9 @@ SCENARIO("Badge Boost Glitch", "[MockmonTest][Badge Boost][StatModifiers][Gen 1 
         Trainer t{"check"};
         Arena arena{true};
         arena.SetBadgeBoosts(t);
-        Mockmon ma{MockmonSpeciesId::Mew, "test mockmon"};
-        Mockmon mb{MockmonSpeciesId::Mew, "other test mockmon"};
-        MockmonTestUtils::BringMockmonToLevel(ma, 50);
+        auto ma{MockmonTestUtils::CreateTestMockmon("test", MockmonSpeciesId::Mew, 50)};
+        auto mb{MockmonTestUtils::CreateTestMockmon("other")};
+
         ma.SetCurrentTrainer(t.UniqueTrainerID);
         ma.TeachMove(boostingMove);
 

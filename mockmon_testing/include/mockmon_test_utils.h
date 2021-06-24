@@ -5,6 +5,23 @@
 class MockmonTestUtils
 {
 public:
+    static const auto mewSpeciesId = mockmon::MockmonSpeciesId::Mew;
+    /**
+     * @brief Create a Test Mockmon object
+     * create a mockmon at a spesific level with a spesific name,
+     * default is level 1 mew
+     * @param extraName 
+     * @param id 
+     * @param requriedLevel 
+     * @return mockmon::Mockmon 
+     */
+    [[nodiscard]] static mockmon::Mockmon CreateTestMockmon(std::string &&extraName, mockmon::MockmonSpeciesId id = mewSpeciesId, unsigned int requriedLevel = 1)
+    {
+        mockmon::Mockmon m(id, mockmon::AppendAll({Stringify(id), "level", std::to_string(requriedLevel), extraName}), true);
+        BringMockmonToLevel(m, requriedLevel);
+        return m;
+    }
+
     /**
      * @brief 
      * bring a mockmon to a required level
@@ -24,12 +41,29 @@ public:
         m.FullRestore();
     }
 
-    static auto XorredStats(const mockmon::Mockmon &m)
+    [[nodiscard]] static auto XorredStats(const mockmon::Mockmon &m)
     {
         const auto &battleStats = m.CurrentBattleStats.m_battleStats;
         const auto xoredStats = std::accumulate(std::begin(battleStats), std::end(battleStats), 0, [](int xorred, const auto &p)
                                                 { return xorred ^ static_cast<int>(p.second.GetBaseStat()); });
         return xoredStats;
+    }
+
+    /**
+ * @brief Get the Move From Move Set object
+ * teach a move to a mockmon
+ * grab an iterator pointing to it as an equipped move so we can refill it's powerpoints
+ * @param m 
+ * @param mv 
+ * @return auto 
+ */
+    [[nodiscard]] static auto TeachAndGetMoveFromMoveSet(mockmon::Mockmon &m, mockmon::moves::MoveId mv)
+    {
+        m.TeachMove(mv);
+        auto &mvset = m.GetMoveSet();
+        const auto pred{mockmon::MakePredicator<mockmon::moves::EquipedMove, mockmon::moves::MoveId>(mv)};
+        auto match = std::find_if(std::begin(mvset), std::end(mvset), pred);
+        return match;
     }
 
     [[nodiscard]] static const std::vector<double> JumpByOneStage()
