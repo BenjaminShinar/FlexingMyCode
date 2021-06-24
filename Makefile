@@ -43,10 +43,7 @@ CPP_ANSI=-std=c++2a
 C_LINKER_FLAGS= -lm -pthread
 C_LINKER_LRT= -lrt
 
-LIBS_NAME = battle_tower battle controller mockmon_data moves types condition stats mockmon_exp
-MAIN_NAME = main
-
-PROJECTS = knights_tour product_without reverse_sentence  five_stars calculator roman_numerals
+PROJECTS = knights_tour product_without reverse_sentence  five_stars calculator roman_numerals coding_questions
 TARGETS1 = $(addprefix output/,$(addsuffix $(OUTEXTEN),$(PROJECTS)))   
 all: $(TARGETS1)
 

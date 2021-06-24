@@ -6,7 +6,7 @@ void PrintArr(int *arr, size_t n);
 
 int main()
 {
-    int arr[] = {-5,-6,1,1};
+    int arr[] = {-5, -6, 1, 1};
     int n = sizeof(arr) / sizeof(*arr);
     int res = 0;
     res = ProductWithout(arr, n);
@@ -20,8 +20,8 @@ int main()
 int ProductWithout(int *arr, size_t n)
 {
     int result = 1;
-    int *arr_before = malloc(sizeof(int) * n);
-    int *arr_after = malloc(sizeof(int) * n);
+    int *arr_before = (int *)malloc(sizeof(int) * n);
+    int *arr_after = (int *)malloc(sizeof(int) * n);
 
     if ((arr_before != NULL) && ((arr_after != NULL)))
     {
@@ -31,8 +31,8 @@ int ProductWithout(int *arr, size_t n)
 
         for (i = 1; i < n; ++i)
         {
-            arr_before[i] = arr[i-1] * arr_before[i - 1];
-            arr_after[n-i-1] = arr[n - i] * arr_after[n - i];
+            arr_before[i] = arr[i - 1] * arr_before[i - 1];
+            arr_after[n - i - 1] = arr[n - i] * arr_after[n - i];
         }
 
         for (i = 0; i < n; ++i)
