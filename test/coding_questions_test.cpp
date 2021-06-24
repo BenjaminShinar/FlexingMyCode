@@ -7,29 +7,40 @@ int main()
 {
     srand(time(0));
 
-    unsigned int millionChars[1'000]{0};
+    unsigned int millionChars[1'000'00]{0};
     const auto elements = sizeof(millionChars) / sizeof(unsigned int);
+    std::size_t slow{1}, regular{1}, fast{1000000000};
+    const auto requiredMatch{100};
+    std::vector<unsigned int> targets(requiredMatch);
     for (auto i = 0u; i < elements; ++i)
     {
-        millionChars[i] = (rand() % 256);
+        millionChars[i] = (rand() % 10000);
     }
-    std::vector<unsigned int> targets{(rand() % 256u), (rand() % 256u), (rand() % 256u)};
+    std::generate(std::begin(targets), std::end(targets), []()
+                  { return (rand() % 10000); });
 
-    std::cout << elements << '\n';
+    std::cout << "total elemnts in array " << elements << '\n';
     {
-        Timer t("slow");
+        TimerWithExportedValue t(&slow, "slow");
         for (auto target : targets)
         {
-            std::cout << "traget " << target << " exists? " << SlowFindInArray(millionChars, elements, target) << '\n';
+            auto match = SlowFindInArray(millionChars, elements, target);
         }
     }
-
-    std::cout << elements << '\n';
     {
-        Timer t("regular");
+        TimerWithExportedValue t(&regular, "regular");
         for (auto target : targets)
         {
-            std::cout << "traget " << target << " exists? " << FindInArray(millionChars, elements, target) << '\n';
+            auto match = FindInArray(millionChars, elements, target);
         }
     }
+    {
+        TimerWithExportedValue t(&fast, "fast");
+        for (auto target : targets)
+        {
+            auto match = BetterFindInArray(millionChars, elements, target);
+        }
+    }
+    std::cout << "slow " << slow << " is slower than regular " << regular << "? " << (slow > regular) << '\n';
+    std::cout << "regular " << regular << " is slower than fast " << fast << "? " << (regular > fast) << '\n';
 }

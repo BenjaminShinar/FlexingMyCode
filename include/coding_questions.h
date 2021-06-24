@@ -3,20 +3,25 @@
 #include <vector>
 #include <chrono>
 #include <iostream>
-class Timer
+class TimerWithExportedValue
 {
 private:
+    unsigned int *m_ref;
     std::chrono::time_point<std::chrono::system_clock> m_created_at;
     std::string m_operation_name;
 
 public:
-    explicit Timer(std::string &&str = "") : m_created_at(std::chrono::system_clock::now()), m_operation_name(str)
+    explicit TimerWithExportedValue(unsigned int *exportedValue, std::string &&str = "") : m_ref(exportedValue), m_created_at(std::chrono::system_clock::now()), m_operation_name(str)
     {
     }
-    ~Timer()
+    TimerWithExportedValue(const TimerWithExportedValue &other) = delete;
+    TimerWithExportedValue &operator=(const TimerWithExportedValue &other) = delete;
+
+    ~TimerWithExportedValue()
     {
-        auto ml{std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - m_created_at).count()};
-        std::cout << m_operation_name << " requried " << ml << " milliseconds" << '\n';
+        auto ml{std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now() - m_created_at).count()};
+        *m_ref = ml;
+        std::cout << m_operation_name << " requried " << ml << '\n';
     }
 };
 

@@ -1,8 +1,10 @@
 #include "../include/coding_questions.h"
-
+#include <thread>
 bool FindInArray(const unsigned int *arr, std::size_t arr_size, unsigned int x)
 {
-    for (auto ptr = arr; ptr < arr + arr_size; ++ptr)
+    const auto fin{arr + arr_size};
+
+    for (auto ptr = arr; ptr < fin; ++ptr)
     {
         if (*ptr == x)
         {
@@ -24,14 +26,27 @@ bool SlowFindInArray(const unsigned int *arr, std::size_t arr_size, unsigned int
     return false;
 }
 
-bool BetterFindInArray(const unsigned int *arr, std::size_t arr_size, unsigned int x)
+void BetterFindInArrayEarlyExit(const unsigned int *arr, std::size_t arr_size, unsigned int x, bool &continueSearcing)
 {
-    for (auto ptr = arr; ptr < arr + arr_size; ++ptr)
+    for (auto ptr = arr; (ptr < arr + arr_size) && continueSearcing; ++ptr)
     {
         if (*ptr == x)
         {
-            return true;
+            continueSearcing = false;
+            return;
         }
     }
-    return false;
+    return;
+}
+
+bool BetterFindInArray(const unsigned int *arr, std::size_t arr_size, unsigned int x)
+{
+    bool contninueSearching{true};
+    //BetterFindInArrayEarlyExit(arr, arr_size, x, contninueSearching);
+    auto mid = arr_size / 2;
+    std::thread t1(BetterFindInArrayEarlyExit, arr, mid, x, std::ref(contninueSearching));
+    std::thread t2(BetterFindInArrayEarlyExit, arr + mid, arr_size - mid, x, std::ref(contninueSearching));
+    t1.join();
+    t2.join();
+    return !contninueSearching;
 }
