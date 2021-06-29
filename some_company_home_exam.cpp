@@ -9,8 +9,9 @@
 // take vector<string> that represents a path (right,down) and determine if a path to end exists in the required amount of steps.
 
 /*
+* created a convient representation of the string.
 * depending on the range of input sizes, maybe std::bitset<> with an upper bound N is better than std::vector<bool>?
-*
+*Hints: #331, #360, #388 
 * option 1: recursive function
 * use max steps to optimize
 * use std::bitset<> instead of vector - requires advance knowledge about input size, might actually cost more memory
@@ -24,6 +25,15 @@
 * we take take one path and run with it to the end, similiar to recursive function,
 * we push two values to the stack each time, with the top one being the one we want to visit first
 * option 3: dynamic programming
+* create a mirror of the data, keep track of what we know.
+* each position can be marked as "not visited", "has valid path","no valid path".
+* i think it's best to start the scan from the end? sta
+* use enum
+* can we do an early exit? - yes
+* maybe we can drop the new data strucute and use the original? yes.
+* do we have to scan all elements? can we skip dead branches somehow?
+* 
+* THINK ABOUT BENCHMARKING THE OPTIONS 
 */
 struct Position
 {
@@ -135,7 +145,7 @@ std::string doesPathExist(const std::vector<std::string> &stringGrid, int maxSte
     // we know that the distance is fixed, so no need to check this each step
     if (formatted_Grid.StepsRequired > maxSteps)
     {
-        return "no";
+        return "no - early exit";
     }
 
     auto match = doesPathExistRec(formatted_Grid, {0, 0});
@@ -156,7 +166,7 @@ std::string doesPathExistIterBFS(const std::vector<std::string> &stringGrid, int
 
     if (formatted_Grid.StepsRequired > maxSteps)
     {
-        return "no";
+        return "no - early exit";
     }
     std::queue<Position> paths_Queue;
     paths_Queue.push({0, 0});
@@ -185,11 +195,12 @@ std::string doesPathExistIterBFS(const std::vector<std::string> &stringGrid, int
 template <typename T>
 std::string doesPathExistIterDFS(const std::vector<std::string> &stringGrid, int maxSteps)
 {
+
     T formatted_Grid(stringGrid);
 
     if (formatted_Grid.StepsRequired > maxSteps)
     {
-        return "no";
+        return "no - early exit";
     }
     std::stack<Position> paths_Stack;
     paths_Stack.push({0, 0});
@@ -208,6 +219,101 @@ std::string doesPathExistIterDFS(const std::vector<std::string> &stringGrid, int
             paths_Stack.push({current_position.Row + 1, current_position.Column}); //this will be second
             paths_Stack.push({current_position.Row, current_position.Column + 1}); //this will be first
         }
+    }
+    return "no";
+}
+
+enum class DynamicVisit
+{
+    NOT_VISITED,
+    NO_VALID_PATHS,
+    HAS_VALID_PATHS
+};
+
+std::string doesPathExistDynamicBackwards(const std::vector<std::string> &stringGrid, int maxSteps)
+{
+
+    auto n_rows = static_cast<int>(stringGrid.size());
+    auto n_cols = static_cast<int>(stringGrid.front().size());
+    if ((n_rows + n_cols - 2) > maxSteps)
+    {
+        return "no - early exit";
+    }
+
+    std::vector<std::vector<DynamicVisit>> visited_table{n_rows, std::vector<DynamicVisit>{n_cols, DynamicVisit::NOT_VISITED}};
+    //destination must be ok
+    visited_table[n_rows - 1][n_cols - 1] = DynamicVisit::HAS_VALID_PATHS;
+
+    //this isn't good enough
+    for (auto row = n_rows - 1; row >= 0; --row)
+    {
+        for (auto col = n_cols - 1; col >= 0; --col)
+        {
+            if (visited_table[row][col] == DynamicVisit::NOT_VISITED)
+            {
+                bool match{stringGrid[row][col] == '.'};
+                //hope for compiler to shortCircut and not compute these
+                match |= (col < (n_cols - 1)) && visited_table[row][col + 1] == DynamicVisit::HAS_VALID_PATHS;
+                match |= (row < (n_rows - 1)) && visited_table[row + 1][col] == DynamicVisit::HAS_VALID_PATHS;
+
+                if (match)
+                {
+                    visited_table[row][col] = DynamicVisit::HAS_VALID_PATHS;
+                }
+                else
+                {
+                    visited_table[row][col] = DynamicVisit::NO_VALID_PATHS;
+                }
+            }
+        }
+    }
+    if (visited_table.front().front() == DynamicVisit::HAS_VALID_PATHS)
+    {
+        return "yes";
+    }
+    return "no";
+}
+
+std::string doesPathExistDynamicForwards(const std::vector<std::string> &stringGrid, int maxSteps)
+{
+
+    auto n_rows = static_cast<int>(stringGrid.size());
+    auto n_cols = static_cast<int>(stringGrid.front().size());
+    if ((n_rows + n_cols - 2) > maxSteps)
+    {
+        return "no - early exit";
+    }
+
+    std::vector<std::vector<DynamicVisit>> visited_table{n_rows, std::vector<DynamicVisit>{n_cols, DynamicVisit::NOT_VISITED}};
+    //destination must be ok
+    visited_table[n_rows - 1][n_cols - 1] = DynamicVisit::HAS_VALID_PATHS;
+
+    //this isn't good enough
+    for (auto row = n_rows - 1; row >= 0; --row)
+    {
+        for (auto col = n_cols - 1; col >= 0; --col)
+        {
+            if (visited_table[row][col] == DynamicVisit::NOT_VISITED)
+            {
+                bool match{stringGrid[row][col] == '.'};
+                //hope for compiler to shortCircut and not compute these
+                match |= (col < (n_cols - 1)) && visited_table[row][col + 1] == DynamicVisit::HAS_VALID_PATHS;
+                match |= (row < (n_rows - 1)) && visited_table[row + 1][col] == DynamicVisit::HAS_VALID_PATHS;
+
+                if (match)
+                {
+                    visited_table[row][col] = DynamicVisit::HAS_VALID_PATHS;
+                }
+                else
+                {
+                    visited_table[row][col] = DynamicVisit::NO_VALID_PATHS;
+                }
+            }
+        }
+    }
+    if (visited_table.front().front() == DynamicVisit::HAS_VALID_PATHS)
+    {
+        return "yes";
     }
     return "no";
 }
@@ -264,6 +370,24 @@ int main()
         std::cout << "advanced case: " << doesPathExistIterDFS<FormattedGridVector>(advance_case, 7) << '\n';
         std::cout << "advance insufficent steps case: " << doesPathExistIterDFS<FormattedGridVector>(advance_case_step, 6) << '\n';
         std::cout << "blocked case: " << doesPathExistIterDFS<FormattedGridVector>(blocked_case, 10) << '\n';
+        std::cout << '\n';
+    }
+
+    std::cout << "Dynamic Programming backwards version" << '\n';
+    {
+        std::cout << "simple case: " << doesPathExistDynamicBackwards(simple_case, 5) << '\n';
+        std::cout << "advanced case: " << doesPathExistDynamicBackwards(advance_case, 7) << '\n';
+        std::cout << "advance insufficent steps case: " << doesPathExistDynamicBackwards(advance_case_step, 6) << '\n';
+        std::cout << "blocked case: " << doesPathExistDynamicBackwards(blocked_case, 10) << '\n';
+        std::cout << '\n';
+    }
+
+    std::cout << "Dynamic Programming forewards version" << '\n';
+    {
+        std::cout << "simple case: " << doesPathExistDynamicForwards(simple_case, 5) << '\n';
+        std::cout << "advanced case: " << doesPathExistDynamicForwards(advance_case, 7) << '\n';
+        std::cout << "advance insufficent steps case: " << doesPathExistDynamicForwards(advance_case_step, 6) << '\n';
+        std::cout << "blocked case: " << doesPathExistDynamicForwards(blocked_case, 10) << '\n';
         std::cout << '\n';
     }
     return 0;
