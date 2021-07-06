@@ -43,7 +43,7 @@ CPP_ANSI=-std=c++2a
 C_LINKER_FLAGS= -lm -pthread
 C_LINKER_LRT= -lrt
 
-PROJECTS = knights_tour product_without reverse_sentence  five_stars calculator roman_numerals coding_questions
+PROJECTS = knights_tour product_without reverse_sentence  five_stars calculator roman_numerals
 TARGETS1 = $(addprefix output/,$(addsuffix $(OUTEXTEN),$(PROJECTS)))   
 all: $(TARGETS1)
 
